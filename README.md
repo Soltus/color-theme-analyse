@@ -1,5 +1,5 @@
 # 说明
-[bitbucket](https://bitbucket.org/hi-windom/colorthemeanalyse/src/master/)> > 最快更新
+[bitbucket](https://bitbucket.org/hi-windom/colorthemeanalyse/src/master/)> 最快更新
 [gitee](https://gitee.com/hi-windom/color-theme-analyse)
 
 ## 简介
