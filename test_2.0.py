@@ -21,22 +21,32 @@ import os
 import shutil
 from concurrent import futures  # 多进程+多线程，实测速度提升明显，缺点是无法实现rich进度条展示
 '''
----------------------------------
-创建于2021/5/18
-更新于2021/5/18 11:26
----------------------------------
-Need help ?  => 694357845@qq.com
----------------------------------
-处理流程：
-1.传入路径
-2.复制路径文件夹的图片 => 粘贴至当前PY文件目录下的prepare文件夹（没有会自动创建）
-3.压缩prepare文件夹的图片 => 另存至当前PY文件目录下的compress文件夹（没有会自动创建） //这里使用率多进程+多线程，并绑定回调函数testMMCQ执行4.
-4.分析compress文件夹的图片色彩主题 => 重命名对应的prepare图片文件
-5.对prepare文件夹的图片生成对应的JSON文件
-6.[Optional]生成报告
----------------------------------
+# ---------------------------------
+# 创建于2021/5/18
+# 更新于2021/5/18 11:26
+# ---------------------------------
+# Need help ?  => 694357845@qq.com
+# ---------------------------------
+# 处理流程：
+# 1.传入路径
+# 2.复制路径文件夹的图片 => 粘贴至当前PY文件目录下的prepare文件夹（没有会自动创建）
+# 3.压缩prepare文件夹的图片 => 另存至当前PY文件目录下的compress文件夹（没有会自动创建） //这里使用率多进程+多线程，并绑定回调函数testMMCQ执行4.
+# 4.分析compress文件夹的图片色彩主题 => 重命名对应的prepare图片文件
+# 5.对prepare文件夹的图片生成对应的JSON文件
+# 6.[Optional]生成报告
+# ---------------------------------
 '''
-
+# 全局变量
+profile = json.load(open('profile.json', 'r+'))
+themes = profile['themes']
+size_rate = profile['size_rate']
+ignore_size = profile['ignore_size']
+'''
+# themes 是分析色彩的结果颜色数量，默认为5
+# size_rate 是图片尺寸缩放倍率，默认为10
+# ignore_size 是图片压缩忽略阈值（宽/高中的最大值），默认为200
+# 推荐在profile.json中修改配置，如有需要也可以修改成传参
+'''
 # 实例化进度条，由于采用多进程+多线程，只能当分隔符使用
 progress = Progress(
     BarColumn(bar_width=None)
@@ -59,10 +69,10 @@ def compressImage(srcPath):
             dImg = sImg.convert('RGB')
             w, h = sImg.size
             # 设置压缩尺寸和选项，注意尺寸要用括号
-            if max(w, h) > 200:
-                dImg = dImg.resize((int(w/10), int(h/10)), Image.BILINEAR)
+            if max(w, h) > ignore_size:
+                dImg = dImg.resize(
+                    (int(w/size_rate), int(h/size_rate)), Image.BILINEAR)
             dImg.save(dstFile, quality=80)
-
             return dstFile
 
         except Exception:
@@ -82,15 +92,13 @@ def compressImage(srcPath):
 def testMMCQ(future):
     imgfile = future.result()
     start = time.process_time()
-    rgb = list(map(lambda d: MMCQ(d, 5).quantize(), [cv.imdecode(np.fromfile(
+    rgb = list(map(lambda d: MMCQ(d, themes).quantize(), [cv.imdecode(np.fromfile(
         imgfile, dtype=np.uint8), cv.COLOR_BGR2RGB)]))
-
     for i in range(len(rgb)):
         strjoin = ''
         for j in range(len(rgb[i])):
             strs = '#'
             for k in rgb[i][j]:
-
                 strs += str(hex(k))[-2:].replace('x', '0').upper()
             strjoin += strs
         console.print(strjoin.replace('#', ' '), justify='center')
