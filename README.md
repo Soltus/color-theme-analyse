@@ -1,5 +1,11 @@
 # 说明
 
+源码地址
+
+[bitbucket（最快更新）](https://bitbucket.org/hi-windom/colorthemeanalyse/src/master/)
+
+[gitee](https://gitee.com/hi-windom/color-theme-analyse)
+
 ## 简介
 
 基于MMCQ对图片进行色彩主题分析，采用图片压缩和多进程来加速批量分析速度。
