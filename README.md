@@ -20,25 +20,25 @@
 
 必要：
 
-`pip install numpy`
+`pip install numpy -i https://pypi.douban.com/simple`
 
 > `import numpy as np`
 
-`pip install cv2`
+`pip install opencv-python -i https://pypi.douban.com/simple`
 
 > `import cv2 as cv`
 >
 > `from cv2 import data`
 
-`pip install pillow` ~~(PIL)~~
+`pip install Pillow -i https://pypi.douban.com/simple` ~~(PIL)~~
 
 > `from PIL import Image`
 
 可选：
 
-`pip install easygui`
+`pip install easygui -i https://pypi.douban.com/simple`
 
-`pip install rich`
+`pip install rich -i https://pypi.douban.com/simple`
 
 ---
 
