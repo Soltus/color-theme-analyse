@@ -2,6 +2,7 @@
 from hashlib import md5
 import json
 import binascii
+import urllib.parse as parse
 from PIL import Image
 import numpy as np
 import cv2 as cv
@@ -214,9 +215,21 @@ with progress:
                     os.rename(os.path.join(root, f), os.path.join(
                         root, licenseid) + os.path.splitext(f)[1])
             progress.stop_task(task_id)
+
+            cost_times = str(round(time.time()-totaltime, 4))
             cc = g.ccbox(msg="\n\n\n" + base_dir + "\n\n\n 总耗时：" +
-                         str(time.time()-totaltime), title="处理完成", choices=("生成报告", "完成"))
+                         cost_times, title="处理完成", choices=("生成报告", "完成"))
 
             # 点击生成报告触发事件
             if cc == 1:
-                import Upload_FileInPath
+                curr_time = datetime.datetime.now()
+                # 将路径转为URL格式，不转则json.dump以ASCII格式写到JSON文件里
+                in_path_url = parse.quote(
+                    os.path.dirname(img), safe=";/?:@&=+$,")
+                reportjson = {'date': curr_time.strftime(
+                    "%Y-%m-%d"), 'time': curr_time.strftime("%H:%M:%S"), 'in_path_url': in_path_url, 'in_files': ptv, 'cost_times': cost_times}
+                with open(os.path.join(base_dir, curr_time.strftime("%Y%m%d-%H%M%S_")) + 'report.json', 'w') as js:
+                    json.dump(reportjson, js)
+                    js.close
+                console.print(reportjson, justify='full',
+                              highlight=True)
