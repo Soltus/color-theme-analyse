@@ -1,6 +1,7 @@
 # -*- coding=utf-8
 from concurrent import futures  # 多进程+多线程，实测速度提升明显，缺点是无法实现rich进度条展示
 from multiprocessing import shared_memory
+from posixpath import pathsep
 import shutil
 import os
 import datetime
@@ -94,10 +95,11 @@ def compressImage(srcPath):
                 filename.split('.')[1], 'jpg'))  # 不改找不到文件
             return dstFile.replace(filename.split('.')[1], 'jpg')
 
-            # 如果是文件夹就递归
-    if os.path.isdir(srcPath):
-        for file in srcPath:
-            compressImage(file)
+    # 如果是文件夹就递归
+    # if os.path.isdir(srcPath):
+    #     for file in srcPath:
+    #         compressImage(file)
+    # 多进程已做好文件夹递归，传参必是文件
 
 
 def testMMCQ(future):
@@ -112,8 +114,7 @@ def testMMCQ(future):
     elif buf[7] < 255:
         buf[7] += 1  # 处理不超过255*4=1020张图片
     thisbuf = str(buf[4] + buf[5] + buf[6] + buf[7])
-    console.rule(title='多线程 ThreadPoolExecutor ' +
-                 thisbuf, align='left')
+
     imgfile = future.result()
     rgb = list(map(lambda d: MMCQ(d, themes).quantize(), [cv.imdecode(np.fromfile(
         imgfile, dtype=np.uint8), cv.COLOR_BGR2RGB)]))
@@ -124,7 +125,8 @@ def testMMCQ(future):
             for k in rgb[i][j]:
                 strs += str(hex(k))[-2:].replace('x', '0').upper()
             strjoin += strs
-        console.print(strjoin.replace('#', ' '), justify='center')
+        console.rule(title='多线程 ThreadPoolExecutor {:<9}  结果 {}\n'.format(
+            thisbuf, strjoin.replace('#', ' ')), align='left')
         strjoin += '__{}__'.format(thisbuf + str(int(time.time())))
         filename = os.path.basename(imgfile)
         extname = os.path.splitext(imgfile)[1]
@@ -138,7 +140,8 @@ def procompress(files, root):
     testshm = shared_memory.SharedMemory(name='main_run_share')
     buf = testshm.buf
     buf[3] += 1
-    console.rule(title='多进程 ProcessPoolExecutor ' + str(buf[3]), align='right')
+    console.rule(title=' 多进程 ProcessPoolExecutor {:<3}'.format(
+                 str(buf[3])), align='center')
     base_dir = os.path.dirname(__file__)   # 获取当前文件目录
 
     ss = []
@@ -170,23 +173,12 @@ def domain(img):
         # 遍历删除图片
         path = os.path.join(base_dir, "src\\finish")
         if os.path.exists(path):
-            pass
-        else:
-            os.mkdir(path)
-        path = os.walk(path)
-        for root, dirs, files in path:
-            for f in files:
-                os.remove(os.path.join(root, f))
-
+            shutil.rmtree(path)
+        os.mkdir(path)
         path = os.path.join(base_dir, "src\\compress")
         if os.path.exists(path):
-            pass
-        else:
-            os.mkdir(path)
-        path = os.walk(path)
-        for root, dirs, files in path:
-            for f in files:
-                os.remove(os.path.join(root, f))
+            shutil.rmtree(path)
+        os.mkdir(path)
         if os.path.exists(os.path.join(base_dir, "src\\reports")) == False:
             os.makedirs(os.path.join(base_dir, "src\\reports"))
         path = os.path.join(base_dir, "src\\prepare\\temp")
@@ -254,8 +246,11 @@ def domain(img):
                 prolist.map(procompress, ffs, roots)
 
             while True:
-                while len(os.listdir(os.path.join(base_dir, "src\\compress"))) < ptv:
-                    time.sleep(0.5)
+                nowlist = len(os.listdir(
+                    os.path.join(base_dir, "src\\finish")))
+                time.sleep(3)
+                while nowlist != len(os.listdir(
+                        os.path.join(base_dir, "src\\finish"))):
                     continue
                 buf[1] = 0
                 break

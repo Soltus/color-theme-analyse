@@ -18,6 +18,8 @@
 
 ## 库依赖（不包括PY3自带）
 
+要求Python版本高于3.9.0
+
 必要：
 
 `pip install numpy -i https://pypi.douban.com/simple`
