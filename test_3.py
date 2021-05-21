@@ -63,6 +63,30 @@ progress = Progress(
 console = Console(color_system='auto', style=None)
 
 
+def procompress(files, root):
+    testshm = shared_memory.SharedMemory(name='main_run_share')
+    buf = testshm.buf
+    buf[3] += 1
+    console.rule(title=' 多进程 ProcessPoolExecutor {:<3}'.format(
+                 str(buf[3])), align='center')
+    base_dir = os.path.dirname(__file__)   # 获取当前文件目录
+
+    ss = []
+    ipl = 0
+    for f in files:
+        if os.path.splitext(f)[1].lower() in ['.jpg', 'jpeg', '.png']:
+            ipl = ipl + 1
+            new_file_path = r'%s\%s_%s_%s%s' % (
+                os.path.join(base_dir, "src\\prepare"), 'img', ipl, str(int(time.time()*10000)), os.path.splitext(f)[1])
+            shutil.copy2(os.path.join(root, f), new_file_path)
+            ss.append(new_file_path)
+
+    with futures.ThreadPoolExecutor(max_workers=None) as pool:  # 多线程
+        for si in ss:
+            results = pool.submit(compressImage, si)
+            results.add_done_callback(testMMCQ)  # 回调函数
+
+
 def compressImage(srcPath):
     base_dir = os.path.dirname(__file__)   # 获取当前文件目录
     # 如果是文件就处理
@@ -137,30 +161,6 @@ def testMMCQ(future):
             'compress', 'prepare').replace(filename, strjoin)
         os.rename(imgfile.replace(
             'compress', 'prepare'), newname + extname)
-
-
-def procompress(files, root):
-    testshm = shared_memory.SharedMemory(name='main_run_share')
-    buf = testshm.buf
-    buf[3] += 1
-    console.rule(title=' 多进程 ProcessPoolExecutor {:<3}'.format(
-                 str(buf[3])), align='center')
-    base_dir = os.path.dirname(__file__)   # 获取当前文件目录
-
-    ss = []
-    ipl = 0
-    for f in files:
-        if os.path.splitext(f)[1].lower() in ['.jpg', 'jpeg', '.png']:
-            ipl = ipl + 1
-            new_file_path = r'%s\%s_%s_%s%s' % (
-                os.path.join(base_dir, "src\\prepare"), 'img', ipl, str(int(time.time()*10000)), os.path.splitext(f)[1])
-            shutil.copy2(os.path.join(root, f), new_file_path)
-            ss.append(new_file_path)
-
-    with futures.ThreadPoolExecutor(max_workers=None) as pool:
-        for si in ss:
-            results = pool.submit(compressImage, si)
-            results.add_done_callback(testMMCQ)
 
 
 def domain(img):
