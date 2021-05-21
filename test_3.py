@@ -26,7 +26,7 @@ from hashlib import md5
 '''
 # ---------------------------------
 # 创建于2021/5/18
-# 更新于2021/5/20 11:26
+# 更新于2021/5/21 15:55
 # ---------------------------------
 # Need help ?  => 694357845@qq.com
 # ---------------------------------
@@ -279,10 +279,31 @@ def domain(img):
                         fname.replace("#", "-")
                     jsonstr = {'license': licenseid, 'color': fname, 'theme': fname.split("#")[1:], 'CRC32': crc32v, 'size': os.path.getsize(
                         os.path.join(root, f)), 'date': curr_time.strftime("%Y-%m-%d"), 'time': curr_time.strftime("%H:%M:%S"), 'md5': md5v}
-                    with open(os.path.join(root, licenseid) + '.json', 'w') as js:
-                        json.dump(jsonstr, js)
-                    os.rename(os.path.join(root, f), os.path.join(
-                        root, licenseid) + os.path.splitext(f)[1])
+                    dstname = os.path.join(
+                        root, licenseid) + os.path.splitext(f)[1]
+                    if os.path.exists(dstname):
+                        sames = [dstname, os.path.join(root, f), os.path.getsize(
+                            dstname), os.path.getsize(os.path.join(root, f))]  # 第二个是当前处理对象
+                        issanme = g.buttonbox(msg=f'\n 【疑似重复提醒】 检测到两张图片的色彩主题相同，我们有理由怀疑它们是重复的，请检查！\n{sames[0]} \
+                            为已存在图片（图片大小{sames[2]}）\n{sames[1]} 为当前待保存图片（图片大小{sames[3]}）\n',
+                                              title=' 操作确认 ', choices=(
+                                                  ' 保留已存在的 ', ' 我全都要 ', ' 删除已存在的 '), default_choice=None, cancel_choice=' 我全都要 ', images=None)
+                        if issanme != ' 我全都要 ':
+                            if issanme == ' 保留已存在的 ':
+                                os.remove(dstname)
+                                with open(os.path.join(root, licenseid) + '.json', 'w') as js:
+                                    json.dump(jsonstr, js)
+                                os.rename(os.path.join(root, f), dstname)
+                            else:
+                                os.remove(os.path.join(root, f))
+                        else:
+                            # 本demo参考SCMD标准，因此不允许重复存在，如有需求可自行修改
+                            os.remove(os.path.join(root, f))
+                    else:
+                        with open(os.path.join(root, licenseid) + '.json', 'w') as js:
+                            json.dump(jsonstr, js)
+                        os.rename(os.path.join(root, f), dstname)
+
             progress.stop_task(task_id)
 
             cost_times = str(round(time.time()-totaltime, 4))
@@ -333,8 +354,12 @@ def domain(img):
                             base_dir, 'src/base.css'), os.path.join(base_dir, 'src/index.css'))
                         for name in file_list:
                             i += 1
-                            colors = rerule2.search(os.path.splitext(name)[
-                                0]).group().split('-')
+                            if rerule2.search(os.path.splitext(name)[0]):
+                                colors = rerule2.search(os.path.splitext(name)[
+                                    0]).group().split('-')
+                            else:
+                                colors = ['', '', 'FFFFFF', 'FFFFFF',
+                                          'FFFFFF', 'FFFFFF', 'FFFFFF']  # 意外处理
                             if len(colors) != 7:
                                 print(colors)
                                 print('格式有误')

@@ -20,6 +20,8 @@
 
 要求Python版本高于3.9.0
 
+操作系统为Win10，其他系统自行改写有关代码
+
 必要：
 
 `pip install numpy -i https://pypi.douban.com/simple`
