@@ -40,11 +40,14 @@ from hashlib import md5
 # ---------------------------------
 '''
 # 全局变量
-profile = json.load(open('profile.json', 'r+'))
-themes = profile['themes']
-size_rate = profile['size_rate']
-ignore_size = profile['ignore_size']
-
+try:
+    profile = json.load(open('profile.json', 'r+'))
+    themes = profile['themes']
+    size_rate = profile['size_rate']
+    ignore_size = profile['ignore_size']
+except:
+    print('配置文件丢失')
+    exit()
 
 '''
 # themes 是分析色彩的结果颜色数量，默认为5
