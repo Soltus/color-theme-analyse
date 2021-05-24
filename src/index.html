@@ -1,12 +1,17 @@
 <html>
 
 <head>
-    <script src="./react.development.js"></script>
-    <script src="./react-dom.development.js"></script>
-    <script src="./babel.min_5.8.23.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./_js/react.development.js"></script>
+    <script src="./_js/react-dom.development.js"></script>
+    <script src="./_js/babel.min_5.8.23.js"></script>
+    <link type="text/css" rel="stylesheet" href="./index.css" />
+    <link type="text/css" rel="stylesheet" href="./_css/animate.css" />
+    <link type="text/css" rel="stylesheet" href="./_css/sweet-alert.css" />
+    <script src="./_js/sweet-alert.js"></script>
     <script type="text/babel" src="./index.js"></script>
     <script src='https://gitee.com/hi-windom/color-theme-analyse/widget_preview' async defer></script>
-    <link type="text/css" rel="stylesheet" href="./index.css" />
     <script>
         console.log(React);
         console.log(ReactDOM);
@@ -14,17 +19,38 @@
 </head>
 
 <body>
-
-    <a href='https://gitee.com/hi-windom/color-theme-analyse'
-        style="display: flex;justify-content: center;align-items: center;"><img class="follow" src='./gitee.svg'
-            alt='Fork me on Gitee'></img></a>
-    <div style="text-align: center;">
-        <a href='tencent://AddContact/?fromId=45&fromSubId=1&subcmd=all&uin=694357845&website=www.oicqzone.com'
-            style="font-size: 90pt;font-style: oblique;color: #3963c4;">Hello
-            Soltus</a>
+    <div id="viewmode"></div>
+    <div id="headto">
+        <a href='https://gitee.com/hi-windom/color-theme-analyse'
+            style="display: flex;justify-content: center;align-items: center;"><img class="follow wow pulse"
+                data-wow-duration="1.6s" data-wow-delay="0.8s" data-wow-iteration="999" src='./gitee.svg'
+                alt='Fork me on Gitee'></img></a>
     </div>
-    <div id="imgs"></div>
-    <div id="osc-gitee-widget-tag"></div>
+    <div style="text-align: center;" class="wow bounce" data-wow-duration="1.6s" data-wow-delay="0.6s"
+        data-wow-iteration="999">
+        <a href='tencent://AddContact/?fromId=45&fromSubId=1&subcmd=all&uin=694357845&website=www.oicqzone.com'
+            id="hello">Hello
+            Soltus<br>
+            <div id="time"></div>
+        </a>
+    </div>
+    <div id="imgs" class="imgs"></div>
+    <div class="wow fadeIn" data-wow-duration="0.8s" data-wow-delay="0.1s" data-wow-offset="30">
+        <div id="osc-gitee-widget-tag"></div>
+    </div>
 </body>
+<script type="text/javascript" src="./_js/wow.min2.js"></script>
+<!--min2是第三方修改过的wow.js 可以重复展示动画-->
+<script>
+    new WOW().init();
+    console.log('wow');
+    window.onbeforeunload = function () {
+        document.documentElement.scrollTop = 0;  //ie下
+        document.body.scrollTop = 0;  //非ie
+    };
+    window.onload = function () {
+        console.log('ok')
+    }
+</script>
 
 </html>

@@ -6,7 +6,8 @@ import shutil
 import os
 import datetime
 import time
-import easygui as g  # 导入EasyGui模块，主要用于选择目标文件夹，不需要可以去掉
+import easygui as g
+from numba.core.decorators import njit  # 导入EasyGui模块，主要用于选择目标文件夹，不需要可以去掉
 from rich import print  # rich用于进度条展示和美化终端输出，不需要可以去掉
 from rich.console import Console
 from rich.progress import (
@@ -23,6 +24,7 @@ import binascii
 import json
 import re
 from hashlib import md5
+
 '''
 # ---------------------------------
 # 创建于2021/5/18
@@ -248,10 +250,10 @@ def domain(img):
 
                 prolist.map(procompress, ffs, roots)
 
-            while True:
+            while True:  # 定时检测文件夹文件数量
                 nowlist = len(os.listdir(
                     os.path.join(base_dir, "src\\finish")))
-                time.sleep(3)
+                time.sleep(2)
                 while nowlist != len(os.listdir(
                         os.path.join(base_dir, "src\\finish"))):
                     continue
@@ -325,7 +327,9 @@ def domain(img):
                     os.path.dirname(img), safe=";/?:@&=+$,")
                 reportjson = {'date': curr_time.strftime(
                     "%Y-%m-%d"), 'time': curr_time.strftime("%H:%M:%S"), 'in_path_url': in_path_url, 'in_files': ptv, 'cost_times': cost_times}
-                with open(os.path.join(base_dir, 'src\\reports\\' + curr_time.strftime("%Y%m%d-%H%M%S_")) + 'report.json', 'w') as js:
+                reportfile = os.path.join(
+                    base_dir, 'src\\reports\\' + curr_time.strftime("%Y%m%d-%H%M%S_")) + 'report.json'
+                with open(reportfile, 'w') as js:
                     file_list = []
                     for dir in os.listdir(base_dir + '\\src\\prepare'):
                         child = os.path.join(base_dir + '\\src\\prepare', dir)
@@ -354,7 +358,7 @@ def domain(img):
                         img2_w = False
                         i = 0
                         shutil.copy2(os.path.join(
-                            base_dir, 'src/base.css'), os.path.join(base_dir, 'src/index.css'))
+                            base_dir, 'src/_css/base.css'), os.path.join(base_dir, 'src/index.css'))
                         for name in file_list:
                             i += 1
                             if rerule2.search(os.path.splitext(name)[0]):
@@ -369,7 +373,7 @@ def domain(img):
                             else:
                                 if i <= img1 and img2_w == False:
                                     mainjs.writelines(
-                                        r'<div className="colorbox">')
+                                        r'<div className="colorbox wow fadeIn" data-wow-delay="0.2s" data-wow-duration="0.5s" data-wow-offset="20">')
                                     with open(os.path.join(base_dir, 'src/index.css'), 'a', encoding='utf-8') as maincss:
                                         maincss.writelines('\n')
                                         for c in range(1, 6):
@@ -381,14 +385,14 @@ def domain(img):
                                                 z-index: 99;\n}}\n'.format(i, c, colors[c+1]))
                                     mainjs.writelines('</div>\n')
                                     mainjs.writelines(
-                                        r'<img className="img" src={"' + name + r'"} />' + '\n')
+                                        r'<img className="img wow fadeIn" data-wow-delay="0.2s" data-wow-duration="0.5s" data-wow-offset="20" src={"' + name + r'"} />' + '\n')
                                 else:
                                     if img2_w == False:
                                         mainjs.writelines(
                                             '</div>\n<div className='"'imgshow2'"'>\n')
                                         img2_w = True
                                     mainjs.writelines(
-                                        r'<div className="colorbox">')
+                                        r'<div className="colorbox wow fadeIn" data-wow-delay="0.2s" data-wow-duration="0.5s" data-wow-offset="20">')
                                     with open(os.path.join(base_dir, 'src/index.css'), 'a', encoding='utf-8') as maincss:
                                         maincss.writelines('\n')
                                         for c in range(1, 6):
@@ -401,9 +405,17 @@ def domain(img):
                                     mainjs.writelines('</div>\n')
                                 if img2_w == True:
                                     mainjs.writelines(
-                                        r'<img className="img" src={"' + name + r'"} />' + '\n')
+                                        r'<img className="img wow fadeIn" data-wow-delay="0.2s" data-wow-duration="0.5s" data-wow-offset="20" src={"' + name + r'"} />' + '\n')
                         mainjs.writelines(
                             '</div>\n</div> ); \n}}\n\nReactDOM.render(<ImgShow / >,document.getElementById('"'imgs'"')); ')
+                        with open(os.path.join(base_dir, 'src/_js/base.js'), 'r+', encoding='utf-8') as index:
+                            index.seek(0)
+                            index_text = index.read()
+                            rf = re.sub(r'^.*\\src', './',
+                                        reportfile).replace('\\', '/')
+                            index_text = index_text.replace(
+                                '[[reportpath]]', rf)
+                            mainjs.writelines(index_text)
 
 
 # if __name__ == '__main__':

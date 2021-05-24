@@ -8,7 +8,7 @@
     width: auto;
     min-width: 20%;
     height: 25%;
-    min-height: 200px;
+    min-height: 100px;
     padding: 40px;
     object-fit: contain;
 }
@@ -36,30 +36,65 @@
     justify-content: center;
     align-items: center;
 }
+#headto{
+    padding-top: 15px;
+}
+#imgs {
+    color: rebeccapurple;
+}
+#viewmode {
+    position: fixed;
+    top: 0px;
+    z-index: 999;
+    width: 100%;
+}
+#viewmode > div > button{
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    width: 100%;
+}
+#hello {
+    font-size: 90pt;
+    font-style: oblique;
+    color: #3963c4;
+    text-shadow: 3px 8px 10px rgb(162, 127, 223);
+}
+#hello:hover {
+    text-shadow: 4px 4px 4px rgb(230, 78, 192);
+}
+#time {font-size:20pt}
 #imgbox {width: calc(100% - 10px);display: flex;justify-content: center;}
 .img {
     max-width: 98%;
     min-width: 98%;
     height: 630px;
     object-fit:contain;
-    background-color: white;
+    background-color: whitesmoke;
     border: 1px solid white;
     margin: 0;
     margin-left: 10px;
+    box-shadow: 4px 14px 18px rgb(171, 164, 168);
 }
 .img:hover {
-    background-color:whitesmoke;
-    border: 1px solid firebrick;
+    background-color:rgb(235, 235, 235);
 }
 body {
     height: 100%;
     width: 100%;
+    max-width: 100%;
     margin: 0;
     background-color: white;
 }
 a {
     text-decoration: none;
 }
+
 .colorbox {
     max-width: 98%;
     min-width: 98%;
@@ -71,10 +106,18 @@ a {
     z-index: 999;
     margin: 0;
     padding-left: 10px;
-    background-color: white;
-    border-top: 58px solid white;
+    padding-top: 58px;
     border-bottom: 3px solid white;
     display: flex;
     justify-content: center;
     align-items: center;
 }
+
+@media screen and (max-width: 501px) {
+.img {height: 230px;}
+.imgshow1{min-height: 300px;}
+.imgshow2{min-height: 300px;}
+#hello{font-size: 50pt;}
+#time {font-size:10pt}
+}
+
