@@ -1,7 +1,7 @@
 from multiprocessing import shared_memory
 from concurrent import futures
 import easygui as g
-import test_3
+from . import test_3
 import os
 import socket
 import time

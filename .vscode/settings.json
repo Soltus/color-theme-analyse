@@ -1,3 +1,4 @@
 {
-    "activestate.promptRuntimeCreation": false
+    "activestate.promptRuntimeCreation": false,
+    "python.pythonPath": "C:\\ProgramData\\Miniconda3\\envs\\sc\\python.exe"
 }
