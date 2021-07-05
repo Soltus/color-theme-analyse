@@ -1,7 +1,7 @@
 from multiprocessing import shared_memory
 from concurrent import futures
 import easygui as g
-from . import test_3
+import test_3 # 需要test_3.py文件在同一目录下
 import os
 import socket
 import time

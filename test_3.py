@@ -14,7 +14,7 @@ from rich.progress import (
     BarColumn,
     Progress,
 )
-from . import MMCQ  # 需要MMCQ.py文件在同一目录下
+import MMCQ  # 需要MMCQ.py文件在同一目录下
 from cv2 import data
 import cv2 as cv
 import numpy as np
