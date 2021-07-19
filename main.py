@@ -1,11 +1,42 @@
-from multiprocessing import shared_memory
+# -*- coding=utf-8
+
+# SCSD-PY001
+
+# hi-windom/ColorThemeAnalyse
+
+# https://gitee.com/hi-windom/color-theme-analyse
+
+'''
+# ---------------------------------
+# 创建于    2021-5-18
+# 更新于    2021-7-20 02:09:40
+# ---------------------------------
+# Need help ?  => 694357845@qq.com
+# ---------------------------------
+# 如果你的 Python 版本大于 3.8.0 ，直接运行本文件，会自动帮你安装依赖
+# 建议在 Conda 虚拟环境运行本文件
+# ---------------------------------
+'''
+
+################################################################
+import importlib
+logger = importlib.import_module('.logger','scp.lib')
+logger = logger.myLogging("gitee.com/soltus")  # 这里如果报错，可以忽略
+importlib.import_module('.executable_check','scp')
+from multiprocessing import shared_memory  # required for Python >= 3.8
 from concurrent import futures
-import easygui as g
-import test_3 # 需要test_3.py文件在同一目录下
-import os
+test_3 = importlib.import_module('.test_3','scp.lib')
 import socket
 import time
-
+import os
+PN = 'easygui'
+try:
+    import easygui as g
+except ImportError:
+    logger.critical(f'import "{PN}" could not be resolved')
+    logger.info("Try to download [{PN}] , Please wait for busy.")
+    os.system("pip install easygui -i https://pypi.douban.com/simple/")
+    import easygui as g
 
 def get_host_ip():
     """

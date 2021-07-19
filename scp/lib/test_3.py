@@ -1,34 +1,15 @@
 # -*- coding=utf-8
-from concurrent import futures  # 多进程+多线程，实测速度提升明显，缺点是无法实现rich进度条展示
-from multiprocessing import shared_memory
-from posixpath import pathsep
-import shutil
-import os
-import datetime
-import time
-import easygui as g
-from numba.core.decorators import njit  # 导入EasyGui模块，主要用于选择目标文件夹，不需要可以去掉
-from rich import print  # rich用于进度条展示和美化终端输出，不需要可以去掉
-from rich.console import Console
-from rich.progress import (
-    BarColumn,
-    Progress,
-)
-import MMCQ  # 需要MMCQ.py文件在同一目录下
-from cv2 import data
-import cv2 as cv
-import numpy as np
-from PIL import Image
-import urllib.parse as parse
-import binascii
-import json
-import re
-from hashlib import md5
+
+# SCSD-PY001
+
+# hi-windom/ColorThemeAnalyse
+
+# https://gitee.com/hi-windom/color-theme-analyse
 
 '''
 # ---------------------------------
-# 创建于2021/5/18
-# 更新于2021/5/27 15:55
+# 创建于    2021-5-18
+# 更新于    2021-7-20 02:10:10
 # ---------------------------------
 # Need help ?  => 694357845@qq.com
 # ---------------------------------
@@ -41,6 +22,8 @@ from hashlib import md5
 # 6.[Optional]生成报告
 # ---------------------------------
 '''
+import os
+import json
 # 全局变量
 try:
     profile = json.load(open('profile.json', 'r+'))
@@ -57,6 +40,66 @@ except:
 # ignore_size 是图片压缩忽略阈值（宽/高中的最大值），默认为200
 # 推荐在profile.json中修改配置，如有需要也可以修改成传参
 '''
+import importlib
+from concurrent import futures  # 多进程+多线程，实测速度提升明显，缺点是无法实现rich进度条展示
+from multiprocessing import shared_memory
+from posixpath import pathsep
+import shutil
+import datetime
+import time  # 导入EasyGui模块，主要用于选择目标文件夹，不需要可以去掉
+import urllib.parse as parse
+import binascii
+import re
+from hashlib import md5
+try:
+    import easygui as g
+except ImportError:
+    os.system("pip install easygui -i https://pypi.douban.com/simple/")
+    importlib.invalidate_caches()
+    import easygui as g
+
+try:
+    import cv2 as cv
+except ImportError:
+    os.system("pip install opencv-python -i https://pypi.douban.com/simple/")
+    importlib.invalidate_caches()
+    cv = importlib.import_module("cv2",'cv2')
+    # import cv2 as cv
+
+try:
+    import numpy as np
+except ImportError:
+    os.system("pip install numpy -i https://pypi.douban.com/simple/")
+    importlib.invalidate_caches()
+    import numpy as np
+
+try:
+    from PIL import Image
+except ImportError:
+    os.system("pip install pillow -i https://pypi.douban.com/simple/")
+    importlib.invalidate_caches()
+    from PIL import Image
+
+try:
+    from rich import print  # rich用于进度条展示和美化终端输出，不需要可以去掉
+    from rich.console import Console
+    from rich.progress import (
+    BarColumn,
+    Progress,
+)
+except ImportError:
+    os.system("pip install rich -i https://pypi.douban.com/simple/")
+    importlib.invalidate_caches()
+    from rich import print  # rich用于进度条展示和美化终端输出，不需要可以去掉
+    from rich.console import Console
+    from rich.progress import (
+    BarColumn,
+    Progress,
+)
+
+from MMCQ import MMCQ  # 需要MMCQ.py文件在同一目录下，第一个MMCQ是文件名，第二个是类名
+
+
 # 实例化进度条，由于采用多进程+多线程，只能当分隔符使用
 progress = Progress(
     BarColumn(bar_width=None)

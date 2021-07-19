@@ -1,3 +1,22 @@
+# -*- coding=utf-8
+
+# SCSD-PY001
+
+# hi-windom/ColorThemeAnalyse
+
+# https://gitee.com/hi-windom/color-theme-analyse
+
+'''
+# ---------------------------------
+# 创建于    ???
+# 更新于    2021-7-20 02:10:25
+# ---------------------------------
+# Need help ?  => 694357845@qq.com
+# ---------------------------------
+# 这是第三方开源项目的一部分源代码
+# 这是一个修改过的副本，获取原作者构建的版本请在 GitHub 搜索 [ImageColorTheme]
+# ---------------------------------
+'''
 import numpy as np
 from queue import PriorityQueue as PQueue
 from functools import reduce
@@ -87,8 +106,8 @@ class MMCQ(object):
         return pixHisto
 
     @classmethod
-    def getColorIndex(self, r, g, b):
-        return (r << (2 * self.SIGBITS)) + (g << self.SIGBITS) + b
+    def getColorIndex(cls, r, g, b):  # 这里的 [cls] 是被修改的，源码此处应为 [self]
+        return (r << (2 * cls.SIGBITS)) + (g << cls.SIGBITS) + b
 
     def createVbox(self, pixData):
         rmax = np.max(pixData[:, :, 0]) >> self.rshift
