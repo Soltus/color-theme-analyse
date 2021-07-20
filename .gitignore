@@ -50,12 +50,13 @@ Thumbs.db
 
 *__pycache__
 *.pyc
-
+*.egg-info
 /.history
 /.vscode
-/src/compress
-/src/finish
-/src/prepare
-/src/reports
-/src/index.css
-/src/index.js
+/tests
+/src/MMCQsc/src/compress
+/src/MMCQsc/src/finish
+/src/MMCQsc/src/prepare
+/src/MMCQsc/src/reports
+/src/MMCQsc/src/index.css
+/src/MMCQsc/src/index.js

@@ -1,0 +1,24 @@
+include pyproject.toml
+
+include *.md
+
+include LICENSE
+
+include setup.py
+
+include __init__.py
+include src/__init__.py
+
+recursive-include src *
+global-exclude *__pycache__
+global-exclude *.pyc
+global-exclude *.history
+global-exclude *.vscode
+global-exclude src/MMCQsc/src/compress
+global-exclude src/MMCQsc/src/finish
+global-exclude src/MMCQsc/src/prepare
+global-exclude src/MMCQsc/src/reports
+recursive-exclude src/MMCQsc/src index.css
+recursive-exclude src/MMCQsc/src index.js
+
+inclue src/color_theme_analyse.py

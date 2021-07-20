@@ -100,7 +100,7 @@ def openhtml():
     logger.info(f'\n即将默认浏览器打开：\n{myip}:5858\n\n')
     os.system(f'start http://{myip}:5858')
 
-def main():
+def mainFunc():
     try:
         shm = shared_memory.SharedMemory(
             name='main_run_share', create=True, size=4096)
@@ -126,3 +126,10 @@ def main():
 
 # shm.close()  # 关闭共享内存
 # shm.unlink()  # 释放共享内存
+if __name__ == '__main__':
+    import os,sys
+    root_path = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+    if root_path not in sys.path:
+        sys.path.append(root_path)
+    from scp import executable_check
+    result = mainFunc()
