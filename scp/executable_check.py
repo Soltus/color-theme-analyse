@@ -24,15 +24,13 @@ import json
 root_path = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 if root_path not in sys.path:
     sys.path.append(root_path)
-if __name__ == '__main__': #单文件调试
-    logger = import_module('.logger','lib')
-    logger = logger.myLogging("gitee.com/soltus")  # 这里如果报错，可以忽略
-    error_sc = import_module('.error_sc','lib')
-    EnvError = error_sc.EnvError()
-else: #被调用
-    from scp.lib.logger import *
-    logger = myLogging("gitee.com/soltus")
-    from scp.lib.error_sc import *
+    # logger = import_module('.logger','lib')
+    # logger = logger.myLogging("gitee.com/soltus")
+
+from scp.lib.error_sc import *
+from scp.lib.logger import *
+logger = myLogging("gitee.com/soltus")
+from scp.lib.error_sc import *
 
 
 def fun_version(v1,v2):
@@ -92,7 +90,7 @@ def run_in_env(env):
         if "conda" in conda_v.read():
             logger.debug("\n\n\n\t\t使用当前 Conda 环境继续吗 (y) ？\n\t\t或者重新选择运行环境 (n) ？\n\t\t也可以输入任意字符作为新环境名，将为你自创建一个 Python 3.9.5 的新环境\n\n\t\tProccess ?  [Y/n/*]")
     while True:
-        pick_env = input("main.py:123 >>> ")
+        pick_env = input("main.py:93 >>> ")
         if pick_env in ['Y','y']:
             if sys.version_info.major < 3:
                 logger.error(" Can NOT run in Python 2.x ")
@@ -108,7 +106,7 @@ def run_in_env(env):
             os.system("cls")
             os.system("conda info -e")
             logger.debug("\n\n\n\t\t输入你想激活的 Conda 环境")
-            pick_env = input("main.py:123 >>> ")
+            pick_env = input("main.py:109 >>> ")
             logger.debug(f"请在终端执行指令 conda activate {pick_env} 手动激活环境")
             exit()
         else:

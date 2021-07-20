@@ -27,18 +27,20 @@ root_path = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 
 if root_path not in sys.path:
     sys.path.append(root_path)
-if __name__ == '__main__': #单文件调试
-    logger = import_module('.logger','lib')
-    logger = logger.myLogging("gitee.com/soltus")  # 这里如果报错，可以忽略
-    executer = import_module('.executer','scp.scripts')
-else: #被调用
-    from .lib.logger import *
-    logger = myLogging("gitee.com/soltus")
-    from .scripts import executer
+
+    # logger = import_module('.logger','lib')
+    # logger = logger.myLogging("gitee.com/soltus")
+    # executer = import_module('.executer','scp.scripts')
+
+from scp.lib.logger import *
+logger = myLogging("gitee.com/soltus")
+from scp.scripts import executer
 
 
 from multiprocessing import shared_memory  # required for Python >= 3.8
 from concurrent import futures
+from subprocess import Popen
+import shlex
 
 PN = 'easygui'
 try:
@@ -66,27 +68,39 @@ def get_host_ip():
 
 def createServer():
     myip = get_host_ip()
-    print(f'\n\n\n本地服务器创建成功：\n{myip}:5858\n\n')
-    os.system(
-        'cd {}/src && python -m http.server 5858'.format(os.path.join(os.path.dirname(__file__), '../..')))
+    SRC_DIR =os.path.join(os.path.dirname(__file__), '..','src')
+    try:
+        args = shlex.split(f"pyhton -m http.server 5858")
+        result = Popen(args, bufsize=0, executable=sys.executable, close_fds=False, shell=False, cwd=SRC_DIR, startupinfo=None, creationflags=0)
+        '''
+        cwd 工作目录，设置为正确值以确保 launch ../src/index.html
+        executable 参数指定一个要执行的替换程序。这很少需要。当 shell=True， executable 替换 args 指定运行的程序。但是，原始的 args 仍然被传递给程序。大多数程序将被 args 指定的程序作为命令名对待，这可以与实际运行的程序不同。
+        '''
+        logger.debug(f"本地服务器进程 PID: {result.pid}")
+        logger.info(f'\n\n\n本地服务器创建成功：\n{myip}:5858\n\n')
+        result.wait()
+    except BaseException as e:
+        if isinstance(e, KeyboardInterrupt):
+            logger.warning("服务已停止")
+            time.sleep(2)
+            try:
+                os.remove(SRC_DIR + '\\index.js')
+                os.remove(SRC_DIR + '\\index.css')
+            except:
+                logger.warning('未能删除自动生成文件')
+            finally:
+                exit()
+    # os.system(
+    #     'cd {}/src && python -m http.server 5858'.format(os.path.join(os.path.dirname(__file__), '..')))
 
 
 # 无网页交互需求可以恢复被注释的代码
 def openhtml():
     myip = get_host_ip()
-    print(f'\n即将默认浏览器打开：\n{myip}:5858\n\n')
+    logger.info(f'\n即将默认浏览器打开：\n{myip}:5858\n\n')
     os.system(f'start http://{myip}:5858')
-    time.sleep(10)
-    try:
-        base_dir = os.path.dirname(__file__)
-        # os.remove(base_dir + '\\src\\index.js')
-        # os.remove(base_dir + '\\src\\index.css')
-    except:
-        pass
-    # os.system('taskkill /f /fi "IMAGENAME eq cmd.exe')
 
-
-if __name__ != '__main__':
+def main():
     try:
         shm = shared_memory.SharedMemory(
             name='main_run_share', create=True, size=4096)

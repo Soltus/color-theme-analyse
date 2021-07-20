@@ -127,14 +127,13 @@ if dddd:
     print(f'\n\t\t{dddd} new packages already installed .\n\n\t\ttry to launch again .\n\n')
     exit()
 
-if __name__ == '__main__': #单文件调试
-    from scp.lib import logger
-    logger = logger.myLogging("gitee.com/soltus")  # 这里如果报错，可以忽略
-    from scp.lib.MMCQ import MMCQ
-else: #被调用
-    from ..lib.logger import *
-    logger = myLogging("gitee.com/soltus")
-    from ..lib.MMCQ import MMCQ  # 第一个MMCQ是文件名，第二个是类名
+from scp.lib import logger
+logger = logger.myLogging("gitee.com/soltus")  # 这里如果报错，可以忽略
+from scp.lib.MMCQ import MMCQ # 第一个MMCQ是文件名，第二个是类名
+
+    # from ..lib.logger import *
+    # logger = myLogging("gitee.com/soltus")
+    # from ..lib.MMCQ import MMCQ  # 第一个MMCQ是文件名，第二个是类名
 
 
 # 实例化进度条，由于采用多进程+多线程，只能当分隔符使用

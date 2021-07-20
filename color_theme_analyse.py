@@ -13,3 +13,4 @@ if __name__ == '__main__':
         sys.path.append(root_path)
     from scp import executable_check
     from scp import main
+    result = main.main()
