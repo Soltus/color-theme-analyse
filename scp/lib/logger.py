@@ -56,7 +56,7 @@ class ColoredFormatter(logging.Formatter):
         return logging.Formatter.format(self, record)
 
 
-LOGFORMAT = "%(filename)s:%(lineno)d >>> [ %(levelname)s ]\t%(asctime)s    %(message)s\t%(name)s"
+LOGFORMAT = " >>> %(filename)s:%(lineno)d [ %(levelname)s ]\t%(asctime)s    %(message)s\t%(name)s"
 LOG_LEVEL = logging.DEBUG
 formatter = ColoredFormatter(LOGFORMAT)
 stream = logging.StreamHandler()

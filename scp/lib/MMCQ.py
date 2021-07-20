@@ -17,6 +17,7 @@
 # 这是一个修改过的副本，获取原作者构建的版本请在 GitHub 搜索 [ImageColorTheme]
 # ---------------------------------
 '''
+import sys
 import numpy as np
 from queue import PriorityQueue as PQueue
 from functools import reduce

@@ -18,17 +18,22 @@
 '''
 
 ################################################################
-
-import os
-import sys
-import importlib
+import os,sys
+from importlib import import_module
 import json
-if __name__ == '__main__':
-    logger = importlib.import_module('.logger','lib')
+root_path = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+if root_path not in sys.path:
+    sys.path.append(root_path)
+if __name__ == '__main__': #单文件调试
+    logger = import_module('.logger','lib')
     logger = logger.myLogging("gitee.com/soltus")  # 这里如果报错，可以忽略
-else:
-    from .lib.logger import *
+    error_sc = import_module('.error_sc','lib')
+    EnvError = error_sc.EnvError()
+else: #被调用
+    from scp.lib.logger import *
     logger = myLogging("gitee.com/soltus")
+    from scp.lib.error_sc import *
+
 
 def fun_version(v1,v2):
 # v1 == v2 return 0
@@ -68,14 +73,13 @@ def check_conda():
 from subprocess import Popen
 import shlex
 
-error_sc = importlib.import_module('.error_sc','lib')
-try:
-    raise error_sc.__Python__Env__Error('e001')
-except error_sc.__Python__Env__Error as e:
-    logger.error("引发异常：" + repr(e))
-    logger.debug(e.help('e002'))
-    logger.warning(e.get_all('json'))
-exit()
+# try:
+#     raise error_sc.EnvError('e97304')
+# except error_sc.EnvError as e:
+#     logger.error("引发异常：" + repr(e))
+#     tb = sys.exc_info()[2]
+#     if tb:
+#         raise error_sc.OA().with_traceback(tb)
 
 def run_in_env(env):
     PY3_VNO = ''
@@ -86,16 +90,16 @@ def run_in_env(env):
     logger.info("You are using Conda , Activated conda env : '{}' Python {}".format(env, PY3_VNO))
     with os.popen("conda --version") as conda_v:
         if "conda" in conda_v.read():
-            logger.debug("\n\n\n\t\t使用当前 Conda 环境继续吗 (y) ？\n\t\t或者重新选择运行环境 (n) ？\n\t\t也可以输入任意字符作为新环境名，将为你自动创建一个 Python 3.9.5 的新环境\n\n\t\tProccess ?  [Y/n/*]")
+            logger.debug("\n\n\n\t\t使用当前 Conda 环境继续吗 (y) ？\n\t\t或者重新选择运行环境 (n) ？\n\t\t也可以输入任意字符作为新环境名，将为你自创建一个 Python 3.9.5 的新环境\n\n\t\tProccess ?  [Y/n/*]")
     while True:
         pick_env = input("main.py:123 >>> ")
         if pick_env in ['Y','y']:
             if sys.version_info.major < 3:
                 logger.error(" Can NOT run in Python 2.x ")
-                raise __Python__Version__Error('\n\n\t''This script is only for use with ''Python 3.6 or later\n\n\t https://gitee.com/hi-windom/color-theme-analyse/ \n\n')
+                raise EnvError('\n\n\t''This script is only for use with ''Python 3.6 or later\n\n\t https://gitee.com/hi-windomcolor-theme-analyse/ \n\n')
             elif sys.version_info[:3] < (3,6,0):
                 logger.error(" Can NOT run in Python < 3.6 ")
-                raise __Python__Version__Error('\n\n\t''This script is only for use with ''Python 3.6 or later\n\n\t https://gitee.com/hi-windom/color-theme-analyse/ \n\n')
+                raise EnvError('\n\n\t''This script is only for use with ''Python 3.6 or later\n\n\t https://gitee.com/hi-windomcolor-theme-analyse/ \n\n')
             else:
                 return 0
         elif pick_env in ['N','n']:
@@ -113,10 +117,15 @@ def run_in_env(env):
             os.system("cls")
             python = sys.executable.replace(check_conda()[1],pick_env)
             change_env = file_path.replace('main','change_env')
-            args = shlex.split(f"conda create -n {pick_env} python==3.9.5 -y")
-            result = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0)
-            logger.debug(f"创建下载线程 PID: {result.pid}")
-            result.wait()
+            try:
+                args = shlex.split(f"conda create -n {pick_env} python==3.9.5 -y")
+                result = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0)
+                logger.debug(f"创建下载线程 PID: {result.pid}")
+                result.wait()
+            except BaseException as e:
+                if isinstance(e, KeyboardInterrupt):
+                    logger.warning("用户中止了下载")
+                    result.kill()
             #os.system(f"conda create -n {pick_env} python==3.9.5 -y")
             # args = shlex.split(f"conda activate {pick_env}")
             # result = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0)
@@ -148,17 +157,22 @@ if fun_version(PY3_VNO,"3.8.0") == -1:
         exit()
     os.system("cls")
     logger.info("即将开始下载，这取决于你的网络")
-    args = shlex.split(f"conda install python==3.9.5 -n {pick_env} -y")
-    result = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0)
-    logger.debug(f"创建下载线程 PID: {result.pid}")
-    result.wait()
-    # result = os.system("conda install python==3.9.5 -y")
-    if result.returncode:
-        logger.error("下载失败，请手动升级 Python 后重试")
-    else:
-        args = [sys.executable, file_path]
-        logger.debug(args)
-        logger.debug(f"请在终端执行指令 conda activate {pick_env} 手动激活环境")
-    exit()
+    try:
+        args = shlex.split(f"conda install python==3.9.5 -n {pick_env} -y")
+        result = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0)
+        logger.debug(f"创建下载线程 PID: {result.pid}")
+        result.wait()
+    except BaseException as e:
+        if isinstance(e, KeyboardInterrupt):
+            logger.warning("用户中止了下载")
+            result.kill()
+    finally:
+        if result.returncode:
+            logger.error("下载失败，请手动升级 Python 后重试")
+        else:
+            args = [sys.executable, file_path]
+            logger.debug(args)
+            logger.debug(f"请在终端执行指令 conda activate {pick_env} 手动激活环境")
+            exit()
 elif fun_version(PY3_VNO,"3.9.5") == -1:
     logger.warning("Recommended version : Python >= 3.9.5  However, it doesn't matter")

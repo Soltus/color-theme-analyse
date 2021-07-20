@@ -48,14 +48,14 @@ Thumbs.db
 *.mov
 *.wmv
 
-/.vscode
+*__pycache__
+*.pyc
+
 /.history
-/__pycache__
+/.vscode
 /src/compress
 /src/finish
 /src/prepare
 /src/reports
 /src/index.css
 /src/index.js
-/scp/lib/__pycache__
-/scp/__pycache__

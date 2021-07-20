@@ -19,24 +19,35 @@
 '''
 
 ################################################################
-import importlib
-logger = importlib.import_module('.logger','scp.lib')
-logger = logger.myLogging("gitee.com/soltus")  # 这里如果报错，可以忽略
-importlib.import_module('.executable_check','scp')
-from multiprocessing import shared_memory  # required for Python >= 3.8
-from concurrent import futures
-test_3 = importlib.import_module('.test_3','scp.lib')
 import socket
 import time
-import os
+import os,sys
+from importlib import import_module
+root_path = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+
+if root_path not in sys.path:
+    sys.path.append(root_path)
+if __name__ == '__main__': #单文件调试
+    logger = import_module('.logger','lib')
+    logger = logger.myLogging("gitee.com/soltus")  # 这里如果报错，可以忽略
+    executer = import_module('.executer','scp.scripts')
+else: #被调用
+    from .lib.logger import *
+    logger = myLogging("gitee.com/soltus")
+    from .scripts import executer
+
+
+from multiprocessing import shared_memory  # required for Python >= 3.8
+from concurrent import futures
+
 PN = 'easygui'
 try:
     import easygui as g
 except ImportError:
     logger.critical(f'import "{PN}" could not be resolved')
-    logger.info("Try to download [{PN}] , Please wait for busy.")
+    logger.info(f"Try to download [{PN}] , Please wait for busy.")
     os.system("pip install easygui -i https://pypi.douban.com/simple/")
-    import easygui as g
+    exit()
 
 def get_host_ip():
     """
@@ -44,11 +55,11 @@ def get_host_ip():
     :return: ip
     """
     try:
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        s.connect(('8.8.8.8', 80))
-        ip = s.getsockname()[0]
+        ss = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        ss.connect(('8.8.8.8', 80))
+        ip = ss.getsockname()[0]
     finally:
-        s.close()
+        ss.close()
 
     return ip
 
@@ -57,7 +68,7 @@ def createServer():
     myip = get_host_ip()
     print(f'\n\n\n本地服务器创建成功：\n{myip}:5858\n\n')
     os.system(
-        'cd {}/src && python -m http.server 5858'.format(os.path.dirname(__file__)))
+        'cd {}/src && python -m http.server 5858'.format(os.path.join(os.path.dirname(__file__), '../..')))
 
 
 # 无网页交互需求可以恢复被注释的代码
@@ -75,7 +86,7 @@ def openhtml():
     # os.system('taskkill /f /fi "IMAGENAME eq cmd.exe')
 
 
-if __name__ == '__main__':
+if __name__ != '__main__':
     try:
         shm = shared_memory.SharedMemory(
             name='main_run_share', create=True, size=4096)
@@ -92,7 +103,7 @@ if __name__ == '__main__':
             buf[1] = len(img)
             for i in range(2, 10, 1):
                 buf[i] = 0
-            test_3.domain(img)
+            executer.domain(img)
             if buf[2] == 1:
                 with futures.ProcessPoolExecutor(max_workers=None) as prolist:
                     prolist.submit(createServer)

@@ -4,6 +4,12 @@ parser = argparse.ArgumentParser(prog='color-theme-analyse',formatter_class=argp
 parser.add_argument('--path',default=None, help='选择交给 %(prog)s 处理的文件夹（包含子文件夹）')
 
 args = parser.parse_args()
-print(args.path)
+
+
 if __name__ == '__main__':
-    from ..main import *
+    import os,sys
+    root_path = os.path.abspath(os.path.join(os.path.dirname(__file__)))
+    if root_path not in sys.path:
+        sys.path.append(root_path)
+    from scp import executable_check
+    from scp import main
