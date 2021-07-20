@@ -29,7 +29,7 @@ setuptools.setup(
     package_dir={"": "src"},
     package_data={
         
-    }, # 数据文件包含在包的子目录中
+    }, # 数据文件包含在包的子目录中, 文件扩展名为 .dat
     data_files=[
         ('lib/site-packages/MMCQsc/src',['src/MMCQsc/src/index.html']),
         ('lib/site-packages/MMCQsc/src',['src/MMCQsc/src/gitee.svg']),

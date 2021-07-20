@@ -77,18 +77,19 @@ def createServer():
         executable 参数指定一个要执行的替换程序。这很少需要。当 shell=True， executable 替换 args 指定运行的程序。但是，原始的 args 仍然被传递给程序。大多数程序将被 args 指定的程序作为命令名对待，这可以与实际运行的程序不同。
         '''
         logger.debug(f"本地服务器进程 PID: {result.pid}")
-        logger.info(f'\n\n\n本地服务器创建成功：\n{myip}:5858\n\n')
+        logger.info(f'\n\n\n\t\t本地服务器创建成功：\n\n\t\t{myip}:5858\n\n\t\t（支持局域网访问）\n\n')
+        logger.warning("\n\n\t\t[ tip ] : 快捷键 CTR + C 强制结束\n\n")
         result.wait()
     except BaseException as e:
         if isinstance(e, KeyboardInterrupt):
             logger.warning("服务已停止")
-            time.sleep(2)
             try:
                 os.remove(SRC_DIR + '\\index.js')
                 os.remove(SRC_DIR + '\\index.css')
             except:
                 logger.warning('未能删除自动生成文件')
             finally:
+                logger.warning("当前窗口已完成使命，是时候和它告别了")
                 exit()
     # os.system(
     #     'cd {}/src && python -m http.server 5858'.format(os.path.join(os.path.dirname(__file__), '..')))
@@ -97,7 +98,8 @@ def createServer():
 # 无网页交互需求可以恢复被注释的代码
 def openhtml():
     myip = get_host_ip()
-    logger.info(f'\n即将默认浏览器打开：\n{myip}:5858\n\n')
+    time.sleep(2)
+    logger.info(f'\n\n\n\t\t即将默认浏览器打开：\n\n{myip}:5858\n\n')
     os.system(f'start http://{myip}:5858')
 
 def mainFunc():

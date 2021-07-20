@@ -99,7 +99,7 @@ def run_in_env(env):
                 logger.error(" Can NOT run in Python < 3.6 ")
                 raise EnvError('\n\n\t''This script is only for use with ''Python 3.6 or later\n\n\t https://gitee.com/hi-windomcolor-theme-analyse/ \n\n')
             else:
-                return 0
+                return env
         elif pick_env in ['N','n']:
             python = sys.executable.replace(check_conda()[1],pick_env)
             print(python)
@@ -108,6 +108,7 @@ def run_in_env(env):
             logger.debug("\n\n\n\t\t输入你想激活的 Conda 环境")
             pick_env = input("main.py:109 >>> ")
             logger.debug(f"请在终端执行指令 conda activate {pick_env} 手动激活环境")
+            logger.warning("\n\n\t\t[ tip ] : 方向上键 ^ 可调出调出历史指令\n\n")
             exit()
         else:
             os.system("conda deactivate")
@@ -119,10 +120,12 @@ def run_in_env(env):
                 args = shlex.split(f"conda create -n {pick_env} python==3.9.5 -y")
                 result = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0)
                 logger.debug(f"创建下载线程 PID: {result.pid}")
+                logger.warning("\n\n\t\t[ tip ] : 快捷键 CTR + C 强制结束\n\n")
                 result.wait()
             except BaseException as e:
                 if isinstance(e, KeyboardInterrupt):
                     logger.warning("用户中止了下载")
+                    logger.warning("当前窗口已完成使命，是时候和它告别了")
                     result.kill()
             #os.system(f"conda create -n {pick_env} python==3.9.5 -y")
             # args = shlex.split(f"conda activate {pick_env}")
@@ -131,12 +134,16 @@ def run_in_env(env):
             logger.debug(python)
             logger.debug(file_path)
             logger.debug(f"已创建的环境 : [ {pick_env} ]  请使用创建的环境重新运行\n\n")
+            logger.warning("\n\n\t\t[ tip ] : 方向上键 ^ 可调出调出历史指令\n\n")
             exit()
             return pick_env
 
-pick_env = run_in_env(check_conda()[1])
+pick_env = check_conda()[1]
 while pick_env:
+    env_tmep = pick_env
     pick_env = run_in_env(pick_env)
+    if pick_env == env_tmep:
+        break
 
 PY3_VNO = ''
 for i in sys.version_info[:3]:
@@ -156,13 +163,15 @@ if fun_version(PY3_VNO,"3.8.0") == -1:
     os.system("cls")
     logger.info("即将开始下载，这取决于你的网络")
     try:
-        args = shlex.split(f"conda install python==3.9.5 -n {pick_env} -y")
-        result = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0)
+        args = shlex.split(f"conda conda install python==3.9.5 -n {pick_env} -y")
+        result = Popen(args, bufsize=0, executable=r"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe", close_fds=False, shell=False, env=None, startupinfo=None, creationflags=0)
         logger.debug(f"创建下载线程 PID: {result.pid}")
+        logger.warning("\n\n\t\t[ tip ] : 快捷键 CTR + C 强制结束\n\n")
         result.wait()
     except BaseException as e:
         if isinstance(e, KeyboardInterrupt):
             logger.warning("用户中止了下载")
+            logger.warning("当前窗口已完成使命，是时候和它告别了")
             result.kill()
     finally:
         if result.returncode:
@@ -171,6 +180,7 @@ if fun_version(PY3_VNO,"3.8.0") == -1:
             args = [sys.executable, file_path]
             logger.debug(args)
             logger.debug(f"请在终端执行指令 conda activate {pick_env} 手动激活环境")
+            logger.warning("\n\n\t\t[ tip ] : 方向上键 ^ 可调出调出历史指令\n\n")
             exit()
 elif fun_version(PY3_VNO,"3.9.5") == -1:
     logger.warning("Recommended version : Python >= 3.9.5  However, it doesn't matter")
