@@ -60,3 +60,5 @@ Thumbs.db
 /src/MMCQsc/src/reports
 /src/MMCQsc/src/index.css
 /src/MMCQsc/src/index.js
+/.eggs
+/build
