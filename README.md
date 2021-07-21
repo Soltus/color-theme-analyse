@@ -36,7 +36,6 @@ Pypi（计划中）
 必要的 Python 第三方库依赖：numpy, opencv-python, pillow, easygui, rich
 
 * [ ] 计划将 `rich` 移植为扩展依赖
-* [ ] 计划移除 `easygui` 依赖
 * [ ] 计划移除 `opency-python` 依赖
 
 本项目使用了 `React` 框架（非项目构建，只是运行时 `Babel`）

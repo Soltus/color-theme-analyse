@@ -20,7 +20,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="color-theme-analyse",
-    setup_requires=['setuptools_scm'],
+    setup_requires=['setuptools_scm'], # 指定运行 setup.py 文件本身所依赖的包
     use_scm_version=True, # .gitignore 应与 setup.py 在同一文件夹 更多信息参考 https://pypi.org/project/setuptools-scm/
     # version="0.0.5", # 默认的手动指定版本
     author="Soltus",
@@ -96,9 +96,9 @@ setuptools.setup(
         'download':['pipx'],
         'advanced':['pyinstaller>=4.3'],
     },
-    # 如果其中某些依赖，在官方的PyPI中不存在，则需要指定dependency_links (貌似已被弃用，但写上也不影响)
+    # dependency_links 已被弃用，因此使用 testPyPi 测试时，一些依赖项会无法下载（ https://test-files.pythonhosted.org 上没有），需要提前安装好依赖，然后 pip 后面加参数 --no-deps 无依赖下载
     dependency_links=[
-        'http://pypi.douban.com/simple',
+        'https://pypi.douban.com/simple',
         'https://pypi.org/simple',
     ],
 )
