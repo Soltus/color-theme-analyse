@@ -1,48 +1,43 @@
 # 说明
 
+已修改默认分支为 `pypi`
+
+
 源码地址
 
-[bitbucket（最快更新）](https://bitbucket.org/hi-windom/colorthemeanalyse/src/master/)
+[Bitbucket（最快更新）](https://bitbucket.org/hi-windom/colorthemeanalyse/src/master/ "默认仓库")
 
-[gitee](https://gitee.com/hi-windom/color-theme-analyse)
+[Gitee（最快下载）](https://gitee.com/hi-windom/color-theme-analyse "主要同步仓库")
+
+Github（计划中）
 
 ## 简介
 
 基于MMCQ对图片进行色彩主题分析，采用图片压缩和多进程来加速批量分析速度。
 
-> 多进程下难以实现进度条，因此可去掉
+`master` 分支是功能实现的 Simple Demo
+
+`pypi` 分支是 基于master分支重构的 Python Package 打包发布的 Simple Demo
 
 本项目是ImageColorTheme的（MMCQ）具体实现，ImageColorTheme的GitHub（国内镜像）地址：
 
 [GitHub - rainyear/ImageColorTheme: Extract Color Themes from Images (fastgit.org)](https://hub.fastgit.org/rainyear/ImageColorTheme)
 
-## 库依赖（不包括PY3自带）
+## 依赖
 
-要求Python版本高于3.9.0
+要求的版本Python>=3.8.0，建议的版本Python==3.9.5
 
-操作系统为Win10，其他系统自行改写有关代码
+`from multiprocessing import shared_memory required for Python >= 3.8`
 
-必要：
+要求的操作系统为Windows >= 1909  ( Win 10 / 11 )，建议的版本Windows==22000.71
 
-`pip install numpy -i https://pypi.douban.com/simple`
+必要的 Python 第三方库依赖：numpy, opencv-python, pillow, easygui, rich
 
-> `import numpy as np`
+* [ ] 计划将 `rich` 移植为扩展依赖
+* [ ] 计划移除 `easygui` 依赖
+* [ ] 计划移除 `opency-python` 依赖
 
-`pip install opencv-python -i https://pypi.douban.com/simple`
-
-> `import cv2 as cv`
->
-> `from cv2 import data`
-
-`pip install Pillow -i https://pypi.douban.com/simple` ~~(PIL)~~
-
-> `from PIL import Image`
-
-可选：
-
-`pip install easygui -i https://pypi.douban.com/simple`
-
-`pip install rich -i https://pypi.douban.com/simple`
+本项目使用了 `React` 框架（非项目构建，只是运行时 `Babel`）
 
 ---
 

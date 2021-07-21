@@ -6,11 +6,15 @@ MANIFEST.in 需要放在和 setup.py 同级的顶级目录下，setuptools 会�
 //关于setuptools：setuptools 是 distutils 增强版，不包括在标准库中
 //关于包格式：egg 包是过时的，whl 包是新的标准
 //关于打包：python -m build 默认帮你生成了 dist/*.tar.gz 和 dist/*.whl ，更多命令使用 python setup.py --help-commands 查看
-//关于上传：用 upload 命令上传包已经过时（不安全），官方提供了 twine 工具专门用来与 PyPI 交互
+//关于上传：用 upload 命令上传包已经过时（不安全），官方提供了 twine 工具专门用来与 PyPI 交互。
+项目成熟之前，应当使用 twine upload --repository testpypi dist/*
+testpypi 的数据库会被定期修剪，因此可以放心上传
 //关于版本号：python的软件分发工具还支持 local version identifier 可用于标识不打算发布的本地开发构建，本地版本标识符采用以下形式 <public version identifier>+<local version label> 例如：
 1.2.0.dev1+hg.5.b11e5e6f0b0b  # 5th VCS commmit since 1.2.0.dev1 release
 1.2.1+fedora.4                # Package with downstream Fedora patches applied
+使用了本地版本标识符是无法上传到 PyPi 的，因此 local_scheme = "no-local-version" 在 pyproject.toml
 '''
+
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
@@ -88,8 +92,9 @@ setuptools.setup(
     # install_requires 在安装模块时会自动安装依赖包
     # extras_require 仅表示该模块依赖这些包，但不是必须的，需要用户手动安装
     extras_require={
-        'PDF':  ["ReportLab>=1.2", "RXP"],
-        'reST': ["docutils>=0.3"],
+        'pipx':[],
+        'PDF':["ReportLab>=1.2", "RXP"],
+        'reST':["docutils>=0.3"],
     },
     # 如果其中某些依赖，在官方的PyPI中不存在，则需要指定dependency_links (貌似已被弃用，但写上也不影响)
     dependency_links=[
