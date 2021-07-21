@@ -2,18 +2,23 @@
 
 已修改默认分支为 `pypi`
 
-
 ## 项目地址
 
 [Bitbucket（最快更新）](https://bitbucket.org/hi-windom/colorthemeanalyse/src/master/ "默认仓库")
 
 [Gitee（最快下载）](https://gitee.com/hi-windom/color-theme-analyse "主要同步仓库")
 
-[Github（计划中）]()
+[Github（仅同步PyPi分支）](https://github.com/Soltus/color-theme-analyse)
 
 [Pypi](https://pypi.org/project/color-theme-analyse/ "https://pypi.org/project/color-theme-analyse/")
 
 [libraries.io](https://libraries.io/pypi/color-theme-analyse)
+
+源仓库在 Bitbucket，因此会首先得到同步
+
+Bug 反馈和 Issues 提交可以在 Bitbucket 或者 Gitee，**在 Gitee 会得到最快反馈**
+
+请勿在 Github 提交 Issues ，Github 只是同步仓库，不会处理任何提交的 Issues
 
 
 ## 简介
@@ -29,7 +34,6 @@
 [GitHub - rainyear/ImageColorTheme: Extract Color Themes from Images (fastgit.org)](https://hub.fastgit.org/rainyear/ImageColorTheme)
 
 本项目同时也是SCMD开源计划的一部分
-
 
 ## 依赖
 
