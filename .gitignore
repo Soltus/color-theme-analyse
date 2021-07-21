@@ -62,3 +62,4 @@ Thumbs.db
 /src/MMCQsc/src/index.js
 /.eggs
 /build
+/src/MMCQsc/version.py
