@@ -2,7 +2,8 @@
 
 已修改默认分支为 `pypi`
 
-## 项目地址
+
+### 项目地址
 
 [Bitbucket（最快更新）](https://bitbucket.org/hi-windom/colorthemeanalyse/src/master/ "默认仓库")
 
@@ -21,7 +22,7 @@ Bug 反馈和 Issues 提交可以在 Bitbucket 或者 Gitee，**在 Gitee 会得
 请勿在 Github 提交 Issues ，Github 只是同步仓库，不会处理任何提交的 Issues
 
 
-## 简介
+### 简介
 
 基于MMCQ对图片进行色彩主题分析，采用图片压缩和多进程来加速批量分析速度。
 
@@ -35,26 +36,39 @@ Bug 反馈和 Issues 提交可以在 Bitbucket 或者 Gitee，**在 Gitee 会得
 
 本项目同时也是SCMD开源计划的一部分
 
-## 依赖
 
-要求的版本Python>=3.8.0，建议的版本Python==3.9.5
+### Requires
+
+要求的版本 Python>=3.8.0
+
+建议的版本 Python==3.9.5
 
 `from multiprocessing import shared_memory required for Python >= 3.8`
 
-要求的操作系统为Windows >= 1909  ( Win 10 / 11 )，建议的版本Windows==22000.71
+要求的操作系统 Windows >= 1909  ( Win 10 / 11 )
+
+建议的操作系统 Windows>=22000.71（ Win 11 Dev ）
 
 必要的 Python 第三方库依赖：numpy, opencv-python, pillow, easygui, rich
 
-* [ ] 计划将 `rich` 移植为扩展依赖
-* [ ] 计划移除 `opency-python` 依赖
 
 本项目使用了 `React` 框架（非项目构建，只是运行时 `Babel`）
 
 ---
 
+
+
+
 # 教程
 
-## 个性化实现
+
+### Build
+
+
+### Feature
+
+
+### Customize
 
 `str(hex(k))[-2:].replace('x', '0').upper()`
 
@@ -65,3 +79,10 @@ Bug 反馈和 Issues 提交可以在 Bitbucket 或者 Gitee，**在 Gitee 会得
 本demo默认颜色主题为5个颜色，可根据需要减少或者增加（注意：主题色越多，分析速度越慢）。
 
 本demo限制一次最多处理1020图片，不建议修改，更多图片分批次处理即可
+
+
+### Scheme
+
+计划将 `rich` 移植为扩展依赖
+
+计划移除 `opency-python` 依赖
