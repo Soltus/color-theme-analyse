@@ -10,12 +10,14 @@ MANIFEST.in 需要放在和 setup.py 同级的顶级目录下，setuptools 会�
 //关于上传：用 upload 命令上传包已经过时（不安全），官方提供了 twine 工具专门用来与 PyPI 交互。
 项目成熟之前，应当使用 twine upload dist/* --verbose --repository testpypi
 testpypi 的数据库会被定期修剪，因此可以放心上传
-//关于版本号：python的软件分发工具还支持 local version identifier 可用于标识不打算发布的本地开发构建，本地版本标识符采用以下形式 <public version identifier>+<local version label> 例如：
+//关于版本号：Python 的软件分发工具还支持 local version identifier 可用于标识不打算发布的本地开发构建，本地版本标识符采用以下形式 <public version identifier>+<local version label> 例如：
 
         1.2.0.dev1+hg.5.b11e5e6f0b0b  # 5th VCS commmit since 1.2.0.dev1 release
         1.2.1+fedora.4                # Package with downstream Fedora patches applied
 
-使用了本地版本标识符是无法上传到 PyPi 的，因此 local_scheme = "no-local-version" 在 pyproject.toml
+另请注意，使用 setuptools_scm 控制版本后，使用了本地版本标识符是无法上传到 PyPi 的，因此 local_scheme = "no-local-version" 在 pyproject.toml
+修改 Release 版本号需要使用 Git 打上版本号标签，在熟悉之前应当使用 x.x.x 形式的标签（例如 1.0.2 ）
+如果不熟悉 Git 命令行操作，可以使用软件 Sourcetree 直观的提交和打标签。如果没有标签，你生成的包将始终为 0.1.dev*
 '''
 
 with open("README.md", "r", encoding="utf-8") as fh:
