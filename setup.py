@@ -1,7 +1,7 @@
 import setuptools
 '''
 官方推荐使用静态的 setup.cfg 但动态的 setup.py 对我们来说更熟悉，学习成本低，两个文件也可以共存
-MANIFEST.in 需要放在和 setup.py 同级的顶级目录下，setuptools 会自动读取该文件
+MANIFEST.in 需要放在和 setup.py 同级的顶级目录下，setuptools 会自动读取该文件，需要注意 MANIFEST.in 指令是按顺序执行的，因此 exclude 要放在 include 后面
 建议 MANIFEST.in 只用于构建 tar.gz 而不用于 whl ，即 setup.py 设置 [include_package_data=False]，至少在熟练掌握构建前应当这样做
 //关于setuptools：setuptools 是 distutils 增强版，不包括在标准库中
 //关于包格式：egg 包是过时的，whl 包是新的标准
