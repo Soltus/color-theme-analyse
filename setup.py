@@ -64,9 +64,14 @@ setuptools.setup(
         ('lib/site-packages/MMCQsc/src/_js',['src/MMCQsc/src/_js/base.js','src/MMCQsc/src/_js/babel.min_5.8.23.js','src/MMCQsc/src/_js/react-dom.development.js','src/MMCQsc/src/_js/react.development.js','src/MMCQsc/src/_js/sweet-alert.js','src/MMCQsc/src/_js/wow.min.js','src/MMCQsc/src/_js/wow.min2.js']),
     ], # 不在包内的数据文件，格式为(安装目录，文件目录)，注意都是相对路径
     include_package_data=False, # !important
-    # entry_points 一般用于开发插件，如果不了解不要乱写
-    # 以jupyter-lab的中文扩展包为例：entry_points={"jupyterlab.languagepack":["zh_CN = jupyterlab_Chinese_SC"],}
+    # entry_points 可以自动将模块入口生成为跨平台的可执行文件(windows平台生成.exe)，也可用于开发插件，如果不了解不要乱写
+    # 插件开发以 jupyter-lab 的中文扩展包为例：
+    # entry_points={"jupyterlab.languagepack":["zh_CN = jupyterlab_Chinese_SC"],}
     # 注意 jupyterlab_Chinese_SC 并非官方使用的原名，仅供参考
+    # 可执行文件以 'console_scripts':['RunMMCQsc = MMCQsc.scp.main:mainFunc'] 为例：
+    # console_scripts 是 Python 定义的，可以理解为生成控制台程序脚本
+    # RunMMCQsc 为文件名，表示生成 RunMMCQsc.exe 文件，pip install 后该文件就躺在 python.exe 所在文件夹的 Scripts 子文件夹里面
+    # MMCQsc.scp.main:mainFunc 只需要知道 mainFunc 是 MMCQsc/scp/main.py 里的一个函数
     entry_points={'console_scripts':['RunMMCQsc = MMCQsc.scp.main:mainFunc']},
     # 手动添加脚本。虽然 scripts 关键字用于指向预先制作好的脚本进行安装，建议使用实现跨平台兼容性的方法 console_scripts 入口点(entry_points)
     scripts=['src/MMCQsc.cmd'],

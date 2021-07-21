@@ -10,6 +10,8 @@
 
 [Github（仅同步PyPi分支）](https://github.com/Soltus/color-theme-analyse)
 
+[GitLab（仅同步PyPi分支）](https://gitlab.com/liaoshanyi/ColorThemeAnalyse)
+
 [Pypi](https://pypi.org/project/color-theme-analyse/ "https://pypi.org/project/color-theme-analyse/")
 
 [libraries.io](https://libraries.io/pypi/color-theme-analyse)
@@ -18,7 +20,7 @@
 
 Bug 反馈和 Issues 提交可以在 Bitbucket 或者 Gitee，**在 Gitee 会得到最快反馈**
 
-请勿在 Github 提交 Issues ，Github 只是同步仓库，不会处理任何提交的 Issues
+请勿在 Github 或 GitLab 提交 Issues ，它们只是同步仓库，不会处理任何提交的 Issues
 
 ### 简介
 
