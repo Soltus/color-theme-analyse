@@ -3,15 +3,18 @@
 已修改默认分支为 `pypi`
 
 
-项目地址
+## 项目地址
 
 [Bitbucket（最快更新）](https://bitbucket.org/hi-windom/colorthemeanalyse/src/master/ "默认仓库")
 
 [Gitee（最快下载）](https://gitee.com/hi-windom/color-theme-analyse "主要同步仓库")
 
-Github（计划中）
+[Github（计划中）]()
 
-Pypi（计划中）
+[Pypi](https://pypi.org/project/color-theme-analyse/ "https://pypi.org/project/color-theme-analyse/")
+
+[libraries.io](https://libraries.io/pypi/color-theme-analyse)
+
 
 ## 简介
 
@@ -24,6 +27,9 @@ Pypi（计划中）
 本项目是ImageColorTheme的（MMCQ）具体实现，ImageColorTheme的GitHub（国内镜像）地址：
 
 [GitHub - rainyear/ImageColorTheme: Extract Color Themes from Images (fastgit.org)](https://hub.fastgit.org/rainyear/ImageColorTheme)
+
+本项目同时也是SCMD开源计划的一部分
+
 
 ## 依赖
 
@@ -41,6 +47,8 @@ Pypi（计划中）
 本项目使用了 `React` 框架（非项目构建，只是运行时 `Babel`）
 
 ---
+
+# 教程
 
 ## 个性化实现
 
