@@ -65,7 +65,7 @@ setuptools.setup(
     # entry_points 一般用于开发插件，如果不了解不要乱写
     # 以jupyter-lab的中文扩展包为例：entry_points={"jupyterlab.languagepack":["zh_CN = jupyterlab_Chinese_SC"],}
     # 注意 jupyterlab_Chinese_SC 并非官方使用的原名，仅供参考
-    entry_points={'console_scripts':['mmcqsc = MMCQsc']},
+    entry_points={'console_scripts':['mmcqsc = MMCQsc.scp.main:mainFunc']},
     # 手动添加脚本。虽然 scripts 关键字用于指向预先制作好的脚本进行安装，建议使用实现跨平台兼容性的方法 console_scripts 入口点(entry_points)
     scripts=['src/MMCQsc.cmd'],
     license="MIT",
