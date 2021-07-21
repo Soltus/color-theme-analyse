@@ -90,11 +90,11 @@ setuptools.setup(
         'rich',
     ],
     # install_requires 在安装模块时会自动安装依赖包
-    # extras_require 仅表示该模块依赖这些包，但不是必须的，需要用户手动安装
+    # extras_require 仅表示该模块依赖这些包，但不是必须的，需要用户手动安装。被依赖使用时，可以用类似'requests[download, advanced]'的形式来指定
+    # extras_require 需要一个 dict ，其中按（自定义的）功能名称进行分组，每组一个 list
     extras_require={
-        'pipx':[],
-        'PDF':["ReportLab>=1.2", "RXP"],
-        'reST':["docutils>=0.3"],
+        'download':['pipx'],
+        'advanced':['pyinstaller>=4.3'],
     },
     # 如果其中某些依赖，在官方的PyPI中不存在，则需要指定dependency_links (貌似已被弃用，但写上也不影响)
     dependency_links=[
