@@ -79,7 +79,7 @@ setuptools.setup(
     scripts=['src/MMCQsc.cmd'],
     license="MIT",
     platforms=['Windows'],
-    python_requires=">=3.8.0",
+    python_requires=">=3.8.0,<=3.10.0",
     # 关于 install_requires， 有以下五种常用的表示方法：(指定包名是必须的，而版本控制与可选依赖，则是高级形式。 这不仅仅是install_requires的形式，而是对setup.py的所有require都适用)
     # 'argparse'，只包含包名。 这种形式只检查包的存在性，不检查版本。 方便，但不利于控制风险，更新时还会遇到依赖冲突问题。
     # 'setuptools==38.2.4' 指定版本。确保了开发、测试与部署的版本一致，不会出现意外。 缺点是不利于更新，每次更新都需要改动代码。
@@ -98,7 +98,7 @@ setuptools.setup(
     # extras_require 需要一个 dict ，其中按（自定义的）功能名称进行分组，每组一个 list
     extras_require={
         'download':['pipx>=0.1'],
-        'advanced':['pyinstaller>=4.3'],
+        'advanced':['pyinstaller>=4.3;sys_platform=="win32"'],
     },
     # dependency_links 已被弃用，因此使用 testPyPi 测试时，一些依赖项会无法下载（ https://test-files.pythonhosted.org 上没有），需要提前安装好依赖，然后 pip 后面加参数 --no-deps 无依赖下载
     dependency_links=[
