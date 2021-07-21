@@ -36,12 +36,7 @@ setuptools.setup(
         # 提供分类项目的分类器列表。有关完整的列表，请参阅https://pypi.org/classifiers/
         # 尽管分类器列表可以声明项目支持的Python版本，但此信息仅用于搜索和浏览Pypi上的项目，而不用于安装项目。
         # 要实际限制项目可以安装的Python版本，请使用 python_requires
-        "Development Status :: 1 - Planning",
-        "Development Status :: 2 - Pre-Alpha",
-        "Development Status :: 3 - Alpha",
         "Development Status :: 4 - Beta",
-        "Development Status :: 5 - Production/Stable",
-        "Development Status :: 6 - Mature",
         "Environment :: Win32 (MS Windows)",
         "Environment :: Console",
         "Intended Audience :: Developers",

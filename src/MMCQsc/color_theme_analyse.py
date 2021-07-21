@@ -14,6 +14,10 @@ def __main__():
     print('hello soltus')
 
 if __name__ == '__main__':
-    from MMCQsc.scp import executable_check
-    from MMCQsc.scp import main
-    result = main.mainFunc()
+    try:
+        from MMCQsc.scp import executable_check
+    except:
+        exit()
+    finally:
+        from MMCQsc.scp import main
+        result = main.mainFunc()
