@@ -1,3 +1,3 @@
-__version__ = "0.1.dev39"
-version = "0.1.dev39"
+__version__ = "0.1.dev45"
+version = "0.1.dev45"
 version_tuple = (0, 1)
