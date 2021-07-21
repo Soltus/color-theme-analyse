@@ -3,13 +3,15 @@
 已修改默认分支为 `pypi`
 
 
-源码地址
+项目地址
 
 [Bitbucket（最快更新）](https://bitbucket.org/hi-windom/colorthemeanalyse/src/master/ "默认仓库")
 
 [Gitee（最快下载）](https://gitee.com/hi-windom/color-theme-analyse "主要同步仓库")
 
 Github（计划中）
+
+Pypi（计划中）
 
 ## 简介
 
