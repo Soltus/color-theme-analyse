@@ -6,5 +6,3 @@ try:
 except PackageNotFoundError:
     # package is not installed
     pass
-
-from .color_theme_analyse import __main__

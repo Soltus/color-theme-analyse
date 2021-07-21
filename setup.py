@@ -3,6 +3,7 @@ import setuptools
 官方推荐使用静态的 setup.cfg 但动态的 setup.py 对我们来说更熟悉，学习成本低，两个文件也可以共存
 MANIFEST.in 需要放在和 setup.py 同级的顶级目录下，setuptools 会自动读取该文件，需要注意 MANIFEST.in 指令是按顺序执行的，因此 exclude 要放在 include 后面
 建议 MANIFEST.in 只用于构建 tar.gz 而不用于 whl ，即 setup.py 设置 [include_package_data=False]，至少在熟练掌握构建前应当这样做
+
 //关于setuptools：setuptools 是 distutils 增强版，不包括在标准库中
 //关于包格式：egg 包是过时的，whl 包是新的标准
 //关于打包：python -m build 默认帮你生成了 dist/*.tar.gz 和 dist/*.whl ，更多命令使用 python setup.py --help-commands 查看
@@ -10,8 +11,10 @@ MANIFEST.in 需要放在和 setup.py 同级的顶级目录下，setuptools 会�
 项目成熟之前，应当使用 twine upload dist/* --repository testpypi
 testpypi 的数据库会被定期修剪，因此可以放心上传
 //关于版本号：python的软件分发工具还支持 local version identifier 可用于标识不打算发布的本地开发构建，本地版本标识符采用以下形式 <public version identifier>+<local version label> 例如：
-1.2.0.dev1+hg.5.b11e5e6f0b0b  # 5th VCS commmit since 1.2.0.dev1 release
-1.2.1+fedora.4                # Package with downstream Fedora patches applied
+
+        1.2.0.dev1+hg.5.b11e5e6f0b0b  # 5th VCS commmit since 1.2.0.dev1 release
+        1.2.1+fedora.4                # Package with downstream Fedora patches applied
+
 使用了本地版本标识符是无法上传到 PyPi 的，因此 local_scheme = "no-local-version" 在 pyproject.toml
 '''
 
@@ -42,7 +45,6 @@ setuptools.setup(
         "Intended Audience :: Developers",
         "Programming Language :: JavaScript",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.9",
         "License :: OSI Approved :: MIT License",
         "Operating System :: Microsoft :: Windows :: Windows 10",
         "Natural Language :: Chinese (Simplified)",
@@ -65,7 +67,7 @@ setuptools.setup(
     # entry_points 一般用于开发插件，如果不了解不要乱写
     # 以jupyter-lab的中文扩展包为例：entry_points={"jupyterlab.languagepack":["zh_CN = jupyterlab_Chinese_SC"],}
     # 注意 jupyterlab_Chinese_SC 并非官方使用的原名，仅供参考
-    entry_points={'console_scripts':['mmcqsc = MMCQsc.scp.main:mainFunc']},
+    entry_points={'console_scripts':['RunMMCQsc = MMCQsc.scp.main:mainFunc']},
     # 手动添加脚本。虽然 scripts 关键字用于指向预先制作好的脚本进行安装，建议使用实现跨平台兼容性的方法 console_scripts 入口点(entry_points)
     scripts=['src/MMCQsc.cmd'],
     license="MIT",
