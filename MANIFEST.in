@@ -6,19 +6,19 @@ include LICENSE
 
 include setup.py
 
-include __init__.py
-include src/__init__.py
+global-include *.json
 
-recursive-include src *
 global-exclude *__pycache__
 global-exclude *.pyc
 global-exclude *.history
 global-exclude *.vscode
-global-exclude src/MMCQsc/src/compress
-global-exclude src/MMCQsc/src/finish
-global-exclude src/MMCQsc/src/prepare
-global-exclude src/MMCQsc/src/reports
+global-exclude *.log
+
+recursive-include src *
+
+recursive-exclude src/MMCQsc/src compress
+recursive-exclude src/MMCQsc/src finish
+recursive-exclude src/MMCQsc/src prepare
+recursive-exclude src/MMCQsc/src reports
 recursive-exclude src/MMCQsc/src index.css
 recursive-exclude src/MMCQsc/src index.js
-
-inclue src/color_theme_analyse.py

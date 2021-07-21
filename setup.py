@@ -3,6 +3,13 @@ import setuptools
 官方推荐使用静态的 setup.cfg 但动态的 setup.py 对我们来说更熟悉，学习成本低，两个文件也可以共存
 MANIFEST.in 需要放在和 setup.py 同级的顶级目录下，setuptools 会自动读取该文件
 建议 MANIFEST.in 只用于构建 tar.gz 而不用于 whl ，即 setup.py 设置 [include_package_data=False]，至少在熟练掌握构建前应当这样做
+//关于setuptools：setuptools 是 distutils 增强版，不包括在标准库中
+//关于包格式：egg 包是过时的，whl 包是新的标准
+//关于打包：python -m build 默认帮你生成了 dist/*.tar.gz 和 dist/*.whl ，更多命令使用 python setup.py --help-commands 查看
+//关于上传：用 upload 命令上传包已经过时（不安全），官方提供了 twine 工具专门用来与 PyPI 交互
+//关于版本号：python的软件分发工具还支持 local version identifier 可用于标识不打算发布的本地开发构建，本地版本标识符采用以下形式 <public version identifier>+<local version label> 例如：
+1.2.0.dev1+hg.5.b11e5e6f0b0b  # 5th VCS commmit since 1.2.0.dev1 release
+1.2.1+fedora.4                # Package with downstream Fedora patches applied
 '''
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
@@ -22,16 +29,25 @@ setuptools.setup(
         "Bug Tracker": "https://gitee.com/hi-windom/color-theme-analyse/issues",
     },
     classifiers=[
-        # 这一部分的编写指南可以参考 https://pypi.org/classifiers/
+        # 提供分类项目的分类器列表。有关完整的列表，请参阅https://pypi.org/classifiers/
+        # 尽管分类器列表可以声明项目支持的Python版本，但此信息仅用于搜索和浏览Pypi上的项目，而不用于安装项目。
+        # 要实际限制项目可以安装的Python版本，请使用 python_requires
+        "Development Status :: 1 - Planning",
+        "Development Status :: 2 - Pre-Alpha",
         "Development Status :: 3 - Alpha",
+        "Development Status :: 4 - Beta",
+        "Development Status :: 5 - Production/Stable",
+        "Development Status :: 6 - Mature",
+        "Environment :: Win32 (MS Windows)",
         "Environment :: Console",
+        "Intended Audience :: Developers",
+        "Programming Language :: JavaScript",
         "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.9",
         "License :: OSI Approved :: MIT License",
         "Operating System :: Microsoft :: Windows :: Windows 10",
         "Natural Language :: Chinese (Simplified)",
         "Natural Language :: English",
-        "Programming Language :: JavaScript",
-        "Programming Language :: Python :: 3.9", # 目标 Python 版本
         "Topic :: Multimedia :: Graphics"
     ],
     packages=setuptools.find_packages("src"),
@@ -47,13 +63,14 @@ setuptools.setup(
         ('lib/site-packages/MMCQsc/src/_js',['src/MMCQsc/src/_js/base.js','src/MMCQsc/src/_js/babel.min_5.8.23.js','src/MMCQsc/src/_js/react-dom.development.js','src/MMCQsc/src/_js/react.development.js','src/MMCQsc/src/_js/sweet-alert.js','src/MMCQsc/src/_js/wow.min.js','src/MMCQsc/src/_js/wow.min2.js']),
     ], # 不在包内的数据文件，格式为(安装目录，文件目录)，注意都是相对路径
     include_package_data=False, # !important
-    entry_points={
-        "console_scripts": [
-            "mmcqsc = MMCQsc.scp.main:mainFun",
-        ],
-    },
-    # 将脚本添加到系统 PATH 中
-    scripts=['src/MMCQsc/color_theme_analyse.py'],
+    # entry_points 一般开发插件才会用得上，不要乱写
+    # 以jupyter-lab的中文扩展包为例：entry_points={"jupyterlab.languagepack":["zh_CN = jupyterlab_Chinese_SC"],}
+    # 注意 jupyterlab_Chinese_SC 并非官方使用的原名，仅供参考
+    entry_points={},
+    # 手动添加脚本。虽然 scripts 关键字用于指向预先制作好的脚本进行安装，建议使用实现跨平台兼容性的方法 console_scripts 入口点(entry_points)
+    scripts=['src/MMCQsc.cmd'],
+    license="MIT",
+    platforms=['Windows'],
     python_requires=">=3.8",
     # 关于 install_requires， 有以下五种常用的表示方法：(指定包名是必须的，而版本控制与可选依赖，则是高级形式。 这不仅仅是install_requires的形式，而是对setup.py的所有require都适用)
     # 'argparse'，只包含包名。 这种形式只检查包的存在性，不检查版本。 方便，但不利于控制风险。

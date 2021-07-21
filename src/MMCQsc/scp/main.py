@@ -32,9 +32,9 @@ if root_path not in sys.path:
     # logger = logger.myLogging("gitee.com/soltus")
     # executer = import_module('.executer','scp.scripts')
 
-from scp.lib.logger import *
+from MMCQsc.scp.lib.logger import *
 logger = myLogging("gitee.com/soltus")
-from scp.scripts import executer
+from MMCQsc.scp.scripts import executer
 
 
 from multiprocessing import shared_memory  # required for Python >= 3.8

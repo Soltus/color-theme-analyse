@@ -29,7 +29,8 @@ root_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
 BASE_DIR = os.path.join(os.path.dirname(__file__), "../..") 
 if root_path not in sys.path:
     sys.path.append(root_path)
-
+from MMCQsc.scp.lib import logger
+logger = logger.myLogging("gitee.com/soltus")
 # 全局变量
 try:
     profile = json.load(open(f'{root_path}\\scp\\scripts\\profile.json', 'r+'))
@@ -127,9 +128,8 @@ if dddd:
     print(f'\n\t\t{dddd} new packages already installed .\n\n\t\ttry to launch again .\n\n')
     exit()
 
-from scp.lib import logger
-logger = logger.myLogging("gitee.com/soltus")  # 这里如果报错，可以忽略
-from scp.lib.MMCQ import MMCQ # 第一个MMCQ是文件名，第二个是类名
+
+from MMCQsc.scp.lib.MMCQ import MMCQ # 第一个MMCQ是文件名，第二个是类名
 
     # from ..lib.logger import *
     # logger = myLogging("gitee.com/soltus")

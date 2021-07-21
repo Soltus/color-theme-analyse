@@ -27,10 +27,10 @@ if root_path not in sys.path:
     # logger = import_module('.logger','lib')
     # logger = logger.myLogging("gitee.com/soltus")
 
-from scp.lib.error_sc import *
-from scp.lib.logger import *
+from MMCQsc.scp.lib.error_sc import *
+from MMCQsc.scp.lib.logger import *
 logger = myLogging("gitee.com/soltus")
-from scp.lib.error_sc import *
+from MMCQsc.scp.lib.error_sc import *
 
 
 def fun_version(v1,v2):
