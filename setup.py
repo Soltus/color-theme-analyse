@@ -20,10 +20,20 @@ testpypi 的数据库会被定期修剪，因此可以放心上传
 如果不熟悉 Git 命令行操作，可以使用软件 Sourcetree 直观的提交和打标签。如果没有标签，你生成的包将始终为 0.1.dev*
 '''
 
+EXAMPLE_EXT = setuptools.Extension(
+    name='_test',
+    sources=[
+        'src/test_wrap.cxx',
+        'src/test.cpp',
+    ],
+)
+
+
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
+    ext_modules=[EXAMPLE_EXT],
     name="color-theme-analyse",
     setup_requires=['setuptools_scm'], # 指定运行 setup.py 文件本身所依赖的包
     use_scm_version=True, # .gitignore 应与 setup.py 在同一文件夹 更多信息参考 https://pypi.org/project/setuptools-scm/
@@ -98,7 +108,7 @@ setuptools.setup(
     # extras_require 需要一个 dict ，其中按（自定义的）功能名称进行分组，每组一个 list
     extras_require={
         'download':['pipx>=0.1'],
-        'advanced':['pyinstaller>=4.3;sys_platform=="win32"'],
+        'advanced':['pyinstaller>=4.3; platform_system == "Windows"'],
     },
     # dependency_links 已被弃用，因此使用 testPyPi 测试时，一些依赖项会无法下载（ https://test-files.pythonhosted.org 上没有），需要提前安装好依赖，然后 pip 后面加参数 --no-deps 无依赖下载
     dependency_links=[

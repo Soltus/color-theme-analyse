@@ -77,3 +77,43 @@ Bug 反馈和 Issues 提交可以在 Bitbucket 或者 Gitee，**在 Gitee 会得
 计划将 `rich` 移植为扩展依赖
 
 计划移除 `opency-python` 依赖
+
+
+# 目录树
+
+src
+├─ MMCQsc
+│  ├─ scp
+│  │  ├─ lib
+│  │  │  ├─ error_sc.py
+│  │  │  ├─ logger.py
+│  │  │  ├─ MMCQ.py
+│  │  │  └─ __init__.py
+│  │  ├─ scripts
+│  │  │  ├─ executer.py
+│  │  │  ├─ profile.json
+│  │  │  └─ __init__.py
+│  │  ├─ executable_check.py
+│  │  ├─ main.py
+│  │  └─ __init__.py
+│  ├─ src
+│  │  ├─ _css
+│  │  │  ├─ animate.css
+│  │  │  ├─ base.css
+│  │  │  └─ sweet-alert.css
+│  │  ├─ _js
+│  │  │  ├─ babel.min_5.8.23.js
+│  │  │  ├─ base.js
+│  │  │  ├─ react-dom.development.js
+│  │  │  ├─ react.development.js
+│  │  │  ├─ sweet-alert.js
+│  │  │  ├─ wow.min.js
+│  │  │  └─ wow.min2.js
+│  │  ├─ gitee.svg
+│  │  ├─ index.css
+│  │  ├─ index.html
+│  │  └─ index.js
+│  ├─ color_theme_analyse.py
+│  ├─ version.py
+│  └─ __init__.py
+└─ MMCQsc.cmd
