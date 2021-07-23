@@ -54,7 +54,7 @@ Bug 反馈和 Issues 提交可以在 Bitbucket 或者 Gitee，**在 Gitee 会得
 
 要求的操作系统 Windows >= 1909  ( Win 10 / 11 )
 
-建议的操作系统 Windows>=22000.71（ Win 11 Dev ）
+建议的操作系统 Windows>=22000.100（ Win 11 Dev ）
 
 必要的 Python 第三方库依赖：numpy, opencv-python, pillow, easygui, rich
 
