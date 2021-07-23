@@ -60,12 +60,12 @@ os.system("cls")
 file_path = sys.argv[0]
 def check_conda():
     if "\\envs\\" in sys.executable:
-        conda_path = os.path.abspath(os.path.join(os.path.dirname(sys.executable), "../..", "Script", "conda.exe"))
+        conda_exec = os.path.abspath(os.path.join(os.path.dirname(sys.executable), "../..", "Script", "conda.exe"))
         conda_env = sys.executable.split("\\")[-2]
     else:
-        conda_path = os.path.abspath(os.path.join(os.path.dirname(sys.executable), "Script", "conda.exe"))
+        conda_exec = os.path.abspath(os.path.join(os.path.dirname(sys.executable), "Script", "conda.exe"))
         conda_env = "base"
-    return conda_path, conda_env
+    return conda_exec, conda_env
 
 
 from subprocess import Popen
@@ -90,7 +90,12 @@ def run_in_env(env):
         if "conda" in conda_v.read():
             logger.debug("\n\n\n\t\t使用当前 Conda 环境继续吗 (y) ？\n\t\t或者重新选择运行环境 (n) ？\n\t\t也可以输入任意字符作为新环境名，将为你自创建一个 Python 3.9.5 的新环境\n\n\t\tProccess ?  [Y/n/*]")
     while True:
-        pick_env = input("main.py:93 >>> ")
+        try:
+            pick_env = input("main.py:93 >>> ")
+        except BaseException as e:
+            if isinstance(e, KeyboardInterrupt):
+                logger.warning("用户强制退出")
+                exit()
         if pick_env in ['Y','y']:
             if sys.version_info.major < 3:
                 logger.error(" Can NOT run in Python 2.x ")
@@ -126,7 +131,7 @@ def run_in_env(env):
                 if isinstance(e, KeyboardInterrupt):
                     logger.warning("用户中止了下载")
                     logger.warning("当前窗口已完成使命，是时候和它告别了")
-                    result.kill()
+                    exit()
             #os.system(f"conda create -n {pick_env} python==3.9.5 -y")
             # args = shlex.split(f"conda activate {pick_env}")
             # result = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0)

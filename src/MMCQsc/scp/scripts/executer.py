@@ -43,7 +43,7 @@ except:
 '''
 # themes 是分析色彩的结果颜色数量，默认为5
 # size_rate 是图片尺寸缩放倍率，默认为10
-# ignore_size 是图片压缩忽略阈值（宽/高中的最大值），默认为200
+# ignore_size 是图片压缩忽略阈值（宽/高中的最大值），默认为300
 # 推荐在profile.json中修改配置，如有需要也可以修改成传参
 '''
 
@@ -179,10 +179,15 @@ def compressImage(srcPath):
             sImg = Image.open(srcFile)
             dImg = sImg.convert('RGB')
             w, h = sImg.size
+            MIN_SIZE = 40*40
             # 设置压缩尺寸和选项，注意尺寸要用括号
             if max(w, h) > ignore_size:
                 dImg = dImg.resize(
                     (int(w/size_rate), int(h/size_rate)), Image.NEAREST)
+            # 尺寸过小需要放大
+            elif max(w, h) < MIN_SIZE:
+                dImg = dImg.resize(
+                    (int(w*2), int(h/size_rate*2)), Image.NEAREST)
             dImg.save(dstFile.replace(filename.split('.')[1], 'jpg'))
             dImg.close()
             sImg.close()
@@ -222,7 +227,7 @@ def testMMCQ(future):
     thisbuf = str(buf[4] + buf[5] + buf[6] + buf[7])
 
     imgfile = future.result()
-    rgb = list(map(lambda d: MMCQ(d, themes).quantize(), [cv.imdecode(np.fromfile(
+    rgb = list(map(lambda d: MMCQ(d, themes, file=imgfile).quantize(), [cv.imdecode(np.fromfile(
         imgfile, dtype=np.uint8), cv.COLOR_BGR2RGB)]))
     for i in range(len(rgb)):
         strjoin = ''

@@ -18,6 +18,11 @@ testpypi 的数据库会被定期修剪，因此可以放心上传
 另请注意，使用 setuptools_scm 控制版本后，使用了本地版本标识符是无法上传到 PyPi 的，因此 local_scheme = "no-local-version" 在 pyproject.toml
 修改 Release 版本号需要使用 Git 打上版本号标签，在熟悉之前应当使用 x.x.x 形式的标签（例如 1.0.2 ）
 如果不熟悉 Git 命令行操作，可以使用软件 Sourcetree 直观的提交和打标签。如果没有标签，你生成的包将始终为 0.1.dev*
+建议的版本号规则：
+模块的版本号采用X.Y.Z的格式，
+1、修复bug，小改动，增加z。
+2、增加新特性，可向后兼容，增加y
+3、有很大的改动，无法向下兼容,增加x
 '''
 
 EXAMPLE_EXT = setuptools.Extension(

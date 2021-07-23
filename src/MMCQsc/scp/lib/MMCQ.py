@@ -73,17 +73,17 @@ class MMCQ(object):
     MAX_ITERATIONS = 1000
     SIGBITS = 5
 
-    def __init__(self, pixData, maxColor, fraction=0.85, sigbits=5):
+    def __init__(self, pixData, maxColor, fraction=0.85, sigbits=5,file=''):
         """
         @pixData        Image data [[R, G, B], ...]
-        @maxColor       Between [2, 256]
+        @maxColor       Between [2, 100]
         @fraction       Between [0.3, 0.9]
         @sigbits        5 or 6
         """
         super(MMCQ, self).__init__()
         self.pixData = pixData
-        if not 2 <= maxColor <= 256:
-            raise AttributeError("maxColor should between [2, 256]!")
+        if not 2 <= maxColor <= 100:       #源码此处应为[2,256]
+            raise AttributeError("maxColor should between [2, 100]!")
         self.maxColor = maxColor
         if not 0.3 <= fraction <= 0.9:
             raise AttributeError("fraction should between [0.3, 0.9]!")
@@ -92,7 +92,7 @@ class MMCQ(object):
             raise AttributeError("sigbits should be either 5 or 6!")
         self.SIGBITS = sigbits
         self.rshift = 8 - sigbits
-
+        self.imgPath = file  # 源码没有 [self.imgPath] ，这是为了多线程调试定位添加的
         self.h, self.w, _ = self.pixData.shape
 
     def getPixHisto(self):
@@ -196,12 +196,16 @@ class MMCQ(object):
         while True:
             if ncolors >= maxColor:
                 break
-            vbox0 = boxQueue.get_nowait()[1]
+            vbox0 = boxQueue.get()[1]  # 这里的 get() 是被修改的，源码此处应为 get_nowait()
             if vbox0.npixs == 0:
                 print("Vbox has no pixels")
                 boxQueue.put((vbox0.priority, vbox0))
                 continue
-            vbox1, vbox2 = self.medianCutApply(vbox0)
+            try:
+                vbox1, vbox2 = self.medianCutApply(vbox0)
+            except:
+                print(self.imgPath + '  failed to analyse')
+                continue
 
             if vol:
                 vbox1.priority *= vbox1.vol
@@ -262,3 +266,13 @@ class MMCQ(object):
         while not boxQueue.empty():
             theme.append(self.boxAvgColor(boxQueue.get()[1]))
         return theme
+
+    """
+        empty()
+        如果队列是空的，返回 True ，反之返回 False 。 由于多线程或多进程的环境，该状态是不可靠的。
+
+    [这是已知缺陷]
+
+        full()
+        如果队列是满的，返回 True ，反之返回 False 。 由于多线程或多进程的环境，该状态是不可靠的。
+    """
