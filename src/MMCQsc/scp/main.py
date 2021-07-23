@@ -21,10 +21,10 @@
 ################################################################
 import socket
 import time
-import os,sys
+import os,sys,shutil
 from importlib import import_module
 root_path = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-
+SRC_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..','src'))
 if root_path not in sys.path:
     sys.path.append(root_path)
 
@@ -68,37 +68,18 @@ def get_host_ip():
 
 def createServer():
     myip = get_host_ip()
-    SRC_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..','src'))
     logger.info(SRC_DIR)
-    try:
-        args = shlex.split(f"pyhton -m http.server 5858")
-        '''
-        cwd 工作目录，设置为正确值以确保 launch ../src/index.html
-        executable 参数指定一个要执行的替换程序。这很少需要。当 shell=True， executable 替换 args 指定运行的程序。但是，原始的 args 仍然被传递给程序。大多数程序将被 args 指定的程序作为命令名对待，这可以与实际运行的程序不同。
-        '''
-        result =  Popen(args, bufsize=0, executable=sys.executable, close_fds=False, shell=False, cwd=SRC_DIR, startupinfo=None, creationflags=0) # shell=False 非常重要
-        logger.debug(f"本地服务器进程 PID: {result.pid}")
-        logger.info(f'\n\n\n\t\t本地服务器创建成功：\n\n\t\t{myip}:5858\n\n\t\t（支持局域网访问）\n\n')
-        logger.warning("\n\n\t\t[ tip ] : 快捷键 CTR + C 强制结束\n\n")
-        try:
-            outs, errs = result.communicate(timeout=15)
-        except:
-            result.kill()
-    except BaseException as e:
-        if isinstance(e, KeyboardInterrupt):
-            logger.warning("服务已停止")
-    finally:
-       try:
-           os.remove(os.path.join(SRC_DIR + 'index.js'))
-           os.remove(os.path.join(SRC_DIR + 'index.css'))
-       except:
-           logger.warning('未能删除自动生成文件')
-       finally:
-           logger.warning("当前窗口已完成使命，是时候和它告别了")
-           exit()
+    args = shlex.split(f"pyhton -m http.server 5858")
+    '''
+    cwd 工作目录，设置为正确值以确保 launch ../src/index.html
+    executable 参数指定一个要执行的替换程序。这很少需要。当 shell=True， executable 替换 args 指定运行的程序。但是，原始的 args 仍然被传递给程序。大多数程序将被 args 指定的程序作为命令名对待，这可以与实际运行的程序不同。
+    '''
+    result =  Popen(args, bufsize=0, executable=sys.executable, close_fds=False, shell=False, cwd=SRC_DIR, startupinfo=None, creationflags=0) # shell=False 非常重要
+    logger.debug(f"http.server进程 PID: {result.pid}")
+    logger.info(f'\n\n\n\t\t本地服务器创建成功：\n\n\t\t{myip}:5858\n\n\t\t（支持局域网访问）\n\n')
+    logger.warning("\n\n\t\t[ tip ] : 快捷键 CTR + C 强制结束\n\n")
+    result.wait()
 
-
-# 无网页交互需求可以恢复被注释的代码
 def openhtml():
     myip = get_host_ip()
     time.sleep(2)
@@ -117,20 +98,34 @@ def mainFunc():
     if buf[1] > 0:
         pass
     else:
-        img = g.fileopenbox('open file' + '会导入当前文件夹的全部图片')
-        if img != None:  # 有传入才处理
-            buf[1] = len(img)
-            for i in range(2, 10, 1):
-                buf[i] = 0
-            executer.domain(img)
-            if buf[2] == 1:
-                with futures.ProcessPoolExecutor(max_workers=None) as prolist:
-                    prolist.submit(createServer)
-                    prolist.submit(openhtml)  # 多进程才能打开
+        try:
+            img = g.fileopenbox('open file' + '会导入当前文件夹的全部图片')
+            if img != None:  # 有传入才处理
+                buf[1] = len(img)
+                for i in range(2, 10, 1):
+                    buf[i] = 0
+                executer.domain(img)
+                if buf[2] == 1:
+                    with futures.ProcessPoolExecutor(max_workers=None) as prolist:
+                        prolist.submit(createServer)
+                        prolist.submit(openhtml)  # 多进程才能打开
+        except BaseException as e:
+            if isinstance(e, KeyboardInterrupt):
+                os.system('cls')
+                logger.info("http.server 进程服务已停止\t原因：用户强制退出")
+        finally:
+            try:
+                os.remove(os.path.join(SRC_DIR + '\\index.js'))
+                os.remove(os.path.join(SRC_DIR + '\\index.css'))
+                shutil.rmtree(os.path.join(SRC_DIR + '\\finish'))
+                shutil.rmtree(os.path.join(SRC_DIR + '\\compress'))
+                logger.info('成功删除不重要的自动生成文件')
+            except:
+                logger.warning('未能删除自动生成文件')
+            finally:
+                exit()
 
 
-# shm.close()  # 关闭共享内存
-# shm.unlink()  # 释放共享内存
 if __name__ == '__main__':
     import os,sys
     root_path = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))

@@ -7,12 +7,11 @@ include LICENSE
 include setup.py
 
 recursive-include src *
-
+exclude .history
 global-include *.json
 
 global-exclude *__pycache__
 global-exclude *.pyc
-global-exclude *.history
 global-exclude *.log
 
 recursive-exclude .vscode *

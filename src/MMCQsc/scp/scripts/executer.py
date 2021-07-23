@@ -370,7 +370,7 @@ def domain(img):
                     if os.path.exists(dstname):
                         sames = [dstname, os.path.join(root, f), os.path.getsize(
                             dstname), os.path.getsize(os.path.join(root, f))]  # 第二个是当前处理对象
-                        issanme = g.buttonbox(msg=f'\n 【疑似重复提醒】 检测到两张图片的色彩主题相同，我们有理由怀疑它们是重复的，请检查！\n{sames[0]} \
+                        issanme = g.buttonbox(msg=f'\n 【疑似重复提醒】 检测到两张图片的色彩主题相同，你有理由怀疑它们是重复的，请检查！\n{sames[0]} \
                             为已存在图片（图片大小{sames[2]}）\n{sames[1]} 为当前待保存图片（图片大小{sames[3]}）\n',
                                               title=' 操作确认 ', choices=(
                                                   ' 保留已存在的 ', ' 我全都要 ', ' 删除已存在的 '), default_choice=None, cancel_choice=' 我全都要 ', images=None)
@@ -394,7 +394,7 @@ def domain(img):
 
             cost_times = str(round(time.time()-totaltime, 4))
             cc = g.ccbox(msg="\n\n\n" + BASE_DIR + "\n\n\n 总耗时：" +
-                         cost_times, title="处理完成", choices=("生成报告", "完成"))
+                         cost_times, title="处理完成", choices=(" 生成报告 ", " 完成 "))
 
             # 点击生成报告触发事件
             if cc == 1:
@@ -461,9 +461,7 @@ def domain(img):
                                             mainjs.writelines(
                                                 r'<div id = "t{}c{}"></div>'.format(i, c))
                                             maincss.writelines(
-                                                '#t{}c{} {{\nmax-width: 20%; min-width: 20%; width: 20%; \
-                                                height: 40px; background-color: #{}; display: inline-block; \
-                                                z-index: 99;\n}}\n'.format(i, c, colors[c+1]))
+                                                '#t{}c{} {{\nmax-width: 20%; min-width: 20%; width: 20%; height: 40px; background-color: #{}; display: inline-block; z-index: 99;\n}}\n'.format(i, c, colors[c+1]))
                                     mainjs.writelines('</div>\n')
                                     mainjs.writelines(
                                         r'<img className="img wow fadeIn" data-wow-delay="0.2s" data-wow-duration="0.5s" data-wow-offset="20" src={"' + name + r'"} />' + '\n')
@@ -480,9 +478,7 @@ def domain(img):
                                             mainjs.writelines(
                                                 r'<div id = "t{}c{}"></div>'.format(i, c))
                                             maincss.writelines(
-                                                '#t{}c{} {{\nmax-width: 20%; min-width: 20%; width: 20%; \
-                                                height: 40px; background-color: #{}; display: inline-block; \
-                                                z-index: 99;\n}}\n'.format(i, c, colors[c+1]))
+                                                '#t{}c{} {{\nmax-width: 20%; min-width: 20%; width: 20%; height: 40px; background-color: #{}; display: inline-block; z-index: 99;\n}}\n'.format(i, c, colors[c+1]))
                                     mainjs.writelines('</div>\n')
                                 if img2_w == True:
                                     mainjs.writelines(

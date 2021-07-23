@@ -1,4 +1,4 @@
-import os,sys,shutil
+import os,sys
 root_path = os.path.abspath(os.path.join(os.path.dirname(__file__),'..'))
 if root_path not in sys.path:
     sys.path.append(root_path)
@@ -22,17 +22,5 @@ if __name__ == '__main__':
         from MMCQsc.scp import main
         try:
             result = main.mainFunc()
-        except BaseException as e:
-            if isinstance(e, KeyboardInterrupt):
-                print("{} 服务已停止\n用户强制退出".format(__file__))
         finally:
-            try:
-                os.remove(os.path.join(SRC_DIR + '\\index.js'))
-                os.remove(os.path.join(SRC_DIR + '\\index.css'))
-                shutil.rmtree(os.path.join(SRC_DIR + '\\finish'))
-                shutil.rmtree(os.path.join(SRC_DIR + '\\compress'))
-                print('成功删除不重要的自动生成文件')
-            except:
-                print('未能删除自动生成文件')
-            finally:
-                exit()
+            exit()
