@@ -1,6 +1,10 @@
-# 说明
+项目依赖比较简单，推荐使用无依赖安装：
 
-已修改默认分支为 `pypi`
+`pip install color-theme-analyse --no-deps`
+
+如果你设置了全局镜像，请使用以下的命令安装：
+
+`pip install color-theme-analyse --no-deps -i https://pypi.org.simple`
 
 ### 项目地址
 
@@ -10,11 +14,15 @@
 
 [Github（仅同步PyPi分支）](https://github.com/Soltus/color-theme-analyse)
 
-[GitLab（仅同步PyPi分支）](https://gitlab.com/liaoshanyi/ColorThemeAnalyse)
+[GitLab](https://gitlab.com/liaoshanyi/ColorThemeAnalyse)
 
 [Pypi](https://pypi.org/project/color-theme-analyse/ "https://pypi.org/project/color-theme-analyse/")
 
 [libraries.io](https://libraries.io/pypi/color-theme-analyse)
+
+已修改默认分支为 `pypi`
+
+`master` 分支已停止维护
 
 源仓库在 Bitbucket，因此会首先得到同步
 
@@ -38,9 +46,9 @@ Bug 反馈和 Issues 提交可以在 Bitbucket 或者 Gitee，**在 Gitee 会得
 
 ### Requires
 
-要求的版本 Python>=3.8.0
+要求的版本 3.10.0 > Python >= 3.8.0
 
-建议的版本 Python==3.9.5
+建议的版本 Python == 3.9.5
 
 `from multiprocessing import shared_memory required for Python >= 3.8`
 
@@ -77,7 +85,6 @@ Bug 反馈和 Issues 提交可以在 Bitbucket 或者 Gitee，**在 Gitee 会得
 计划将 `rich` 移植为扩展依赖
 
 计划移除 `opency-python` 依赖
-
 
 # 目录树
 
