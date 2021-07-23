@@ -7,7 +7,7 @@ include LICENSE
 include setup.py
 
 recursive-include src *
-exclude .history
+exclude setup-py-basic-command.jpg
 global-include *.json
 
 global-exclude *__pycache__
@@ -16,6 +16,7 @@ global-exclude *.log
 
 recursive-exclude .vscode *
 recursive-exclude .git *
+recursive-exclude .history *
 recursive-exclude src/MMCQsc/src/compress *
 recursive-exclude src/MMCQsc/src/finish *
 recursive-exclude src/MMCQsc/src/prepare *
