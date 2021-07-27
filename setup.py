@@ -25,20 +25,12 @@ testpypi 的数据库会被定期修剪，因此可以放心上传
 3、有很大的改动，无法向下兼容,增加x
 '''
 
-EXAMPLE_EXT = setuptools.Extension(
-    name='_test',
-    sources=[
-        'src/test_wrap.cxx',
-        'src/test.cpp',
-    ],
-)
 
 
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    ext_modules=[EXAMPLE_EXT],
     name="color-theme-analyse",
     setup_requires=['setuptools_scm'], # 指定运行 setup.py 文件本身所依赖的包
     use_scm_version=True, # .gitignore 应与 setup.py 在同一文件夹 更多信息参考 https://pypi.org/project/setuptools-scm/
