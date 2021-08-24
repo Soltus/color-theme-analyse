@@ -1,0 +1,9 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_CLASSES_ROOT\Directory\Background\shell\runas]
+@="在 Windows 终端 中打开 (Admin)" ; 这是在右键菜单中显示的项目名称
+"ShowBasedOnVelocityId"=dword:00639bc8 ; 这一项可以实现管理员打开cmd important!
+; "Icon"={} ; 打开注释，将"{}"替换为程序或ico图标地址，这里是2位16进制，为空也没关系
+
+[HKEY_CLASSES_ROOT\Directory\Background\shell\runas\command]
+@="wt.exe -f"

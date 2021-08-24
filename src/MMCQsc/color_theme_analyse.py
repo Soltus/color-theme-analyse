@@ -1,7 +1,7 @@
 import os,sys
-root_path = os.path.abspath(os.path.join(os.path.dirname(__file__),'..'))
-if root_path not in sys.path:
-    sys.path.append(root_path)
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+if BASE_DIR not in sys.path:
+    sys.path.append(BASE_DIR)
 
 
 import argparse
@@ -23,4 +23,5 @@ if __name__ == '__main__':
         try:
             result = main.mainFunc()
         finally:
-            exit()
+            if result is not None:
+                exit()

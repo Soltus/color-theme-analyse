@@ -24,16 +24,16 @@
 '''
 import os,sys
 import json
-from importlib import import_module
-root_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
-BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
-if root_path not in sys.path:
-    sys.path.append(root_path)
+import importlib
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../..", ".."))
+SRC_DIR = os.path.abspath(os.path.join(BASE_DIR, 'MMCQsc','src'))
+if BASE_DIR not in sys.path:
+    sys.path.append(BASE_DIR)
 from MMCQsc.scp.lib import logger
 logger = logger.myLogging("gitee.com/soltus")
 # 全局变量
 try:
-    profile = json.load(open(f'{root_path}\\scp\\scripts\\profile.json', 'r+'))
+    profile = json.load(open(f'{BASE_DIR}\\MMCQsc\\scp\\scripts\\profile.json', 'r+'))
     themes = profile['themes']
     size_rate = profile['size_rate']
     ignore_size = profile['ignore_size']
@@ -52,24 +52,12 @@ from multiprocessing import shared_memory
 from posixpath import pathsep
 import shutil
 import datetime
-import time  # 导入EasyGui模块，主要用于选择目标文件夹，不需要可以去掉
+import time
 import urllib.parse as parse
 import binascii
 import re
 from hashlib import md5
-# try:
-#     import easygui as g
-#     import cv2 as cv
-#     import numpy as np
-#     from PIL import Image
-#     from rich import print  # rich用于进度条展示和美化终端输出，不需要可以去掉
-#     from rich.console import Console
-#     from rich.progress import (
-#     BarColumn,
-#     Progress,
-# )
-# except ImportError:
-#     raise
+
 class Pgd:
     def __init__(self):
         self.url = 'https://pypi.douban.com/simple/'
@@ -78,7 +66,7 @@ class Pgd:
         self.im = im
         self.re = re
         import os
-        repo = input('\n\n Unable to import package [{}] , \n\n Do you want to download ? \n\n\t\tProccess ? [Y/n]\t'.format(self.im))
+        repo = input('\n\n Unable to import package [{}] from \n\t{} , \n\n Do you want to download ? \n\n\t\tProccess ? [Y/n]\t'.format(self.im, sys.path))
         if repo in ['Y','y']:
             os.system('cls')
             os.system("pip install {} -i {}".format(self.re, self.url))
@@ -87,40 +75,46 @@ class Pgd:
 
 dddd = 0
 pgd = Pgd()
-try:
-    import easygui as g
-except ImportError:
-    repo = pgd.task(im="easygui",re="easygui")
-    dddd += repo
+
+# try:
+#     import cv2 as cv
+# except ImportError:
+#     repo = pgd.task(im="cv2",re="opencv-python")
+#     dddd += repo
 
 try:
-    import cv2 as cv
+    np = __import__('numpy', globals(), locals(), [], 0)
 except ImportError:
-    repo = pgd.task(im="cv2",re="opencv-python")
-    dddd += repo
+    try:
+        from MMCQsc.scp.lib import numpy as np
+    except:
+        repo = pgd.task(im="numpy",re="numpy")
+        dddd += repo
 
-try:
-    import numpy as np
-except ImportError:
-    repo = pgd.task(im="numpy",re="numpy")
-    dddd += repo
+'''
+embed 版本：Pillow 和 rich 更换为嵌入版本，弃用 OpenCV-Python
+'''
+# try:
+#     from PIL import Image
+# except ImportError:
+#     repo = pgd.task(im="PIL",re="pillow")
+#     dddd += repo
 
-try:
-    from PIL import Image
-except ImportError:
-    repo = pgd.task(im="PIL",re="pillow")
-    dddd += repo
+# try:
+#     from rich import print
+#     from rich.console import Console
+#     from rich.progress import (
+#     BarColumn,
+#     Progress,)
+#     # 实例化进度条，由于采用多进程+多线程，只能当分隔符使用
+#     progress = Progress(
+#         BarColumn(bar_width=None)
+#     )
 
-try:
-    from rich import print
-    from rich.console import Console
-    from rich.progress import (
-    BarColumn,
-    Progress,
-)
-except ImportError:
-    repo = pgd.task(im="rich",re="rich")
-    dddd += repo
+#     console = Console(color_system='auto', style=None)
+# except ImportError:
+#     repo = pgd.task(im="rich",re="rich")
+#     dddd += repo
 
 
 if dddd:
@@ -128,27 +122,31 @@ if dddd:
     print(f'\n\t\t{dddd} new packages already installed .\n\n\t\ttry to launch again .\n\n')
     exit()
 
-
+from MMCQsc.scp.lib.PIL import Image as PImage
+from MMCQsc.scp.lib.rich import print
+from MMCQsc.scp.lib.rich.console import Console
 from MMCQsc.scp.lib.MMCQ import MMCQ # 第一个MMCQ是文件名，第二个是类名
+from MMCQsc.scp.lib.rich.progress import (
+    BarColumn,
+    Progress,)
+    # 实例化进度条，由于采用多进程+多线程，只能当分隔符使用
+progress = Progress(
+        BarColumn(bar_width=None)
+    )
+
+console = Console(color_system='auto', style=None)
 
     # from ..lib.logger import *
     # logger = myLogging("gitee.com/soltus")
     # from ..lib.MMCQ import MMCQ  # 第一个MMCQ是文件名，第二个是类名
 
 
-# 实例化进度条，由于采用多进程+多线程，只能当分隔符使用
-progress = Progress(
-    BarColumn(bar_width=None)
-)
-
-console = Console(color_system='auto', style=None)
-
 
 def procompress(files, root):
     testshm = shared_memory.SharedMemory(name='main_run_share')
     buf = testshm.buf
     buf[3] += 1
-    console.rule(title=' 多进程 ProcessPoolExecutor {:<3}'.format(
+    console.rule(title=' 多进程 ProcessPoolExecutor {:<3} \t "./profile.json 配置文件加载成功"'.format(
                  str(buf[3])), align='center')
 
     ss = []
@@ -157,7 +155,7 @@ def procompress(files, root):
         if os.path.splitext(f)[1].lower() in ['.jpg', 'jpeg', '.png']:
             ipl = ipl + 1
             new_file_path = r'%s\%s_%s_%s%s' % (
-                os.path.join(BASE_DIR, "src\\prepare"), 'img', ipl, str(int(time.time()*10000)), os.path.splitext(f)[1])
+                os.path.join(SRC_DIR, "prepare"), 'img', ipl, str(int(time.time()*10000)), os.path.splitext(f)[1])
             shutil.copy2(os.path.join(root, f), new_file_path)
             ss.append(new_file_path)
 
@@ -173,44 +171,36 @@ def compressImage(srcPath):
         try:
             # 打开原图片缩小后保存，可以用if srcFile.endswith(".jpg")或者split，splitext等函数等针对特定文件压缩
             filename = os.path.basename(srcPath)
-            srcFile = srcPath
             dstFile = os.path.join(os.path.join(
-                BASE_DIR, "src\\compress"), filename)
-            sImg = Image.open(srcFile)
+                SRC_DIR, "compress"), filename)
+            sImg = PImage.open(srcPath)
             dImg = sImg.convert('RGB')
             w, h = sImg.size
             MIN_SIZE = 40*40
             # 设置压缩尺寸和选项，注意尺寸要用括号
             if max(w, h) > ignore_size:
                 dImg = dImg.resize(
-                    (int(w/size_rate), int(h/size_rate)), Image.NEAREST)
+                    (int(w/size_rate), int(h/size_rate)), PImage.NEAREST)
             # 尺寸过小需要放大
             elif max(w, h) < MIN_SIZE:
                 dImg = dImg.resize(
-                    (int(w*2), int(h/size_rate*2)), Image.NEAREST)
+                    (int(w*2), int(h/size_rate*2)), PImage.NEAREST)
             dImg.save(dstFile.replace(filename.split('.')[1], 'jpg'))
             dImg.close()
             sImg.close()
-            os.rename(srcFile, srcFile.replace(
+            os.rename(srcPath, srcPath.replace(
                 filename.split('.')[1], 'jpg'))  # 不改找不到文件
             return dstFile.replace(filename.split('.')[1], 'jpg')
 
         except Exception:
-            sImg.close()
-            sImg = cv.imread(srcFile, 1)
-            if max(w, h) > ignore_size:
-                dImg = cv.resize(sImg, None, size_rate, size_rate)
-            cv.imwrite(dstFile.replace(filename.split('.')[1], 'jpg'), dImg)
-            sImg.close
-            os.rename(srcFile, srcFile.replace(
-                filename.split('.')[1], 'jpg'))  # 不改找不到文件
-            return dstFile.replace(filename.split('.')[1], 'jpg')
+            raise
+
 
     # 如果是文件夹就递归
     # if os.path.isdir(srcPath):
     #     for file in srcPath:
     #         compressImage(file)
-    # 多进程已做好文件夹递归，传参必是文件
+    # 多进程已做好文件夹递归，srcPath传参必是文件
 
 
 def testMMCQ(future):
@@ -227,8 +217,11 @@ def testMMCQ(future):
     thisbuf = str(buf[4] + buf[5] + buf[6] + buf[7])
 
     imgfile = future.result()
-    rgb = list(map(lambda d: MMCQ(d, themes, file=imgfile).quantize(), [cv.imdecode(np.fromfile(
-        imgfile, dtype=np.uint8), cv.COLOR_BGR2RGB)]))
+    # rgb = list(map(lambda d: MMCQ(d, themes, file=imgfile, use='cv2').quantize(), [cv.imdecode(np.fromfile(
+    #     imgfile, dtype=np.uint8), cv.COLOR_BGR2RGB)]))
+    # pimg = PImage.open(imgfile)
+    # parray = np.asarray(pimg, dtype=np.uint8)
+    rgb = list(map(lambda d: MMCQ(d, themes, file=imgfile, use='PIL').quantize(), [PImage.open(imgfile).convert('RGB')]))
     for i in range(len(rgb)):
         strjoin = ''
         for j in range(len(rgb[i])):
@@ -257,22 +250,22 @@ def domain(img):
         totaltime = time.time()  # 获取当前文件目录
 
         # 遍历删除图片
-        path = os.path.join(BASE_DIR, "src\\finish")
+        path = os.path.join(SRC_DIR, "finish")
         if os.path.exists(path):
             shutil.rmtree(path)
         os.mkdir(path)
-        path = os.path.join(BASE_DIR, "src\\compress")
+        path = os.path.join(SRC_DIR, "compress")
         if os.path.exists(path):
             shutil.rmtree(path)
         os.mkdir(path)
-        if os.path.exists(os.path.join(BASE_DIR, "src\\reports")) == False:
-            os.makedirs(os.path.join(BASE_DIR, "src\\reports"))
-        path = os.path.join(BASE_DIR, "src\\prepare\\temp")
-        temp = os.path.join(BASE_DIR, "src\\prepare\\temp")
+        if os.path.exists(os.path.join(SRC_DIR, "reports")) == False:
+            os.makedirs(os.path.join(SRC_DIR, "reports"))
+        path = os.path.join(SRC_DIR, "prepare", "temp")
+        temp = os.path.join(SRC_DIR, "prepare", "temp")
         if os.path.exists(path):
             shutil.rmtree(path)
         os.makedirs(path)
-        path = os.walk(os.path.join(BASE_DIR, "src\\prepare"))
+        path = os.walk(os.path.join(SRC_DIR, "prepare"))
         rerule = re.compile(r'\#.{6}\#.{6}\#.{6}\#.{6}\#.{6}\__')
         rerule2 = re.compile(
             r'SCMD-P.*')  # 和定义的命名规则有关
@@ -306,6 +299,7 @@ def domain(img):
             ptv = 0
             origin_list = []
             path = os.walk(os.path.dirname(img))
+            print(img)
             for root, dirs, files in path:
                 for f in files:
                     if os.path.splitext(f)[1].lower() in ['.jpg', '.jpeg', '.png']:
@@ -333,21 +327,21 @@ def domain(img):
 
             while True:  # 定时检测文件夹文件数量
                 nowlist = len(os.listdir(
-                    os.path.join(BASE_DIR, "src\\finish")))
+                    os.path.join(SRC_DIR, "finish")))
                 time.sleep(2)
                 while nowlist != len(os.listdir(
-                        os.path.join(BASE_DIR, "src\\finish"))):
+                        os.path.join(SRC_DIR, "finish"))):
                     continue
                 buf[1] = 0
                 break
 
-            path = os.walk(os.path.join(BASE_DIR, "src\\compress"))
+            path = os.walk(os.path.join(SRC_DIR, "compress"))
             for root, dirs, files in path:
                 for f in files:
                     shutil.move(os.path.join(root, f), os.path.join(
-                        BASE_DIR, "src\\finish", f))
+                        SRC_DIR, "finish", f))
 
-            path = os.walk(os.path.join(BASE_DIR, "src\\prepare"))
+            path = os.walk(os.path.join(SRC_DIR, "prepare"))
             for root, dirs, files in path:
                 for f in files:
                     fname = os.path.splitext(os.path.basename(f))[0]
@@ -370,21 +364,21 @@ def domain(img):
                     if os.path.exists(dstname):
                         sames = [dstname, os.path.join(root, f), os.path.getsize(
                             dstname), os.path.getsize(os.path.join(root, f))]  # 第二个是当前处理对象
-                        issanme = g.buttonbox(msg=f'\n 【疑似重复提醒】 检测到两张图片的色彩主题相同，你有理由怀疑它们是重复的，请检查！\n{sames[0]} \
-                            为已存在图片（图片大小{sames[2]}）\n{sames[1]} 为当前待保存图片（图片大小{sames[3]}）\n',
-                                              title=' 操作确认 ', choices=(
-                                                  ' 保留已存在的 ', ' 我全都要 ', ' 删除已存在的 '), default_choice=None, cancel_choice=' 我全都要 ', images=None)
-                        if issanme != ' 我全都要 ':
-                            if issanme == ' 保留已存在的 ':
-                                os.remove(dstname)
-                                with open(os.path.join(root, licenseid) + '.json', 'w') as js:
-                                    json.dump(jsonstr, js)
-                                os.rename(os.path.join(root, f), dstname)
-                            else:
-                                os.remove(os.path.join(root, f))
-                        else:
-                            # 本demo参考SCMD标准，因此不允许重复存在，如有需求可自行修改
-                            os.remove(os.path.join(root, f))
+                        # issanme = g.buttonbox(msg=f'\n 【疑似重复提醒】 检测到两张图片的色彩主题相同，你有理由怀疑它们是重复的，请检查！\n{sames[0]} \
+                        #     为已存在图片（图片大小{sames[2]}）\n{sames[1]} 为当前待保存图片（图片大小{sames[3]}）\n',
+                        #                       title=' 操作确认 ', choices=(
+                        #                           ' 保留已存在的 ', ' 我全都要 ', ' 删除已存在的 '), default_choice=None, cancel_choice=' 我全都要 ', images=None)
+                        # if issanme != ' 我全都要 ':
+                        #     if issanme == ' 保留已存在的 ':
+                        #         os.remove(dstname)
+                        #         with open(os.path.join(root, licenseid) + '.json', 'w') as js:
+                        #             json.dump(jsonstr, js)
+                        #         os.rename(os.path.join(root, f), dstname)
+                        #     else:
+                        #         os.remove(os.path.join(root, f))
+                        # else:
+                        #     # 本demo参考SCMD标准，因此不允许重复存在，如有需求可自行修改
+                        #     os.remove(os.path.join(root, f))
                     else:
                         with open(os.path.join(root, licenseid) + '.json', 'w') as js:
                             json.dump(jsonstr, js)
@@ -393,14 +387,12 @@ def domain(img):
             progress.stop_task(task_id)
 
             cost_times = str(round(time.time()-totaltime, 4))
-            cc = g.ccbox(msg="\n\n\n" + BASE_DIR + "\n\n\n 总耗时：" +
-                         cost_times, title="处理完成", choices=(" 生成报告 ", " 完成 "))
+            cc = 1
+            # cc = g.ccbox(msg="\n\n\n" + SRC_DIR + "\n\n\n 总耗时：" +
+            #              cost_times, title="处理完成", choices=(" 生成报告 ", " 完成 "))
 
             # 点击生成报告触发事件
             if cc == 1:
-                cc1 = shared_memory.SharedMemory(name='main_run_share')
-                buf = cc1.buf
-                buf[2] = 1
                 print('\n\n\n')
                 curr_time = datetime.datetime.now()
                 # 将路径转为URL格式，不转则json.dump以ASCII格式写到JSON文件里
@@ -409,11 +401,11 @@ def domain(img):
                 reportjson = {'date': curr_time.strftime(
                     "%Y-%m-%d"), 'time': curr_time.strftime("%H:%M:%S"), 'in_path_url': in_path_url, 'in_files': ptv, 'cost_times': cost_times}
                 reportfile = os.path.join(
-                    BASE_DIR, 'src\\reports\\' + curr_time.strftime("%Y%m%d-%H%M%S_")) + 'report.json'
+                    SRC_DIR, 'reports\\' + curr_time.strftime("%Y%m%d-%H%M%S_")) + 'report.json'
                 with open(reportfile, 'w') as js:
                     file_list = []
-                    for dir in os.listdir(BASE_DIR + '\\src\\prepare'):
-                        child = os.path.join(BASE_DIR + '\\src\\prepare', dir)
+                    for dir in os.listdir(SRC_DIR + '\\prepare'):
+                        child = os.path.join(SRC_DIR + '\\prepare', dir)
                         if os.path.isdir(child):
                             for file in os.listdir(child):
                                 if os.path.splitext(file)[1].lower() in ['.jpg', '.jpeg', '.png']:
@@ -430,21 +422,20 @@ def domain(img):
                                   highlight=True)
                     for i in range(len(file_list)):
                         file_list[i] = str(file_list[i]).replace(
-                            BASE_DIR.replace('\\', '/') + '/src/', '')
-                    with open(os.path.join(BASE_DIR, 'src/index.js'), 'w', encoding='utf-8') as mainjs:
+                            SRC_DIR.replace('\\', '/'), '')
+                    with open(os.path.join(SRC_DIR, 'index.js'), 'w', encoding='utf-8') as mainjs:
                         mainjs.write(
                             'class ImgShow extends React.Component {\n render() {\n return (<div id="imgbox"><div className="imgshow1" >\n')
-                    with open(os.path.join(BASE_DIR, 'src/index.js'), 'a', encoding='utf-8') as mainjs:
+                    with open(os.path.join(SRC_DIR, 'index.js'), 'a', encoding='utf-8') as mainjs:
                         img1 = len(file_list) // 2
                         img2_w = False
                         i = 0
                         shutil.copy2(os.path.join(
-                            BASE_DIR, 'src/_css/base.css'), os.path.join(BASE_DIR, 'src/index.css'))
+                            SRC_DIR, '_css', 'base.css'), os.path.join(SRC_DIR, 'index.css'))
                         for name in file_list:
                             i += 1
                             if rerule2.search(os.path.splitext(name)[0]):
-                                colors = rerule2.search(os.path.splitext(name)[
-                                    0]).group().split('-')
+                                colors = rerule2.search(os.path.splitext(name)[0]).group().split('-')
                             else:
                                 colors = ['', '', 'FFFFFF', 'FFFFFF',
                                           'FFFFFF', 'FFFFFF', 'FFFFFF']  # 意外处理
@@ -455,7 +446,7 @@ def domain(img):
                                 if i <= img1 and img2_w == False:
                                     mainjs.writelines(
                                         r'<div className="colorbox wow fadeIn" data-wow-delay="0.2s" data-wow-duration="0.5s" data-wow-offset="20">')
-                                    with open(os.path.join(BASE_DIR, 'src/index.css'), 'a', encoding='utf-8') as maincss:
+                                    with open(os.path.join(SRC_DIR, 'index.css'), 'a', encoding='utf-8') as maincss:
                                         maincss.writelines('\n')
                                         for c in range(1, 6):
                                             mainjs.writelines(
@@ -472,7 +463,7 @@ def domain(img):
                                         img2_w = True
                                     mainjs.writelines(
                                         r'<div className="colorbox wow fadeIn" data-wow-delay="0.2s" data-wow-duration="0.5s" data-wow-offset="20">')
-                                    with open(os.path.join(BASE_DIR, 'src/index.css'), 'a', encoding='utf-8') as maincss:
+                                    with open(os.path.join(SRC_DIR, 'index.css'), 'a', encoding='utf-8') as maincss:
                                         maincss.writelines('\n')
                                         for c in range(1, 6):
                                             mainjs.writelines(
@@ -485,7 +476,7 @@ def domain(img):
                                         r'<img className="img wow fadeIn" data-wow-delay="0.2s" data-wow-duration="0.5s" data-wow-offset="20" src={"' + name + r'"} />' + '\n')
                         mainjs.writelines(
                             '</div>\n</div> ); \n}}\n\nReactDOM.render(<ImgShow / >,document.getElementById('"'imgs'"')); ')
-                        with open(os.path.join(BASE_DIR, 'src/_js/base.js'), 'r+', encoding='utf-8') as index:
+                        with open(os.path.join(SRC_DIR, '_js', 'base.js'), 'r+', encoding='utf-8') as index:
                             index.seek(0)
                             index_text = index.read()
                             rf = re.sub(r'^.*\\src', './',
@@ -493,6 +484,11 @@ def domain(img):
                             index_text = index_text.replace(
                                 '[[reportpath]]', rf)
                             mainjs.writelines(index_text)
+
+                cc1 = shared_memory.SharedMemory(name='main_run_share')
+                buf = cc1.buf
+                buf[2] = 1
+                return 6
 
 
 # if __name__ == '__main__':

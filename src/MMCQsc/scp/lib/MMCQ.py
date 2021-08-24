@@ -65,6 +65,7 @@ class VBox(object):
         pass
 
 
+
 class MMCQ(object):
     """
         Modified Median Cut Quantization(MMCQ)
@@ -73,7 +74,7 @@ class MMCQ(object):
     MAX_ITERATIONS = 1000
     SIGBITS = 5
 
-    def __init__(self, pixData, maxColor, fraction=0.85, sigbits=5,file=''):
+    def __init__(self, pixData, maxColor, fraction=0.85, sigbits=5,file='',use='PIL'):
         """
         @pixData        Image data [[R, G, B], ...]
         @maxColor       Between [2, 100]
@@ -91,19 +92,33 @@ class MMCQ(object):
         if sigbits != 5 and sigbits != 6:
             raise AttributeError("sigbits should be either 5 or 6!")
         self.SIGBITS = sigbits
+        self.imgPath = file  # 源码没有 [self.imgPath]
+        self.use = use # 源码没有 [self.use]
         self.rshift = 8 - sigbits
-        self.imgPath = file  # 源码没有 [self.imgPath] ，这是为了多线程调试定位添加的
-        self.h, self.w, _ = self.pixData.shape
+        if self.use == 'cv2':
+            self.h, self.w, _ = self.pixData.shape # for opencv-pythnn [height, width, color]
+        elif self.use == 'PIL':
+            self.w, self.h = self.pixData.size # for Pillow [width, height]
+        else:
+            raise
 
     def getPixHisto(self):
         pixHisto = np.zeros(1 << (3 * self.SIGBITS))
-        for y in range(self.h):
-            for x in range(self.w):
-                r = self.pixData[y, x, 0] >> self.rshift
-                g = self.pixData[y, x, 1] >> self.rshift
-                b = self.pixData[y, x, 2] >> self.rshift
-
-                pixHisto[self.getColorIndex(r, g, b)] += 1
+        if self.use == 'cv2':
+            for y in range(self.h):
+                for x in range(self.w):
+                    r = self.pixData[y, x, 0] >> self.rshift
+                    g = self.pixData[y, x, 1] >> self.rshift
+                    b = self.pixData[y, x, 2] >> self.rshift
+                    pixHisto[self.getColorIndex(r, g, b)] += 1
+        elif self.use == 'PIL':
+            for y in range(self.h):
+                for x in range(self.w):
+                    r,g,b = self.pixData.getpixel((x,y)) #获取一个像素块的rgb
+                    r = r >> self.rshift
+                    g = g >> self.rshift
+                    b = b >> self.rshift
+                    pixHisto[self.getColorIndex(r, g, b)] += 1
         return pixHisto
 
     @classmethod
@@ -111,12 +126,21 @@ class MMCQ(object):
         return (r << (2 * cls.SIGBITS)) + (g << cls.SIGBITS) + b
 
     def createVbox(self, pixData):
-        rmax = np.max(pixData[:, :, 0]) >> self.rshift
-        rmin = np.min(pixData[:, :, 0]) >> self.rshift
-        gmax = np.max(pixData[:, :, 1]) >> self.rshift
-        gmin = np.min(pixData[:, :, 1]) >> self.rshift
-        bmax = np.max(pixData[:, :, 2]) >> self.rshift
-        bmin = np.min(pixData[:, :, 2]) >> self.rshift
+        if self.use == 'cv2':
+            rmax = np.max(pixData[:, :, 0]) >> self.rshift
+            rmin = np.min(pixData[:, :, 0]) >> self.rshift
+            gmax = np.max(pixData[:, :, 1]) >> self.rshift
+            gmin = np.min(pixData[:, :, 1]) >> self.rshift
+            bmax = np.max(pixData[:, :, 2]) >> self.rshift
+            bmin = np.min(pixData[:, :, 2]) >> self.rshift
+        elif self.use == 'PIL':
+            r,g,b = pixData.split()
+            rmax = np.max(r) >> self.rshift
+            rmin = np.min(r) >> self.rshift
+            gmax = np.max(g) >> self.rshift
+            gmin = np.min(g) >> self.rshift
+            bmax = np.max(b) >> self.rshift
+            bmin = np.min(b) >> self.rshift
 
         if DEBUG:
             print("Red range: {0}-{1}".format(rmin, rmax))

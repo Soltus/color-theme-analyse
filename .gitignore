@@ -64,3 +64,6 @@ Thumbs.db
 /build
 /src/MMCQsc/version.py
 /setup-py-basic-command.jpg
+/src/MMCQsc/scp/lib/numpy-1.21.1.dist-info
+/src/MMCQsc/scp/lib/numpy
+/src/MMCQsc/scp/lib/bin
