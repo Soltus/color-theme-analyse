@@ -82,7 +82,7 @@ try:
     np = __import__('numpy', globals(), locals(), [], 0)
 except ImportError:
     try:
-        import numpy as np
+        from MMCQsc.scp.lib import numpy as np
     except:
         repo = pgd.task(im="numpy",re="numpy")
         dddd += repo

@@ -39,6 +39,8 @@ MANIFEST.in 需要放在和 setup.py 同级的顶级目录下，setuptools 会�
 '''
 
 import setuptools
+__import__("pkg_resources").declare_namespace(__name__)
+
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
@@ -47,7 +49,7 @@ print('如果第一次构建或者删除了 .eggs 文件夹，则需要等待，
 print('开始执行，若长时间无响应，请检查是否有误')
 
 setuptools.setup(
-    name="color-theme-analyse",
+    name="color-theme-analyse", # 在 PyPI 上搜索的项目名称
     setup_requires=['setuptools_scm'], # 指定运行 setup.py 文件本身所依赖的包
     use_scm_version=True, # .gitignore 应与 setup.py 在同一文件夹 更多信息参考 https://pypi.org/project/setuptools-scm/
     # version="0.0.5", # 默认的手动指定版本
@@ -76,8 +78,9 @@ setuptools.setup(
         "Natural Language :: English",
         "Topic :: Multimedia :: Graphics"
     ],
-    packages=setuptools.find_packages(where="src", include=['MMCQsc','PIL','rich'], exclude=['numpy']),
-    package_dir={"": "src"},
+    package_dir={'':'src'},
+    packages=setuptools.find_packages(),
+    namespace_packages=[],
     exclude_package_data={},
     package_data={
         '':['*.json'],

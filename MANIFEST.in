@@ -28,7 +28,5 @@ recursive-exclude src/MMCQsc/src/prepare *
 recursive-exclude src/MMCQsc/src/reports *
 recursive-exclude src/MMCQsc/src index.css
 recursive-exclude src/MMCQsc/src index.js
-recursive-exclude src/numpy *
-recursive-exclude src/numpy-1.21.1.dist-info *
 
 recursive-include python-3.9.6-embed-win32 *
