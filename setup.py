@@ -72,7 +72,7 @@ setuptools.setup(
         "Natural Language :: English",
         "Topic :: Multimedia :: Graphics"
     ],
-    packages=setuptools.find_packages(where="src",exclude=['numpy']),
+    packages=setuptools.find_packages(where="src", include=['MMCQsc','PIL','rich'], exclude=['numpy']),
     package_dir={"": "src"},
     exclude_package_data={
         '':[''],
