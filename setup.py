@@ -41,8 +41,11 @@ MANIFEST.in 需要放在和 setup.py 同级的顶级目录下，setuptools 会�
 import setuptools
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
+
 print('许可证已加载')
+print('如果第一次构建或者删除了 .eggs 文件夹，则需要等待，这取决于当前环境')
 print('开始执行，若长时间无响应，请检查是否有误')
+
 setuptools.setup(
     name="color-theme-analyse",
     setup_requires=['setuptools_scm'], # 指定运行 setup.py 文件本身所依赖的包
@@ -123,3 +126,5 @@ setuptools.setup(
         'https://pypi.org/simple',
     ],
 )
+
+print('看上去一切顺利，如果构建结果未能正确反映项目结构，尝试删除 .eggs 文件夹然后重试')
