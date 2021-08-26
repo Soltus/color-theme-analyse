@@ -22,7 +22,6 @@
 import socket
 import time
 import os,sys,shutil
-from importlib import import_module
 
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
 SRC_DIR = os.path.abspath(os.path.join(BASE_DIR, 'MMCQsc','src'))
@@ -35,9 +34,6 @@ if PY_DIR not in sys.path:
     sys.path.append(PY_DIR)
     sys.path.append(PY39P)
     sys.path.append(PYSPP)
-    # logger = import_module('.logger','lib')
-    # logger = logger.myLogging("gitee.com/soltus")
-    # executer = import_module('.executer','scp.scripts')
 
 from MMCQsc.scp.lib.logger import *
 logger = myLogging("gitee.com/soltus")
@@ -96,7 +92,7 @@ def mainFunc():
         pass
     else:
         try:
-            # img = g.fileopenbox('open file' + '会导入当前文件夹的全部图片') # fileopenbox()函数的返回值是你选择的那个文件的具体路径
+            from MMCQsc.scp import executable_check
             img = ctypes.c_wchar_p(mydll.mainFunc()).value
 
             if img != None:  # 有传入才处理
@@ -120,16 +116,15 @@ def mainFunc():
                 shutil.rmtree(os.path.join(SRC_DIR + '\\finish'))
                 shutil.rmtree(os.path.join(SRC_DIR + '\\compress'))
                 logger.info('成功删除不重要的自动生成文件')
+                logger.warning("\n\n\t\t[ tip ] : 如需在当前窗口返回 Shell 环境，使用 CTRL + PAUSE_BREAK 强制结束所有任务并退出 Python\n\n")
             except:
                 if result:
                     logger.warning('未能删除自动生成文件')
             finally:
-                logger.warning("\n\n\t\t[ tip ] : 如需在当前窗口返回 Shell 环境，使用 CTRL + PAUSE_BREAK 强制结束所有任务并退出 Python\n\n")
                 sys.exit()
 
 
 if __name__ == '__main__':
-    from MMCQsc.scp import executable_check
     try:
         result = mainFunc()
     except BaseException as e:

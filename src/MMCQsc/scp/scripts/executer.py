@@ -76,11 +76,7 @@ class Pgd:
 dddd = 0
 pgd = Pgd()
 
-# try:
-#     import cv2 as cv
-# except ImportError:
-#     repo = pgd.task(im="cv2",re="opencv-python")
-#     dddd += repo
+
 
 try:
     np = __import__('numpy', globals(), locals(), [], 0)
@@ -94,27 +90,6 @@ except ImportError:
 '''
 embed 版本：Pillow 和 rich 更换为嵌入版本，弃用 OpenCV-Python
 '''
-# try:
-#     from PIL import Image
-# except ImportError:
-#     repo = pgd.task(im="PIL",re="pillow")
-#     dddd += repo
-
-# try:
-#     from rich import print
-#     from rich.console import Console
-#     from rich.progress import (
-#     BarColumn,
-#     Progress,)
-#     # 实例化进度条，由于采用多进程+多线程，只能当分隔符使用
-#     progress = Progress(
-#         BarColumn(bar_width=None)
-#     )
-
-#     console = Console(color_system='auto', style=None)
-# except ImportError:
-#     repo = pgd.task(im="rich",re="rich")
-#     dddd += repo
 
 
 if dddd:
@@ -135,10 +110,6 @@ progress = Progress(
     )
 
 console = Console(color_system='auto', style=None)
-
-    # from ..lib.logger import *
-    # logger = myLogging("gitee.com/soltus")
-    # from ..lib.MMCQ import MMCQ  # 第一个MMCQ是文件名，第二个是类名
 
 
 
@@ -219,8 +190,6 @@ def testMMCQ(future):
     imgfile = future.result()
     # rgb = list(map(lambda d: MMCQ(d, themes, file=imgfile, use='cv2').quantize(), [cv.imdecode(np.fromfile(
     #     imgfile, dtype=np.uint8), cv.COLOR_BGR2RGB)]))
-    # pimg = PImage.open(imgfile)
-    # parray = np.asarray(pimg, dtype=np.uint8)
     rgb = list(map(lambda d: MMCQ(d, themes, file=imgfile, use='PIL').quantize(), [PImage.open(imgfile).convert('RGB')]))
     for i in range(len(rgb)):
         strjoin = ''
@@ -490,11 +459,3 @@ def domain(img):
                 buf[2] = 1
                 return 6
 
-
-# if __name__ == '__main__':
-#     # fileopenbox()函数的返回值是你选择的那个文件的具体路径
-#     if 'img' in dir():
-#         pass
-#     else:
-#         img = g.fileopenbox('open file' + '会导入当前文件夹的全部图片')
-#         domain(img)

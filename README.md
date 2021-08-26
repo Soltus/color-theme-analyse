@@ -89,3 +89,5 @@ Bug 反馈和 Issues 提交可以在 Bitbucket 或者 Gitee，**在 Gitee 会得
 已将 `rich` 移植为扩展依赖
 
 已移除 `opency-python` 依赖
+
+已将 Numpy 移植为扩展依赖

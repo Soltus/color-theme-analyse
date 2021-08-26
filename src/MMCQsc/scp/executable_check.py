@@ -290,3 +290,4 @@ if fun_version(PY3_VNO,"3.8.0") == -1:
             exit()
 elif fun_version(PY3_VNO,"3.9.5") != 0:
     logger.warning("Recommended version : Python == 3.9.5  However, it doesn't matter")
+
