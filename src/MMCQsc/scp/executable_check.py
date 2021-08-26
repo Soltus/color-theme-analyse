@@ -111,13 +111,16 @@ def run_in_env(env):
                 logger.warning("用户强制退出")
                 exit()
         if pick_env in ['Y','y']:
+            vtemp = []
+            vtemp.append(str(sys.version_info[0]))
+            vtemp.append(str(sys.version_info[1]))
             if sys.version_info.major < 3:
                 logger.error(" Can NOT run in Python 2.x ")
                 raise EnvError('\n\n\t''This script is only for use with ''Python 3.6 or later\n\n\t https://gitee.com/hi-windomcolor-theme-analyse/ \n\n')
             elif sys.version_info[:3] < (3,6,0):
                 logger.error(" Can NOT run in Python < 3.6 ")
                 raise EnvError('\n\n\t''This script is only for use with ''Python 3.6 or later\n\n\t https://gitee.com/hi-windomcolor-theme-analyse/ \n\n')
-            elif sys.version_info[:2] != PY3_VNO[:2]:
+            elif vtemp != PY3_VNO.split('.')[:2]:
                 logger.error(" 不同 Python 版本的 Numpy 无法共享 ")
                 logger.error(" 应当使用 Python == {}.{} 的 Conda 环境导入 Numpy".format(sys.version_info[0],sys.version_info[1]))
                 continue
