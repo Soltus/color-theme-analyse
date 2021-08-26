@@ -105,17 +105,12 @@ setuptools.setup(
     # 'docutils >= 0.3'，这是比较常用的形式。 当对某个库比较信任时，这种形式可以自动保持版本为最新。
     # 'Django >= 1.11, != 1.11.1, <= 2'，这是比较复杂的形式。保证了Django的大版本在1.11和2之间，也即1.11.x；并且，排除了已知有问题的版本1.11.1（仅举例）。 对于一些大型、复杂的库，这种形式是最合适的。
     # 'requests[security, socks] >= 2.18.4'，这是包含了额外的可选依赖的形式。 正常安装requests会自动安装它的install_requires中指定的依赖，而不会安装security和socks这两组依赖（这两组依赖是定义在它的extras_require中）。
-    install_requires=[
-        'easygui>=0.1',
-        'opencv-python>=4.0',
-        'numpy>=1.21',
-        'pillow>=8.3',
-        'rich>=0.1',
-    ],
+    install_requires=[],
     # install_requires 在安装模块时会自动安装依赖包
     # extras_require 仅表示该模块依赖这些包，但不是必须的，需要用户手动安装。被依赖使用时，可以用类似'requests[download, advanced]'的形式来指定
     # extras_require 需要一个 dict ，其中按（自定义的）功能名称进行分组，每组一个 list
     extras_require={
+        'base':['numpy>=1.21','pillow>=8.3','rich>=0.1',],
         'download':['pipx>=0.1'],
         'advanced':['pyinstaller>=4.3; platform_system == "Windows"'],
     },
