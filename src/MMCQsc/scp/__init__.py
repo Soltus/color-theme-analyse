@@ -6,3 +6,5 @@ try:
 except PackageNotFoundError:
     # package is not installed
     pass
+
+from . import lib,scripts
