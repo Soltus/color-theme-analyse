@@ -94,7 +94,7 @@ def mainFunc():
         try:
             from MMCQsc.scp import executable_check
             img = ctypes.c_wchar_p(mydll.mainFunc()).value
-
+            logger.info('\n\n\t\t请留意最小化的新窗口\n\n')
             if img != None:  # 有传入才处理
                 buf[1] = len(img)
                 for i in range(2, 10, 1):
