@@ -1,22 +1,28 @@
-import setuptools
 '''
 官方推荐使用静态的 setup.cfg 但动态的 setup.py 对我们来说更熟悉，学习成本低，两个文件也可以共存
 MANIFEST.in 需要放在和 setup.py 同级的顶级目录下，setuptools 会自动读取该文件，需要注意 MANIFEST.in 指令是按顺序执行的，因此 exclude 要放在 include 后面
 建议 MANIFEST.in 只用于构建 tar.gz 而不用于 whl ，即 setup.py 设置 [include_package_data=False]，至少在熟练掌握构建前应当这样做
 
 //关于setuptools：setuptools 是 distutils 增强版，不包括在标准库中
-//关于包格式：egg 包是过时的，whl 包是新的标准
-//关于打包：
-    python setup.py sdist 生成 dist/*.tar.gz [源码];
-    python setup.py bdist 生成 dist/*.zip [win32平台构建];
-    python setup.py bdist 生成 dist/*.whl [通用包];
-    python setup.py bdist_wininst 生成 dist/*.whl [Windows安装引导程序];
-    更多命令使用 python setup.py --help-commands 查看
 
-//关于上传：用 upload 命令上传包已经过时（不安全），官方提供了 twine 工具专门用来与 PyPI 交互。
-项目成熟之前，应当使用 twine upload dist/* --verbose --repository testpypi
-testpypi 的数据库会被定期修剪，因此可以放心上传
-//关于版本号：Python 的软件分发工具还支持 local version identifier 可用于标识不打算发布的本地开发构建，本地版本标识符采用以下形式 <public version identifier>+<local version label> 例如：
+//关于包格式：egg 包是过时的，whl 包是新的标准
+
+//关于打包：
+
+        python setup.py sdist 生成 dist/*.tar.gz [源码];
+        python setup.py bdist 生成 dist/*.zip [win32平台构建];
+        python setup.py bdist_wheel 生成 dist/*.whl [通用包];
+        python setup.py bdist_wininst 生成 dist/*.whl [Windows安装引导程序];
+        更多命令使用 python setup.py --help-commands 查看
+
+//关于上传：
+
+        用 upload 命令上传包已经过时（不安全），官方提供了 twine 工具专门用来与 PyPI 交互。
+        项目成熟之前，应当使用 twine upload dist/* --verbose --repository testpypi
+        testpypi 的数据库会被定期修剪，因此可以放心上传
+
+//关于版本号：Python 的软件分发工具还支持 local version identifier 可用于标识不打算发布的本地开发构建.
+本地版本标识符采用以下形式 <public version identifier>+<local version label> 例如：
 
         1.2.0.dev1+hg.5.b11e5e6f0b0b  # 5th VCS commmit since 1.2.0.dev1 release
         1.2.1+fedora.4                # Package with downstream Fedora patches applied
@@ -31,14 +37,14 @@ testpypi 的数据库会被定期修剪，因此可以放心上传
 3、有很大的改动，无法向下兼容,增加x
 '''
 
-
-
+import setuptools
+# import py2exe
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
     name="color-theme-analyse",
-    setup_requires=['setuptools_scm'], # 指定运行 setup.py 文件本身所依赖的包
+    setup_requires=['setuptools_scm','py2exe'], # 指定运行 setup.py 文件本身所依赖的包
     use_scm_version=True, # .gitignore 应与 setup.py 在同一文件夹 更多信息参考 https://pypi.org/project/setuptools-scm/
     # version="0.0.5", # 默认的手动指定版本
     author="Soltus",
@@ -118,4 +124,50 @@ setuptools.setup(
         'https://pypi.douban.com/simple',
         'https://pypi.org/simple',
     ],
+    # ''' 以下内容用于 python setup.py bdist_wininst 生成 dist/*.whl [Windows安装引导程序] '''
+    # options = {"py2exe":
+    # {"compressed": 1,     #开启压缩
+    #  "optimize": 2,
+    #  "ascii": 1,
+    #  "includes":[], #要包含的其它库文件
+    #  "bundle_files": 2
+    #  }
+    # },
+    # zipfile=None, #不生成library.zip文件
+    #console=[{"script": "MMCQsc.scp.main:mainFunc", "icon_resources": [(1, "python.ico")] }]      #源文件，程序图标
+    # 如果你想创建的exe程序是一个图形的用户界面的话，把console修改为windows即可
 )
+
+
+
+# ''' 以下内容用于 python setup.py bdist_wininst 生成 dist/*.whl [Windows安装引导程序] '''
+
+# from distutils.core import setup
+# import py2exe
+
+# includes = ["encodings", "encodings.*"] #要包含的其它库文件
+
+# options = {"py2exe":
+#     {"compressed": 1,     #开启压缩
+#      "optimize": 2,
+#      "ascii": 1,
+#      "includes":includes,
+#      "bundle_files": 2
+#      }
+#     }
+
+# '''
+# [bundle_files]
+# 值为1表示pyd和dll文件会被打包到exe文件中，且不能从文件系统中加载python模块；
+# 值为2表示pyd和dll文件会被打包到exe文件中，但是可以从文件系统中加载python模块；
+# '''
+
+# setup(
+#     version = "1.1.3",
+#     description = "SCSD-PY001 info: This is a simple demo of pictures color theme batch analysis use MMCQ with Python",
+#     name = "color-theme-analyse",
+#     options = options,
+#     zipfile=None, #不生成library.zip文件
+#     console=[{"script": "hello.py", "icon_resources": [(1, "hello.ico")] }]      #源文件，程序图标
+#     )
+

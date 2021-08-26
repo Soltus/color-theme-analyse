@@ -7,7 +7,7 @@ include LICENSE
 include setup.py
 
 recursive-include src *
-exclude setup-py-basic-command.jpg
+exclude python.ico
 global-include *.json
 
 global-exclude *__pycache__
