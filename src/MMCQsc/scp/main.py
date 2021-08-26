@@ -93,8 +93,8 @@ def mainFunc():
     else:
         try:
             from MMCQsc.scp import executable_check
-            img = ctypes.c_wchar_p(mydll.mainFunc()).value
             logger.info('\n\n\t\t请留意最小化的新窗口\n\n')
+            img = ctypes.c_wchar_p(mydll.mainFunc()).value
             if img != None:  # 有传入才处理
                 buf[1] = len(img)
                 for i in range(2, 10, 1):
@@ -105,6 +105,8 @@ def mainFunc():
                     with futures.ProcessPoolExecutor(max_workers=None) as prolist:
                         prolist.submit(createServer)
                         prolist.submit(openhtml)  # 多进程才能打开
+            else:
+                logger.error("未知错误")
         except BaseException as e:
             if isinstance(e, KeyboardInterrupt):
                 os.system('cls')
