@@ -79,6 +79,7 @@ setuptools.setup(
         '':['*.json'],
     }, # 数据文件包含在包的子目录中,也就是有__init__.py 的文件夹中
     data_files=[
+        ('lib/site-packages/MMCQsc/scp/dll',['src/MMCQsc/scp/dll/CommonOpenDialogDll.dll']),
         ('lib/site-packages/MMCQsc/src',['src/MMCQsc/src/index.html']),
         ('lib/site-packages/MMCQsc/src',['src/MMCQsc/src/gitee.svg']),
         ('lib/site-packages/MMCQsc/src/_css',['src/MMCQsc/src/_css/base.css','src/MMCQsc/src/_css/animate.css','src/MMCQsc/src/_css/sweet-alert.css']),
