@@ -67,3 +67,5 @@ Thumbs.db
 /src/MMCQsc/scp/lib/numpy-1.21.1.dist-info
 /src/MMCQsc/scp/lib/numpy
 /src/MMCQsc/scp/lib/bin
+/src/numpy
+/src/numpy-1.21.1.dist-info

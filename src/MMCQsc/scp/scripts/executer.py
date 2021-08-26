@@ -82,7 +82,7 @@ try:
     np = __import__('numpy', globals(), locals(), [], 0)
 except ImportError:
     try:
-        from MMCQsc.scp.lib import numpy as np
+        import numpy as np
     except:
         repo = pgd.task(im="numpy",re="numpy")
         dddd += repo
@@ -97,11 +97,11 @@ if dddd:
     print(f'\n\t\t{dddd} new packages already installed .\n\n\t\ttry to launch again .\n\n')
     exit()
 
-from MMCQsc.scp.lib.PIL import Image as PImage
-from MMCQsc.scp.lib.rich import print
-from MMCQsc.scp.lib.rich.console import Console
 from MMCQsc.scp.lib.MMCQ import MMCQ # 第一个MMCQ是文件名，第二个是类名
-from MMCQsc.scp.lib.rich.progress import (
+from PIL import Image as PImage
+from rich import print
+from rich.console import Console
+from rich.progress import (
     BarColumn,
     Progress,)
     # 实例化进度条，由于采用多进程+多线程，只能当分隔符使用
