@@ -19,13 +19,10 @@
 
 ################################################################
 import os,sys
-# from importlib import import_module
 import json
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
 if BASE_DIR not in sys.path:
     sys.path.append(BASE_DIR)
-    # logger = import_module('.logger','lib')
-    # logger = logger.myLogging("gitee.com/soltus")
 
 from MMCQsc.scp.lib.error_sc import *
 from MMCQsc.scp.lib.logger import *
@@ -69,14 +66,6 @@ def check_conda():
 
 from subprocess import Popen
 import shlex
-
-# try:
-#     raise error_sc.EnvError('e97304')
-# except error_sc.EnvError as e:
-#     logger.error("引发异常：" + repr(e))
-#     tb = sys.exc_info()[2]
-#     if tb:
-#         raise error_sc.OA().with_traceback(tb)
 import types
 def run_in_env(env):
     PY3_VNO = ''
@@ -155,7 +144,7 @@ def run_in_env(env):
                 return env
         elif pick_env in ['N','n']:
             try:
-                NUMPY_D = os.path.abspath(os.path.join(BASE_DIR, 'MMCQsc','scp','lib')).replace('\\','/')
+                NUMPY_D = os.path.abspath(os.path.join(BASE_DIR, 'hi_windom_lib')).replace('\\','/')
                 # python = sys.executable.replace(check_conda()[1],pick_env)
                 # nexe = python.replace('\\','/')
                 python = os.path.abspath(sys.executable).replace('\\','/')

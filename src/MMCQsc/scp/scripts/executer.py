@@ -24,7 +24,6 @@
 '''
 import os,sys
 import json
-import importlib
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../..", ".."))
 SRC_DIR = os.path.abspath(os.path.join(BASE_DIR, 'MMCQsc','src'))
 if BASE_DIR not in sys.path:
@@ -82,11 +81,26 @@ try:
     np = __import__('numpy', globals(), locals(), [], 0)
 except ImportError:
     try:
-        from MMCQsc.scp.lib import numpy as np
+        from hi_windom_lib import numpy as np
     except:
         repo = pgd.task(im="numpy",re="numpy")
         dddd += repo
-
+try:
+    PIL = __import__('PIL', globals(), locals(), [], 0)
+except ImportError:
+    try:
+        from hi_windom_lib import PIL
+    except:
+        repo = pgd.task(im="PIL",re="Pillow")
+        dddd += repo
+try:
+    rich = __import__('rich', globals(), locals(), [], 0)
+except ImportError:
+    try:
+        from hi_windom_lib import rich
+    except:
+        repo = pgd.task(im="rich",re="rich")
+        dddd += repo
 '''
 embed 版本：Pillow 和 rich 更换为嵌入版本，弃用 OpenCV-Python
 '''
