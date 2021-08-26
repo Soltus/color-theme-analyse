@@ -30,7 +30,6 @@ if BASE_DIR not in sys.path:
 from MMCQsc.scp.lib.error_sc import *
 from MMCQsc.scp.lib.logger import *
 logger = myLogging("gitee.com/soltus")
-from MMCQsc.scp.lib.error_sc import *
 
 
 def fun_version(v1,v2):
@@ -289,5 +288,5 @@ if fun_version(PY3_VNO,"3.8.0") == -1:
             logger.debug(f"请在终端执行指令 conda activate {pick_env} 手动激活环境")
             logger.warning("\n\n\t\t[ tip ] : 方向上键 ^ 可调出调出历史指令\n\n")
             exit()
-elif fun_version(PY3_VNO,"3.9.5") == -1:
-    logger.warning("Recommended version : Python >= 3.9.5  However, it doesn't matter")
+elif fun_version(PY3_VNO,"3.9.5") != 0:
+    logger.warning("Recommended version : Python == 3.9.5  However, it doesn't matter")

@@ -6,7 +6,13 @@ MANIFEST.in 需要放在和 setup.py 同级的顶级目录下，setuptools 会�
 
 //关于setuptools：setuptools 是 distutils 增强版，不包括在标准库中
 //关于包格式：egg 包是过时的，whl 包是新的标准
-//关于打包：python -m build 默认帮你生成了 dist/*.tar.gz 和 dist/*.whl ，更多命令使用 python setup.py --help-commands 查看
+//关于打包：
+    python setup.py sdist 生成 dist/*.tar.gz [源码];
+    python setup.py bdist 生成 dist/*.zip [win32平台构建];
+    python setup.py bdist 生成 dist/*.whl [通用包];
+    python setup.py bdist_wininst 生成 dist/*.whl [Windows安装引导程序];
+    更多命令使用 python setup.py --help-commands 查看
+
 //关于上传：用 upload 命令上传包已经过时（不安全），官方提供了 twine 工具专门用来与 PyPI 交互。
 项目成熟之前，应当使用 twine upload dist/* --verbose --repository testpypi
 testpypi 的数据库会被定期修剪，因此可以放心上传
