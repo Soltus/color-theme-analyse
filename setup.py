@@ -79,7 +79,7 @@ setuptools.setup(
         "Topic :: Multimedia :: Graphics"
     ],
     package_dir={'':'src'},
-    packages=setuptools.find_packages(),
+    packages=setuptools.find_packages('src'),
     namespace_packages=[],
     exclude_package_data={},
     package_data={
@@ -130,4 +130,4 @@ setuptools.setup(
     ],
 )
 
-print('看上去一切顺利，如果构建结果未能正确反映项目结构，尝试删除 .eggs 文件夹然后重试')
+print('看上去一切顺利，如果构建结果未能正确反映项目结构，尝试删除 .eggs 和 build 文件夹然后重试')
