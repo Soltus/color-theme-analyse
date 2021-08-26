@@ -41,7 +41,8 @@ MANIFEST.in 需要放在和 setup.py 同级的顶级目录下，setuptools 会�
 import setuptools
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
-
+print('许可证已加载')
+print('开始执行，若长时间无响应，请检查是否有误')
 setuptools.setup(
     name="color-theme-analyse",
     setup_requires=['setuptools_scm'], # 指定运行 setup.py 文件本身所依赖的包
@@ -74,9 +75,7 @@ setuptools.setup(
     ],
     packages=setuptools.find_packages(where="src", include=['MMCQsc','PIL','rich'], exclude=['numpy']),
     package_dir={"": "src"},
-    exclude_package_data={
-        '':[''],
-    },
+    exclude_package_data={},
     package_data={
         '':['*.json'],
         '':['*.reg'],
