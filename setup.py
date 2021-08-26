@@ -80,7 +80,7 @@ setuptools.setup(
     ],
     package_dir={'':'src'},
     packages=setuptools.find_packages('src'),
-    namespace_packages=[],
+    namespace_packages=['hi_windom_lib'],
     exclude_package_data={},
     package_data={
         '':['*.json'],
