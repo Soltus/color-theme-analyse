@@ -80,6 +80,7 @@ def get_dpkg(name):
         # python = sys.executable.replace(check_conda()[1],pick_env)
         # nexe = python.replace('\\','/')
         python = os.path.abspath(sys.executable).replace('\\','/')
+        print(python)
         args = shlex.split(f"{python} -m pip install {name} --isolated --python-version 3.9 --ignore-requires-python --force-reinstall -t {PKG_D} -i https://pypi.douban.com/simple --extra-index-url https://pypi.mirrors.ustc.edu.cn --compile --timeout 30 --exists-action b --only-binary :all:")
         result = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0)
         logger.debug(f"创建下载线程 PID: {result.pid}")

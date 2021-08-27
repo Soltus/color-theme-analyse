@@ -100,14 +100,14 @@ def mainFunc():
                 print(img)
                 img = os.path.abspath(img)
             else:
-                logger.info('\n\n\t\t请留意最小化的新窗口\n\n')
                 if struct.calcsize("P") * 8 == 32:
                     mydll = ctypes.CDLL(os.path.join(BASE_DIR,'MMCQsc','scp','dll','CommonOpenDialogDll.dll'))
                 else:
                     mydll = ctypes.CDLL(os.path.join(BASE_DIR,'MMCQsc','scp','dll','CommonOpenDialogDll64.dll'))
+                logger.info('\n\n\t\t请留意最小化的新窗口\n\n')
                 img = ctypes.c_wchar_p(mydll.mainFunc()).value
-                img = os.path.dirname(img)
             if img != None:  # 有传入才处理
+                img = os.path.dirname(img)
                 print('开始检查')
                 from MMCQsc.scp import executable_check
                 buf[1] = len(img)
