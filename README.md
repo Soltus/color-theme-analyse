@@ -8,7 +8,7 @@
 
 ### 项目地址
 
-[Bitbucket（最快更新）](https://bitbucket.org/hi-windom/colorthemeanalyse/src/master/ "默认仓库")
+[Bitbucket（最快更新）](https://bitbucket.org/hi-windom/colorthemeanalyse/ "默认仓库")
 
 [Gitee（最快下载）](https://gitee.com/hi-windom/color-theme-analyse "主要同步仓库")
 

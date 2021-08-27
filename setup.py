@@ -45,7 +45,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 print('许可证已加载')
-print('如果第一次构建或者删除了 .eggs 文件夹，则需要等待，这取决于当前环境')
+print('如果第一次构建或者删除了缓存，则需要等待，这取决于当前环境')
 print('开始执行，若长时间无响应，请检查是否有误')
 
 setuptools.setup(
