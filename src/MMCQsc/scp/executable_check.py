@@ -32,7 +32,7 @@ logger = myLogging("gitee.com/soltus")
 import shutil
 if os.name == 'posix':
     CLS = 'clear'
-    LOCAL_LIB_POSIX = os.path.join(BASE_DIR, '../..')
+    LOCAL_LIB_POSIX = os.path.abspath(os.path.join(BASE_DIR, '../..'))
     O_DLL = os.path.join(BASE_DIR, 'scp', 'dll')
     D_DLL = os.path.join(LOCAL_LIB_POSIX, 'site-packages', 'MMCQsc', 'scp', 'dll')
     O_SRC = os.path.join(BASE_DIR, 'src')
@@ -51,6 +51,7 @@ if os.name == 'posix':
                     shutil.move(os.path.join(root, f), os.path.join(O_DLL, f))
     if os.path.exists(O_SRC) == False:
         os.mkdir(O_SRC)
+        print(f'move {D_SRC} to {O_SRC}')
         path = os.walk(D_SRC)
         for root, dirs, files in path:
             for f in files:
