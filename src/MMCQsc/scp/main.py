@@ -79,8 +79,11 @@ def createServer():
 def openhtml():
     myip = get_host_ip()
     time.sleep(2)
-    logger.info(f'\n\n\n\t\t即将默认浏览器打开：\n\n\t\t{myip}:5858\n\n')
-    os.system(f'start http://{myip}:5858')
+    if os.name == "posix":
+       logger.info(f'\n\n\n\t\t浏览器访问：\n\n\t\t{myip}:5858\n\n')
+    else:
+        logger.info(f'\n\n\n\t\t即将默认浏览器打开：\n\n\t\t{myip}:5858\n\n')
+        os.system(f'start http://{myip}:5858')
 
 def mainFunc():
     try:
