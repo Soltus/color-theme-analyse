@@ -32,6 +32,15 @@ logger = myLogging("gitee.com/soltus")
 
 if os.name == 'posix':
     CLS = 'clear'
+    LOCAL_LIB_POSIX = os.path.join(BASE_DIR, '../../..')
+    O_DLL = os.path.join(BASE_DIR, 'scp', 'dll')
+    D_DLL = os.path.join(LOCAL_LIB_POSIX, 'site-packages', 'MMCQsc', 'scp', 'dll')
+    O_SRC = os.path.join(BASE_DIR, 'src')
+    D_SRC = os.path.join(LOCAL_LIB_POSIX, 'site-packages', 'MMCQsc', 'src')
+    if os.path.exists(O_DLL):
+        os.system(f'ln –s {O_DLL} {D_DLL}')
+    if os.path.exists(O_SRC):
+        os.system(f'ln –s {O_SRC} {D_SRC}')
 else:
     CLS = 'cls'
 
@@ -76,7 +85,7 @@ import types
 
 def get_dpkg(name):
     try:
-        PKG_D = os.path.abspath(os.path.join(BASE_DIR, 'MMCQsc_dpkg')).replace('\\','/')
+        PKG_D = DPKG_DIR
         # python = sys.executable.replace(check_conda()[1],pick_env)
         # nexe = python.replace('\\','/')
         python = os.path.abspath(sys.executable).replace('\\','/')
