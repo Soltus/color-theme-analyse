@@ -45,9 +45,9 @@ import shlex
 import ctypes
 import struct
 if struct.calcsize("P") * 8 == 32:
-    mydll = ctypes.CDLL(f"{BASE_DIR}\\MMCQsc\\scp\\dll\\CommonOpenDialogDll.dll")
+    mydll = ctypes.CDLL(os.path.abspath(os.path.join(BASE_DIR,'MMCQsc','scp','dll','CommonOpenDialogDll.dll')))
 else:
-    mydll = ctypes.CDLL(f"{BASE_DIR}\\MMCQsc\\scp\\dll\\CommonOpenDialogDll64.dll")
+    mydll = ctypes.CDLL(os.path.abspath(os.path.join(BASE_DIR,'MMCQsc','scp','dll','CommonOpenDialogDll64.dll')))
 
 def get_host_ip():
     """
