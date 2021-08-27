@@ -81,44 +81,45 @@ try:
     np = __import__('numpy', globals(), locals(), [], 0)
 except ImportError:
     try:
-        from MMCQsc_lib import numpy as np
+        from MMCQsc_dpkg import numpy as np
     except:
         repo = pgd.task(im="numpy",re="numpy")
         dddd += repo
 try:
     PIL = __import__('PIL', globals(), locals(), [], 0)
+    from PIL import Image as PImage
 except ImportError:
     try:
-        from MMCQsc_lib import PIL
+        from MMCQsc_dpkg.PIL import Image as PImage
     except:
         repo = pgd.task(im="PIL",re="Pillow")
         dddd += repo
 try:
     rich = __import__('rich', globals(), locals(), [], 0)
+    from rich import print
+    from rich.console import Console
+    from rich.progress import (BarColumn,Progress,) # 实例化进度条，由于采用多进程+多线程，只能当分隔符使用
 except ImportError:
     try:
-        from MMCQsc_lib import rich
+        from MMCQsc_dpkg.rich import print
+        from MMCQsc_dpkg.rich.console import Console
+        from MMCQsc_dpkg.rich.progress import (BarColumn,Progress,) # 实例化进度条，由于采用多进程+多线程，只能当分隔符使用
     except:
         repo = pgd.task(im="rich",re="rich")
         dddd += repo
 '''
-embed 版本：Pillow 和 rich 更换为嵌入版本，弃用 OpenCV-Python
+embed 版本：Pillow 更换为嵌入版本，Numpy, rich 改为动态引用，弃用 OpenCV-Python
 '''
 
 
 if dddd:
     os.system("cls")
-    print(f'\n\t\t{dddd} new packages already installed .\n\n\t\ttry to launch again .\n\n')
-    exit()
+    logger.info(f'\n\t\t{dddd} new packages already installed .\n\n\t\ttry to launch again .\n\n')
+    sys.exit()
 
 from MMCQsc.scp.lib.MMCQ import MMCQ # 第一个MMCQ是文件名，第二个是类名
-from PIL import Image as PImage
-from rich import print
-from rich.console import Console
-from rich.progress import (
-    BarColumn,
-    Progress,)
-    # 实例化进度条，由于采用多进程+多线程，只能当分隔符使用
+
+
 progress = Progress(
         BarColumn(bar_width=None)
     )

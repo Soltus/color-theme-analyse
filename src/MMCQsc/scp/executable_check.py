@@ -68,34 +68,35 @@ from subprocess import Popen
 import shlex
 import types
 
-def get_numpy():
+def get_dpkg(name):
     try:
-        NUMPY_D = os.path.abspath(os.path.join(BASE_DIR, 'MMCQsc_lib')).replace('\\','/')
+        PKG_D = os.path.abspath(os.path.join(BASE_DIR, 'MMCQsc_dpkg')).replace('\\','/')
         # python = sys.executable.replace(check_conda()[1],pick_env)
         # nexe = python.replace('\\','/')
         python = os.path.abspath(sys.executable).replace('\\','/')
-        args = shlex.split(f"{python} -m pip install numpy --isolated --python-version 3.9 --ignore-requires-python --force-reinstall -t {NUMPY_D} -i https://pypi.douban.com/simple --extra-index-url https://pypi.mirrors.ustc.edu.cn --compile --timeout 30 --exists-action b --only-binary :all:")
+        args = shlex.split(f"{python} -m pip install {name} --isolated --python-version 3.9 --ignore-requires-python --force-reinstall -t {PKG_D} -i https://pypi.douban.com/simple --extra-index-url https://pypi.mirrors.ustc.edu.cn --compile --timeout 30 --exists-action b --only-binary :all:")
         result = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0)
         logger.debug(f"创建下载线程 PID: {result.pid}")
         logger.warning("\n\n\t\t[ tip ] : 快捷键 CTRL + C 强制结束当前任务，CTRL + PAUSE_BREAK 强制结束所有任务并退出 Python\n\n")
         result.wait()
-        NUMPY_D = NUMPY_D.replace('/','\\')
-        if NUMPY_D not in sys.path:
-            sys.path.append(NUMPY_D)
-        M_numpy = types.ModuleType('numpy')
-        M_numpy.__file__ = '{}\\numpy\\__init__.py'
-        M_numpy.__package__ = ''
+        PKG_D = PKG_D.replace('/','\\')
+        if PKG_D not in sys.path:
+            sys.path.append(PKG_D)
+        M_module = types.ModuleType(name)
+        M_module.__file__ = f'{PKG_D}\\{name}\\__init__.py'
+        M_module.__package__ = ''
         try:
-            sys.modules['numpy'] = M_numpy
-            import importlib,numpy
-            importlib.reload(numpy)
+            sys.modules[name] = M_module
+            import importlib
+            _dpkg = __import__(name, globals(), locals(), [], 0)
+            importlib.reload(_dpkg)
             importlib.invalidate_caches()
-            importlib.util.resolve_name('numpy', __spec__.parent)
-            logger.info(M_numpy.__dict__)
-            logger.info('\n' + str(M_numpy))
-            logger.info("\n\n\timport numpy seccessfully\n\n")
+            importlib.util.resolve_name(name, __spec__.parent)
+            logger.info(M_module.__dict__)
+            logger.info('\n' + str(M_module))
+            logger.info(f"\n\n\timport {name} seccessfully\n\n")
         except:
-            logger.error(" 从项目导入 Numpy 失败 ")
+            logger.error(f" 从项目导入 {name} 失败 ")
     except BaseException as e:
         if isinstance(e, KeyboardInterrupt):
             logger.warning("用户中止了下载")
@@ -110,7 +111,8 @@ def run_in_env(env):
     logger.info("开始检测 Conda 环境")
     if env == 'noconda':
         logger.info('尝试安装 Numpy 到项目 [ 如果不存在缓存，将从网络下载并安装 ]')
-        get_numpy()
+        get_dpkg('numpy')
+        get_dpkg('rich')
         return env
     else:
         with os.popen("conda info --json") as CONDA_SYS:
@@ -186,7 +188,8 @@ def run_in_env(env):
                         continue
                     return env
             elif pick_env in ['N','n']:
-                get_numpy()
+                get_dpkg('numpy')
+                get_dpkg('rich')
                 return env
             else:
                 python = sys.executable.replace(check_conda()[1],pick_env)
@@ -252,7 +255,7 @@ try:
     np = __import__('numpy', globals(), locals(), [], 0)
 except ImportError:
     try:
-        from MMCQsc_lib import numpy as np
+        from MMCQsc_dpkg import numpy as np
     except:
         pick_env = check_conda()[1]
         while pick_env:
