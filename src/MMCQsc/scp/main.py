@@ -44,10 +44,7 @@ from subprocess import Popen,PIPE
 import shlex
 import ctypes
 import struct
-if struct.calcsize("P") * 8 == 32:
-    mydll = ctypes.CDLL(os.path.abspath(os.path.join(BASE_DIR,'MMCQsc','scp','dll','CommonOpenDialogDll.dll')))
-else:
-    mydll = ctypes.CDLL(os.path.abspath(os.path.join(BASE_DIR,'MMCQsc','scp','dll','CommonOpenDialogDll64.dll')))
+
 
 def get_host_ip():
     """
@@ -97,6 +94,10 @@ def mainFunc():
     else:
         try:
             from MMCQsc.scp import executable_check
+            if struct.calcsize("P") * 8 == 32:
+                mydll = ctypes.CDLL(os.path.abspath(os.path.join(BASE_DIR,'MMCQsc','scp','dll','CommonOpenDialogDll.dll')))
+            else:
+                mydll = ctypes.CDLL(os.path.abspath(os.path.join(BASE_DIR,'MMCQsc','scp','dll','CommonOpenDialogDll64.dll')))
             logger.info('\n\n\t\t请留意最小化的新窗口\n\n')
             img = ctypes.c_wchar_p(mydll.mainFunc()).value
             if img != None:  # 有传入才处理
