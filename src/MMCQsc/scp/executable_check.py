@@ -29,14 +29,20 @@ if DPKG_DIR not in sys.path:
 from MMCQsc.scp.lib.error_sc import *
 from MMCQsc.scp.lib.logger import *
 logger = myLogging("gitee.com/soltus")
-
+import shutil
 if os.name == 'posix':
     CLS = 'clear'
     LOCAL_LIB_POSIX = os.path.join(BASE_DIR, '../..')
     O_DLL = os.path.join(BASE_DIR, 'scp', 'dll')
     D_DLL = os.path.join(LOCAL_LIB_POSIX, 'site-packages', 'MMCQsc', 'scp', 'dll')
     O_SRC = os.path.join(BASE_DIR, 'src')
+    print(O_SRC)
     D_SRC = os.path.join(LOCAL_LIB_POSIX, 'site-packages', 'MMCQsc', 'src')
+    print(D_SRC)
+    # if os.path.isfile(srcPath):
+    # if os.path.isdir(srcPath):
+    #     for file in srcPath:
+    #         compressImage(file)
     if os.path.exists(O_DLL) == False:
         os.mkdir(O_DLL)
         path = os.walk(D_DLL)
