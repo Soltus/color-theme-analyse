@@ -96,6 +96,8 @@ def mainFunc():
             import platform
             if platform.system() == 'Linux':
                 img = input('请输入路径: ~$ ')
+                print(img)
+                img = os.path.abspath(img)
             else:
                 from MMCQsc.scp import executable_check
                 logger.info('\n\n\t\t请留意最小化的新窗口\n\n')
