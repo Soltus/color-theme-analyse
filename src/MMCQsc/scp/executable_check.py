@@ -106,9 +106,10 @@ def run_in_env(env):
     os.system("cls")
     logger.info("开始检测 Conda 环境")
     if env: #env == 'noconda':
-        logger.info('尝试安装 Numpy 到项目 [ 如果不存在缓存，将从网络下载并安装 ]')
+        logger.info('尝试安装多个扩展包到项目 [ 如果不存在缓存，将从网络下载并安装 ]')
         get_dpkg('numpy')
         get_dpkg('rich')
+        get_dpkg('Pillow')
         return env
     else:
         with os.popen("conda info --json") as CONDA_SYS:
@@ -185,8 +186,10 @@ def run_in_env(env):
                         continue
                     return env
             elif pick_env in ['N','n']:
+                logger.info('尝试安装多个扩展包到项目 [ 如果不存在缓存，将从网络下载并安装 ]')
                 get_dpkg('numpy')
                 get_dpkg('rich')
+                get_dpkg('Pillow')
                 return env
             else:
                 python = sys.executable.replace(check_conda()[1],pick_env)
@@ -255,6 +258,7 @@ except ImportError:
     try:
         from MMCQsc_dpkg import numpy as np
         from MMCQsc_dpkg import rich
+        from MMCQsc_dpkg.PIL import Image as PImage
     except:
         pick_env = check_conda()[1]
         while pick_env:
