@@ -4,4 +4,4 @@ pipelines:
     - step:
         script:
           - pip install numpy
-          - python src/MMCQsc/scp/main.py
+          - python setup.py bdist_wheel
