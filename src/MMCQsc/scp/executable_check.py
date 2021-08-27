@@ -236,12 +236,17 @@ def run_in_env(env):
             exit()
             return pick_env
 
-pick_env = check_conda()[1]
-while pick_env:
-    env_tmep = pick_env
-    pick_env = run_in_env(pick_env)
-    if pick_env == env_tmep:
-        break
+
+logger.info('尝试使用缓存')
+try:
+    from hi_windom_lib import numpy as np
+except ImportError:
+    pick_env = check_conda()[1]
+    while pick_env:
+        env_tmep = pick_env
+        pick_env = run_in_env(pick_env)
+        if pick_env == env_tmep:
+            break
 
 PY3_VNO = ''
 for i in sys.version_info[:3]:

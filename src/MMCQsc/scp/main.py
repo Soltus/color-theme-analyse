@@ -106,7 +106,7 @@ def mainFunc():
                         prolist.submit(createServer)
                         prolist.submit(openhtml)  # 多进程才能打开
             else:
-                logger.error("未知错误")
+                logger.error("无输入或无效输入")
         except BaseException as e:
             if isinstance(e, KeyboardInterrupt):
                 os.system('cls')
