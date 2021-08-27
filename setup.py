@@ -9,11 +9,20 @@ MANIFEST.in 需要放在和 setup.py 同级的顶级目录下，setuptools 会�
 
 //关于打包：
 
+        [1]
         python setup.py sdist 生成 dist/*.tar.gz [源码];
-        python setup.py bdist 生成 dist/*.zip [win32平台构建];
+        [2]
         python setup.py bdist_wheel 生成 dist/*.whl [通用包];
+        [3]
+        如果你的项目不是跨平台的，应当构建指定平台的包：
+        python setup.py bdist_wheel --plat-name win32 [win32平台构建]
+        python setup.py bdist_wheel --plat-name win_amd64 [win_amd64平台构建]
+        [4]
+        python setup.py bdist 生成 dist/*.zip [镜像构建，包含虚拟环境，不建议使用];
+        [5]
         python setup.py bdist_wininst 生成 dist/*.whl [Windows安装引导程序];
         ### 从 Python 3.8 开始不推荐使用 bdist_wininst ; bdist_msi从 Python 3.9 起被弃用。 ###
+        [6]
         更多命令使用 python setup.py --help-commands 查看
 
 //关于上传：
