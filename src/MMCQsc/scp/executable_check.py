@@ -32,7 +32,7 @@ logger = myLogging("gitee.com/soltus")
 
 if os.name == 'posix':
     CLS = 'clear'
-    LOCAL_LIB_POSIX = os.path.join(BASE_DIR, '../../..')
+    LOCAL_LIB_POSIX = os.path.join(BASE_DIR, '../..')
     O_DLL = os.path.join(BASE_DIR, 'scp', 'dll')
     D_DLL = os.path.join(LOCAL_LIB_POSIX, 'site-packages', 'MMCQsc', 'scp', 'dll')
     O_SRC = os.path.join(BASE_DIR, 'src')
