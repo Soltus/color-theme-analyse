@@ -34,7 +34,7 @@ from MMCQsc.scp.lib import logger
 logger = logger.myLogging("gitee.com/soltus")
 # 全局变量
 try:
-    profile = json.load(open(f'{BASE_DIR}\\MMCQsc\\scp\\scripts\\profile.json', 'r+'))
+    profile = json.load(open(os.path.abspath(os.path.join(BASE_DIR,'MMCQsc','scp','scripts','profile.json')), 'r+'))
     themes = profile['themes']
     size_rate = profile['size_rate']
     ignore_size = profile['ignore_size']

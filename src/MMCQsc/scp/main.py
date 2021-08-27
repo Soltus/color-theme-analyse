@@ -112,7 +112,7 @@ def mainFunc():
                         prolist.submit(openhtml)  # 多进程才能打开
             else:
                 logger.error("无输入或无效输入")
-                sys.exit()
+                sys.exit(101)
         except BaseException as e:
             if isinstance(e, KeyboardInterrupt):
                 os.system('cls')
@@ -129,7 +129,7 @@ def mainFunc():
                 if result:
                     logger.warning('未能删除自动生成文件')
             finally:
-                sys.exit()
+                sys.exit(102)
 
 
 if __name__ == '__main__':
@@ -138,4 +138,4 @@ if __name__ == '__main__':
     except BaseException as e:
         if isinstance(e, KeyboardInterrupt):
             logger.warning("{}\n\t\t用户强制退出".format(__file__))
-            sys.exit()
+            sys.exit(103)
