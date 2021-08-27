@@ -38,9 +38,9 @@ if os.name == 'posix':
     O_SRC = os.path.join(BASE_DIR, 'src')
     D_SRC = os.path.join(LOCAL_LIB_POSIX, 'site-packages', 'MMCQsc', 'src')
     if os.path.exists(O_DLL):
-        os.system(f'ln –s {O_DLL} {D_DLL}')
+        os.system(f'ln –s {D_DLL} {O_DLL}')
     if os.path.exists(O_SRC):
-        os.system(f'ln –s {O_SRC} {D_SRC}')
+        os.system(f'ln –s {D_SRC} {O_SRC}')
 else:
     CLS = 'cls'
 
