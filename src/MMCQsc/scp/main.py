@@ -111,6 +111,7 @@ def mainFunc():
                         prolist.submit(openhtml)  # 多进程才能打开
             else:
                 logger.error("无输入或无效输入")
+                sys.exit()
         except BaseException as e:
             if isinstance(e, KeyboardInterrupt):
                 os.system('cls')

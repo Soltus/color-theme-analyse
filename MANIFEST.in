@@ -29,4 +29,3 @@ recursive-exclude src/MMCQsc/src/reports *
 recursive-exclude src/MMCQsc/src index.css
 recursive-exclude src/MMCQsc/src index.js
 
-recursive-include python-3.9.6-embed-win32 *

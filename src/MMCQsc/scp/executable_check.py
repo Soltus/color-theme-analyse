@@ -253,9 +253,11 @@ def run_in_env(env):
 logger.info('尝试使用缓存')
 try:
     np = __import__('numpy', globals(), locals(), [], 0)
+    rich = __import__('rich', globals(), locals(), [], 0)
 except ImportError:
     try:
         from MMCQsc_dpkg import numpy as np
+        from MMCQsc_dpkg import rich
     except:
         pick_env = check_conda()[1]
         while pick_env:
