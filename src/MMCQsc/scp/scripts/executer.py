@@ -87,11 +87,11 @@ except ImportError:
         repo = pgd.task(im="numpy",re="numpy")
         dddd += repo
 try:
-    PIL = __import__('PIL', globals(), locals(), [], 0)
-    from PIL import Image as PImage
+    from MMCQsc_dpkg.PIL import Image as PImage
 except ImportError:
     try:
-        from MMCQsc_dpkg.PIL import Image as PImage
+        PIL = __import__('PIL', globals(), locals(), [], 0)
+        from PIL import Image as PImage
     except:
         repo = pgd.task(im="PIL",re="Pillow")
         dddd += repo
