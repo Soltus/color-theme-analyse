@@ -33,9 +33,9 @@ import shutil
 if os.name == 'posix':
     CLS = 'clear'
     LOCAL_LIB_POSIX = os.path.abspath(os.path.join(BASE_DIR, '../..'))
-    O_DLL = os.path.join(BASE_DIR, 'scp', 'dll')
+    O_DLL = os.path.join(BASE_DIR,'MMCQsc', 'scp', 'dll')
     D_DLL = os.path.join(LOCAL_LIB_POSIX, 'site-packages', 'MMCQsc', 'scp', 'dll')
-    O_SRC = os.path.join(BASE_DIR, 'src')
+    O_SRC = os.path.join(BASE_DIR,'MMCQsc', 'src')
     print(O_SRC)
     D_SRC = os.path.join(LOCAL_LIB_POSIX, 'site-packages', 'MMCQsc', 'src')
     print(D_SRC)

@@ -94,10 +94,8 @@ def mainFunc():
         pass
     else:
         try:
-            import platform
-            if platform.system() == 'Linux':
+            if os.name == 'posix':
                 img = input('请输入路径: ~$ ')
-                print(img)
                 img = os.path.abspath(img)
             else:
                 if struct.calcsize("P") * 8 == 32:
@@ -134,11 +132,13 @@ def mainFunc():
                 shutil.rmtree(os.path.join(SRC_DIR, 'compress'))
                 logger.info('成功删除不重要的自动生成文件')
                 logger.warning("\n\n\t\t[ tip ] : 如需在当前窗口返回 Shell 环境，使用 CTRL + PAUSE_BREAK 强制结束所有任务并退出 Python\n\n")
-            except:
+            except Exception as e:
+                print(e)
                 try:
                     result in locals()
                     logger.warning('未能删除自动生成文件')
-                except:
+                except Exception as e:
+                    print(e)
                     pass
             finally:
                 shm.close()

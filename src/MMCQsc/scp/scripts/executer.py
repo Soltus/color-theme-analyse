@@ -189,8 +189,8 @@ def compressImage(srcPath):
                 filename.split('.')[1], 'jpg'))  # 不改找不到文件
             return dstFile.replace(filename.split('.')[1], 'jpg')
 
-        except Exception:
-            raise
+        except Exception as e:
+            print(e)
 
 
     # 如果是文件夹就递归
