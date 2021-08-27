@@ -29,6 +29,7 @@ SRC_DIR = os.path.abspath(os.path.join(BASE_DIR, 'MMCQsc','src'))
 DPKG_DIR = os.path.abspath(os.path.join(BASE_DIR, 'MMCQsc_dpkg'))
 if BASE_DIR not in sys.path:
     sys.path.append(BASE_DIR)
+if DPKG_DIR not in sys.path:
     sys.path.append(DPKG_DIR)
 from MMCQsc.scp.lib import logger
 logger = logger.myLogging("gitee.com/soltus")

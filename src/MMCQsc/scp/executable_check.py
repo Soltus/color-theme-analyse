@@ -21,9 +21,11 @@
 import os,sys
 import json
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
+DPKG_DIR = os.path.abspath(os.path.join(BASE_DIR, 'MMCQsc_dpkg'))
 if BASE_DIR not in sys.path:
     sys.path.append(BASE_DIR)
-
+if DPKG_DIR not in sys.path:
+    sys.path.append(DPKG_DIR)
 from MMCQsc.scp.lib.error_sc import *
 from MMCQsc.scp.lib.logger import *
 logger = myLogging("gitee.com/soltus")
@@ -160,8 +162,8 @@ def run_in_env(env):
                     logger.error(" Can NOT run in Python < 3.6 ")
                     raise EnvError('\n\n\t''This script is only for use with ''Python 3.6 or later\n\n\t https://gitee.com/hi-windomcolor-theme-analyse/ \n\n')
                 elif vtemp != PY3_VNO.split('.')[:2]:
-                    logger.error(" 不同 Python 版本的 Numpy 无法共享 ")
-                    logger.error(" 应当使用 Python == {}.{} 的 Conda 环境导入 Numpy".format(sys.version_info[0],sys.version_info[1]))
+                    logger.error(" 不同 Python 版本的扩展包无法共享 ")
+                    logger.error(" 应当使用 Python == {}.{} 的 Conda 环境导入扩展包".format(sys.version_info[0],sys.version_info[1]))
                     continue
                 else:
                     if _env_pyp not in sys.path:
@@ -252,13 +254,14 @@ def run_in_env(env):
 
 logger.info('尝试使用缓存')
 try:
-    np = __import__('numpy', globals(), locals(), [], 0)
-    rich = __import__('rich', globals(), locals(), [], 0)
+    from MMCQsc_dpkg import numpy as np
+    from MMCQsc_dpkg import rich
+    from MMCQsc_dpkg.PIL import Image as PImage
 except ImportError:
     try:
-        from MMCQsc_dpkg import numpy as np
-        from MMCQsc_dpkg import rich
-        from MMCQsc_dpkg.PIL import Image as PImage
+        np = __import__('numpy', globals(), locals(), [], 0)
+        rich = __import__('rich', globals(), locals(), [], 0)
+        PIL = __import__('PIL', globals(), locals(), [], 0)
     except:
         if os.name == 'posix':
             pick_env = 'noconda'
