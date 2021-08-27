@@ -154,6 +154,7 @@ def procompress(files, root):
         for si in ss:
             results = pool.submit(compressImage, si)
             results.add_done_callback(testMMCQ)  # 回调函数
+    testshm.close()
 
 
 def compressImage(srcPath):
@@ -227,6 +228,7 @@ def testMMCQ(future):
             'compress', 'prepare').replace(filename, strjoin)
         os.rename(imgfile.replace(
             'compress', 'prepare'), newname + extname)
+    testshm.close()
 
 
 def domain(img):
@@ -473,9 +475,10 @@ def domain(img):
                             index_text = index_text.replace(
                                 '[[reportpath]]', rf)
                             mainjs.writelines(index_text)
-
+                testshm.close()
                 cc1 = shared_memory.SharedMemory(name='main_run_share')
                 buf = cc1.buf
                 buf[2] = 1
+                cc1.close()
                 return 6
 
