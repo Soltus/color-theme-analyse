@@ -4,4 +4,4 @@ pipelines:
   - step:
       script:
       - pip install color-theme-analyse --force-reinstall
-      - runmmcqsc
+      - RunMMCQsc
