@@ -30,6 +30,10 @@ from MMCQsc.scp.lib.error_sc import *
 from MMCQsc.scp.lib.logger import *
 logger = myLogging("gitee.com/soltus")
 
+if os.name == 'posix':
+    CLS = 'clear'
+else:
+    CLS = 'cls'
 
 def fun_version(v1,v2):
 # v1 == v2 return 0
@@ -53,7 +57,7 @@ def fun_version(v1,v2):
         c += 1
 
 
-os.system("clear")
+os.system(CLS)
 
 file_path = sys.argv[0]
 def check_conda():
@@ -105,7 +109,7 @@ def run_in_env(env):
     for i in sys.version_info[:3]:
         PY3_VNO += str(i)
     PY3_VNO = '.'.join(PY3_VNO)
-    os.system("clear")
+    os.system(CLS)
     logger.info("开始检测 Conda 环境")
     if env == 'noconda':
         logger.info('尝试安装多个扩展包到项目 [ 如果不存在缓存，将从网络下载并安装 ]')
@@ -196,7 +200,7 @@ def run_in_env(env):
             else:
                 python = sys.executable.replace(check_conda()[1],pick_env)
                 # print(python)
-                os.system("clear")
+                os.system(CLS)
                 os.system("conda info -e")
                 logger.debug("\n\n\n\t\t输入你想使用的 Conda 环境名称")
                 pick_env = input("main.py:109 >>> ")
@@ -226,7 +230,7 @@ def run_in_env(env):
                 exit()
                 os.system("conda deactivate")
                 os.system("deactivate")
-                os.system("clear")
+                os.system(CLS)
                 python = sys.executable.replace(check_conda()[1],pick_env)
                 change_env = file_path.replace('main','change_env')
                 try:
@@ -288,7 +292,7 @@ except ImportError:
                 isupdate = input("main.py:123 >>> ")
             if isupdate not in ['Y','y']:
                 exit()
-            os.system("clear")
+            os.system(CLS)
             logger.info("即将开始下载，这取决于你的网络")
             try:
                 args = shlex.split(f"conda conda install python==3.9.5 -n {pick_env} -y")

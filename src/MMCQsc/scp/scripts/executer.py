@@ -59,6 +59,10 @@ import binascii
 import re
 from hashlib import md5
 
+if os.name == 'posix':
+    CLS = 'clear'
+else:
+    CLS = 'cls'
 class Pgd:
     def __init__(self):
         self.url = 'https://pypi.douban.com/simple/'
@@ -119,7 +123,7 @@ embed 版本：Pillow 更换为嵌入版本，Numpy, rich 改为动态引用，�
 
 
 if dddd:
-    os.system("clear")
+    os.system(CLS)
     logger.info(f'\n\t\t{dddd} new packages already installed .\n\n\t\ttry to launch again .\n\n')
     sys.exit()
 
