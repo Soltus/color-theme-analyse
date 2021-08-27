@@ -39,10 +39,16 @@ if os.name == 'posix':
     D_SRC = os.path.join(LOCAL_LIB_POSIX, 'site-packages', 'MMCQsc', 'src')
     if os.path.exists(O_DLL) == False:
         os.mkdir(O_DLL)
-        os.system(f'ln –s {D_DLL} {O_DLL}')
+        path = os.walk(D_DLL)
+        for root, dirs, files in path:
+            for f in files:
+                    shutil.move(os.path.join(root, f), os.path.join(O_DLL, f))
     if os.path.exists(O_SRC) == False:
         os.mkdir(O_SRC)
-        os.system(f'ln –s {D_SRC} {O_SRC}')
+        path = os.walk(D_SRC)
+        for root, dirs, files in path:
+            for f in files:
+                    shutil.move(os.path.join(root, f), os.path.join(O_SRC, f))
 else:
     CLS = 'cls'
 
