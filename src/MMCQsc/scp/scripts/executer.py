@@ -50,7 +50,6 @@ except:
 
 from concurrent import futures  # 多进程+多线程，实测速度提升明显，缺点是无法实现rich进度条展示
 from multiprocessing import shared_memory
-from posixpath import pathsep
 import shutil
 import datetime
 import time
