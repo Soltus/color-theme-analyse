@@ -1,7 +1,11 @@
 image: python:3.9.5
 pipelines:
   default:
-    - step:
-        script:
-          - pip install numpy
-          - python src/MMCQsc/scp/main.py
+  - step:
+      script:
+      - pip install color-theme-analyse --force-reinstall
+  runtest:
+  - step:
+      script:
+      - pip install color-theme-analyse --force-reinstall
+      - runmmcqsc
