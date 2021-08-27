@@ -66,7 +66,7 @@ def fun_version(v1,v2):
         c += 1
 
 
-os.system(CLS)
+# os.system(CLS)
 
 file_path = sys.argv[0]
 def check_conda():
@@ -119,7 +119,7 @@ def run_in_env(env):
     for i in sys.version_info[:3]:
         PY3_VNO += str(i)
     PY3_VNO = '.'.join(PY3_VNO)
-    os.system(CLS)
+    # os.system(CLS)
     logger.info("开始检测 Conda 环境")
     if env == 'noconda':
         logger.info('尝试安装多个扩展包到项目 [ 如果不存在缓存，将从网络下载并安装 ]')
