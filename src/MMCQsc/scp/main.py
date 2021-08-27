@@ -99,12 +99,13 @@ def mainFunc():
                 print(img)
                 img = os.path.abspath(img)
             else:
+                print('开始检查')
                 from MMCQsc.scp import executable_check
                 logger.info('\n\n\t\t请留意最小化的新窗口\n\n')
                 if struct.calcsize("P") * 8 == 32:
-                    mydll = ctypes.CDLL(os.path.abspath(os.path.join(BASE_DIR,'MMCQsc','scp','dll','CommonOpenDialogDll.dll')))
+                    mydll = ctypes.CDLL(os.path.join(BASE_DIR,'MMCQsc','scp','dll','CommonOpenDialogDll.dll'))
                 else:
-                    mydll = ctypes.CDLL(os.path.abspath(os.path.join(BASE_DIR,'MMCQsc','scp','dll','CommonOpenDialogDll64.dll')))
+                    mydll = ctypes.CDLL(os.path.join(BASE_DIR,'MMCQsc','scp','dll','CommonOpenDialogDll64.dll'))
                 img = ctypes.c_wchar_p(mydll.mainFunc()).value
                 img = os.path.dirname(img)
             if img != None:  # 有传入才处理
@@ -126,10 +127,10 @@ def mainFunc():
                 logger.info("进程服务已停止\t原因：用户强制退出")
         finally:
             try:
-                os.remove(os.path.join(SRC_DIR + '\\index.js'))
-                os.remove(os.path.join(SRC_DIR + '\\index.css'))
-                shutil.rmtree(os.path.join(SRC_DIR + '\\finish'))
-                shutil.rmtree(os.path.join(SRC_DIR + '\\compress'))
+                os.remove(os.path.join(SRC_DIR, 'index.js'))
+                os.remove(os.path.join(SRC_DIR, 'index.css'))
+                shutil.rmtree(os.path.join(SRC_DIR, 'finish'))
+                shutil.rmtree(os.path.join(SRC_DIR, 'compress'))
                 logger.info('成功删除不重要的自动生成文件')
                 logger.warning("\n\n\t\t[ tip ] : 如需在当前窗口返回 Shell 环境，使用 CTRL + PAUSE_BREAK 强制结束所有任务并退出 Python\n\n")
             except:

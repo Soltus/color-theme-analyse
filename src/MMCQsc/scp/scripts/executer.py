@@ -118,7 +118,7 @@ embed 版本：Pillow 更换为嵌入版本，Numpy, rich 改为动态引用，�
 
 
 if dddd:
-    os.system("cls")
+    os.system("clear")
     logger.info(f'\n\t\t{dddd} new packages already installed .\n\n\t\ttry to launch again .\n\n')
     sys.exit()
 
