@@ -36,26 +36,17 @@ if os.name == 'posix':
     O_DLL = os.path.join(BASE_DIR,'MMCQsc', 'scp', 'dll')
     D_DLL = os.path.join(LOCAL_LIB_POSIX, 'site-packages', 'MMCQsc', 'scp', 'dll')
     O_SRC = os.path.join(BASE_DIR,'MMCQsc', 'src')
-    print(O_SRC)
     D_SRC = os.path.join(LOCAL_LIB_POSIX, 'site-packages', 'MMCQsc', 'src')
-    print(D_SRC)
-    # if os.path.isfile(srcPath):
-    # if os.path.isdir(srcPath):
-    #     for file in srcPath:
-    #         compressImage(file)
     if os.path.exists(O_DLL) == False:
-        os.mkdir(O_DLL)
-        path = os.walk(D_DLL)
-        for root, dirs, files in path:
-            for f in files:
-                    shutil.move(os.path.join(root, f), os.path.join(O_DLL, f))
+        shutil.move(D_DLL, O_DLL)
+    elif os.path.exists(D_DLL):
+        shutil.rmtree(O_DLL)
+        shutil.move(D_DLL, O_DLL)
     if os.path.exists(O_SRC) == False:
-        os.mkdir(O_SRC)
-        print(f'move {D_SRC} to {O_SRC}')
-        path = os.walk(D_SRC)
-        for root, dirs, files in path:
-            for f in files:
-                    shutil.move(os.path.join(root, f), os.path.join(O_SRC, f))
+        shutil.mobe(D_SRC, O_SRC)
+    elif os.path.exists(D_SRC):
+        shutil.rmtree(O_SRC)
+        shutil.move(D_SRC, O_SRC)
 else:
     CLS = 'cls'
 
