@@ -147,7 +147,7 @@ def run_in_env(env):
                 return env
         elif pick_env in ['N','n']:
             try:
-                NUMPY_D = os.path.abspath(os.path.join(BASE_DIR, 'hi_windom_lib')).replace('\\','/')
+                NUMPY_D = os.path.abspath(os.path.join(BASE_DIR, 'MMCQsc_lib')).replace('\\','/')
                 # python = sys.executable.replace(check_conda()[1],pick_env)
                 # nexe = python.replace('\\','/')
                 python = os.path.abspath(sys.executable).replace('\\','/')
