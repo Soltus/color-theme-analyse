@@ -336,7 +336,10 @@ def domain(img):
             for root, dirs, files in path:
                 for f in files:
                     fname = os.path.splitext(os.path.basename(f))[0]
-                    fnames = fname.split('\\')
+                    if os.name == 'posix':
+                        fnames = fname.split('/')
+                    else:
+                        fnames = fname.split('\\')
                     lastname = fnames[len(fnames) - 1]
                     fname = fname.replace(
                         lastname, re.sub(r'\__.*\__', '', lastname))  # 正则替换
@@ -392,11 +395,11 @@ def domain(img):
                 reportjson = {'date': curr_time.strftime(
                     "%Y-%m-%d"), 'time': curr_time.strftime("%H:%M:%S"), 'in_path_url': in_path_url, 'in_files': ptv, 'cost_times': cost_times}
                 reportfile = os.path.join(
-                    SRC_DIR, 'reports\\' + curr_time.strftime("%Y%m%d-%H%M%S_")) + 'report.json'
+                    SRC_DIR, 'reports', curr_time.strftime("%Y%m%d-%H%M%S_")) + 'report.json'
                 with open(reportfile, 'w') as js:
                     file_list = []
-                    for dir in os.listdir(SRC_DIR + '\\prepare'):
-                        child = os.path.join(SRC_DIR + '\\prepare', dir)
+                    for dir in os.listdir(os.path.join(SRC_DIR, 'prepare')):
+                        child = os.path.join(SRC_DIR, 'prepare', dir)
                         if os.path.isdir(child):
                             for file in os.listdir(child):
                                 if os.path.splitext(file)[1].lower() in ['.jpg', '.jpeg', '.png']:
@@ -470,8 +473,11 @@ def domain(img):
                         with open(os.path.join(SRC_DIR, '_js', 'base.js'), 'r+', encoding='utf-8') as index:
                             index.seek(0)
                             index_text = index.read()
-                            rf = re.sub(r'^.*\\src', './',
-                                        reportfile).replace('\\', '/')
+                            if os.name == 'posix':
+                                rf = re.sub(r'^.*/src', './', reportfile)
+                            else:
+                                rf = re.sub(r'^.*\\src', './',
+                                            reportfile).replace('\\', '/')
                             index_text = index_text.replace(
                                 '[[reportpath]]', rf)
                             mainjs.writelines(index_text)
