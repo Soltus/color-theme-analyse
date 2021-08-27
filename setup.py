@@ -51,7 +51,9 @@ import setuptools
 import shutil
 import os
 
-shutil.rmtree(os.path.abspath('/dist'))
+DIST_DIR = os.path.abspath('./dist')
+if os.path.exists(DIST_DIR):
+    shutil.rmtree(DIST_DIR)
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
