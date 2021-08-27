@@ -67,6 +67,40 @@ def check_conda():
 from subprocess import Popen
 import shlex
 import types
+
+def get_numpy():
+    try:
+        NUMPY_D = os.path.abspath(os.path.join(BASE_DIR, 'MMCQsc_lib')).replace('\\','/')
+        # python = sys.executable.replace(check_conda()[1],pick_env)
+        # nexe = python.replace('\\','/')
+        python = os.path.abspath(sys.executable).replace('\\','/')
+        args = shlex.split(f"{python} -m pip install numpy --isolated --python-version 3.9 --ignore-requires-python --force-reinstall -t {NUMPY_D} -i https://pypi.douban.com/simple --extra-index-url https://pypi.mirrors.ustc.edu.cn --compile --timeout 30 --exists-action b --only-binary :all:")
+        result = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0)
+        logger.debug(f"创建下载线程 PID: {result.pid}")
+        logger.warning("\n\n\t\t[ tip ] : 快捷键 CTRL + C 强制结束当前任务，CTRL + PAUSE_BREAK 强制结束所有任务并退出 Python\n\n")
+        result.wait()
+        NUMPY_D = NUMPY_D.replace('/','\\')
+        if NUMPY_D not in sys.path:
+            sys.path.append(NUMPY_D)
+        M_numpy = types.ModuleType('numpy')
+        M_numpy.__file__ = '{}\\numpy\\__init__.py'
+        M_numpy.__package__ = ''
+        try:
+            sys.modules['numpy'] = M_numpy
+            import importlib,numpy
+            importlib.reload(numpy)
+            importlib.invalidate_caches()
+            importlib.util.resolve_name('numpy', __spec__.parent)
+            logger.info(M_numpy.__dict__)
+            logger.info('\n' + str(M_numpy))
+            logger.info("\n\n\timport numpy seccessfully\n\n")
+        except:
+            logger.error(" 从项目导入 Numpy 失败 ")
+    except BaseException as e:
+        if isinstance(e, KeyboardInterrupt):
+            logger.warning("用户中止了下载")
+            exit()
+
 def run_in_env(env):
     PY3_VNO = ''
     for i in sys.version_info[:3]:
@@ -74,93 +108,98 @@ def run_in_env(env):
     PY3_VNO = '.'.join(PY3_VNO)
     os.system("cls")
     logger.info("开始检测 Conda 环境")
-    with os.popen("conda info --json") as CONDA_SYS:
-        try:
-            CONDA_JSON = json.loads(CONDA_SYS.read())
-            _conda_location = CONDA_JSON["conda_location"]
-            _conda_exe = CONDA_JSON["env_vars"]["CONDA_EXE"]
-            _env_list = CONDA_JSON["envs"]
-            _env_v = {}
-        except Exception:
-            logger.warning("无法正确检测到 Conda 环境，如果你已经安装了 Conda ，请确保正确配置环境变量并完成 Conda init 初始化终端")
-            sys.exit()
-        for e in _env_list:
-            with os.popen("{}\\python.exe --version".format(e)) as repo:
-                _env_path = e.strip()
-                _env = '{}'.format(e).split('\\')[-1]
-                if '{}'.format(e).split('\\')[-2] == 'envs':
+    if env == 'noconda':
+        logger.info('尝试安装 Numpy 到项目 [ 如果不存在缓存，将从网络下载并安装 ]')
+        get_numpy()
+        return env
+    else:
+        with os.popen("conda info --json") as CONDA_SYS:
+            try:
+                CONDA_JSON = json.loads(CONDA_SYS.read())
+                _conda_location = CONDA_JSON["conda_location"]
+                _conda_exe = CONDA_JSON["env_vars"]["CONDA_EXE"]
+                _env_list = CONDA_JSON["envs"]
+                _env_v = {}
+            except Exception:
+                logger.error('无法正确检测到 Conda 环境')
+                logger.warning("如果你已经安装了 Conda ，请确保正确配置环境变量并完成 Conda init 初始化终端")
+                return 'noconda'
+            for e in _env_list:
+                with os.popen("{}\\python.exe --version".format(e)) as repo:
+                    _env_path = e.strip()
                     _env = '{}'.format(e).split('\\')[-1]
-                else:
-                    _env = 'base'
-                _env_v[_env] = {}
-                _env_v[_env]['version'] = repo.read().strip()
-                _env_v[_env]['path'] = _env_path
-                if '3.9.' in _env_v[_env]['version']:
-                    print('\n\t' + _env + '\t' + _env_v[_env]['version'] + '\t' + _env_path)
-        print('\n\n')
-        logger.info("已列出所有兼容的 Conda 环境")
+                    if '{}'.format(e).split('\\')[-2] == 'envs':
+                        _env = '{}'.format(e).split('\\')[-1]
+                    else:
+                        _env = 'base'
+                    _env_v[_env] = {}
+                    _env_v[_env]['version'] = repo.read().strip()
+                    _env_v[_env]['path'] = _env_path
+                    if '3.9.' in _env_v[_env]['version']:
+                        print('\n\t' + _env + '\t' + _env_v[_env]['version'] + '\t' + _env_path)
+            print('\n\n')
+            logger.info("已列出所有兼容的 Conda 环境")
 
-        _env_pyp = os.path.abspath(os.path.join(_env_v[env]['path'],'Lib','site-packages'))
-        if _env_pyp is not None:
-            logger.debug("\n\n\n\t\t正在使用的 Python 解释器版本 {}\n\t\t正在使用的 Python 解释器路径 {}\n\n\n\t\t使用 Conda 环境 {} ({}) 导入 Numpy 并继续 (y) ？\n\n\t\t或者不导入 Conda 基础包并继续 (n) ？\n\t\t[ 如果项目路径不存在 Numpy ，将从网络下载并安装 ]\n\n\t\t也可以输入其他任意字符，选择其他 Conda 环境导入 Numpy (*)\n\n\t\tProccess ?  [Y/n/*]".format(PY3_VNO,sys.executable,env, _env_v[env]['version']))
-    while True:
-        try:
-            pick_env = input("\n\nmain.py:93 >>> ")
-        except BaseException as e:
-            if isinstance(e, KeyboardInterrupt):
-                logger.warning("用户强制退出")
-                exit()
-        if pick_env in ['Y','y']:
-            vtemp = []
-            vtemp.append(str(sys.version_info[0]))
-            vtemp.append(str(sys.version_info[1]))
-            if sys.version_info.major < 3:
-                logger.error(" Can NOT run in Python 2.x ")
-                raise EnvError('\n\n\t''This script is only for use with ''Python 3.6 or later\n\n\t https://gitee.com/hi-windomcolor-theme-analyse/ \n\n')
-            elif sys.version_info[:3] < (3,6,0):
-                logger.error(" Can NOT run in Python < 3.6 ")
-                raise EnvError('\n\n\t''This script is only for use with ''Python 3.6 or later\n\n\t https://gitee.com/hi-windomcolor-theme-analyse/ \n\n')
-            elif vtemp != PY3_VNO.split('.')[:2]:
-                logger.error(" 不同 Python 版本的 Numpy 无法共享 ")
-                logger.error(" 应当使用 Python == {}.{} 的 Conda 环境导入 Numpy".format(sys.version_info[0],sys.version_info[1]))
-                continue
+            _env_pyp = os.path.abspath(os.path.join(_env_v[env]['path'],'Lib','site-packages'))
+            if _env_pyp is not None:
+                logger.debug("\n\n\n\t\t正在使用的 Python 解释器版本 {}\n\t\t正在使用的 Python 解释器路径 {}\n\n\n\t\t使用 Conda 环境 {} ({}) 导入 Numpy 并继续 (y) ？\n\n\t\t或者不导入 Conda 基础包并继续 (n) ？\n\t\t[ 如果项目路径不存在 Numpy ，将从网络下载并安装 ]\n\n\t\t也可以输入其他任意字符，选择其他 Conda 环境导入 Numpy (*)\n\n\t\tProccess ?  [Y/n/*]".format(PY3_VNO,sys.executable,env, _env_v[env]['version']))
+        while True:
+            try:
+                pick_env = input("\n\nmain.py:93 >>> ")
+            except BaseException as e:
+                if isinstance(e, KeyboardInterrupt):
+                    logger.warning("用户强制退出")
+                    exit()
+            if pick_env in ['Y','y']:
+                vtemp = []
+                vtemp.append(str(sys.version_info[0]))
+                vtemp.append(str(sys.version_info[1]))
+                if sys.version_info.major < 3:
+                    logger.error(" Can NOT run in Python 2.x ")
+                    raise EnvError('\n\n\t''This script is only for use with ''Python 3.6 or later\n\n\t https://gitee.com/hi-windomcolor-theme-analyse/ \n\n')
+                elif sys.version_info[:3] < (3,6,0):
+                    logger.error(" Can NOT run in Python < 3.6 ")
+                    raise EnvError('\n\n\t''This script is only for use with ''Python 3.6 or later\n\n\t https://gitee.com/hi-windomcolor-theme-analyse/ \n\n')
+                elif vtemp != PY3_VNO.split('.')[:2]:
+                    logger.error(" 不同 Python 版本的 Numpy 无法共享 ")
+                    logger.error(" 应当使用 Python == {}.{} 的 Conda 环境导入 Numpy".format(sys.version_info[0],sys.version_info[1]))
+                    continue
+                else:
+                    if _env_pyp not in sys.path:
+                        sys.path.append(_env_pyp)
+                    M_numpy = types.ModuleType('numpy')
+                    M_numpy.__file__ = '{}\\numpy\\__init__.py'.format(_env_pyp)
+                    M_numpy.__package__ = ''
+                    try:
+                        sys.modules['numpy'] = M_numpy
+                        import importlib,numpy
+                        importlib.reload(numpy)
+                        importlib.invalidate_caches()
+                        importlib.util.resolve_name('numpy', __spec__.parent)
+                        print(M_numpy)
+                        print(M_numpy.__dict__)
+                        logger.info("import numpy seccessfully")
+                    except:
+                        logger.error(" 不同 Python 版本的 Numpy 无法共享 ")
+                        logger.error(" 不同 Python 版本的 Numpy 无法共享 ")
+                        logger.error(" 不同 Python 版本的 Numpy 无法共享 ")
+                        continue
+                    return env
+            elif pick_env in ['N','n']:
+                get_numpy()
+                return env
             else:
+                python = sys.executable.replace(check_conda()[1],pick_env)
+                # print(python)
+                os.system("cls")
+                os.system("conda info -e")
+                logger.debug("\n\n\n\t\t输入你想使用的 Conda 环境名称")
+                pick_env = input("main.py:109 >>> ")
+                _env_pyp = os.path.abspath(os.path.join(_env_v[pick_env]['path'],'Lib','site-packages'))
                 if _env_pyp not in sys.path:
-                    sys.path.append(_env_pyp)
+                        sys.path.append(_env_pyp)
                 M_numpy = types.ModuleType('numpy')
                 M_numpy.__file__ = '{}\\numpy\\__init__.py'.format(_env_pyp)
-                M_numpy.__package__ = ''
-                try:
-                    sys.modules['numpy'] = M_numpy
-                    import importlib,numpy
-                    importlib.reload(numpy)
-                    importlib.invalidate_caches()
-                    importlib.util.resolve_name('numpy', __spec__.parent)
-                    print(M_numpy)
-                    print(M_numpy.__dict__)
-                    logger.info("import numpy seccessfully")
-                except:
-                    logger.error(" 不同 Python 版本的 Numpy 无法共享 ")
-                    logger.error(" 不同 Python 版本的 Numpy 无法共享 ")
-                    logger.error(" 不同 Python 版本的 Numpy 无法共享 ")
-                    continue
-                return env
-        elif pick_env in ['N','n']:
-            try:
-                NUMPY_D = os.path.abspath(os.path.join(BASE_DIR, 'MMCQsc_lib')).replace('\\','/')
-                # python = sys.executable.replace(check_conda()[1],pick_env)
-                # nexe = python.replace('\\','/')
-                python = os.path.abspath(sys.executable).replace('\\','/')
-                args = shlex.split(f"{python} -m pip install numpy --isolated --python-version 3.9 --ignore-requires-python --force-reinstall -t {NUMPY_D} -i https://pypi.douban.com/simple --extra-index-url https://pypi.mirrors.ustc.edu.cn --compile --timeout 30 --exists-action b --only-binary :all:")
-                result = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0)
-                logger.debug(f"创建下载线程 PID: {result.pid}")
-                logger.warning("\n\n\t\t[ tip ] : 快捷键 CTRL + C 强制结束当前任务，CTRL + PAUSE_BREAK 强制结束所有任务并退出 Python\n\n")
-                result.wait()
-                NUMPY_D = NUMPY_D.replace('/','\\')
-                if NUMPY_D not in sys.path:
-                    sys.path.append(NUMPY_D)
-                M_numpy = types.ModuleType('numpy')
-                M_numpy.__file__ = '{}\\numpy\\__init__.py'
                 M_numpy.__package__ = ''
                 try:
                     sys.modules['numpy'] = M_numpy
@@ -172,69 +211,40 @@ def run_in_env(env):
                     logger.info('\n' + str(M_numpy))
                     logger.info("\n\n\timport numpy seccessfully\n\n")
                 except:
-                    logger.error(" 从项目导入 Numpy 失败 ")
-            except BaseException as e:
-                if isinstance(e, KeyboardInterrupt):
-                    logger.warning("用户中止了下载")
-                    exit()
-            return env
-        else:
-            python = sys.executable.replace(check_conda()[1],pick_env)
-            # print(python)
-            os.system("cls")
-            os.system("conda info -e")
-            logger.debug("\n\n\n\t\t输入你想使用的 Conda 环境名称")
-            pick_env = input("main.py:109 >>> ")
-            _env_pyp = os.path.abspath(os.path.join(_env_v[pick_env]['path'],'Lib','site-packages'))
-            if _env_pyp not in sys.path:
-                    sys.path.append(_env_pyp)
-            M_numpy = types.ModuleType('numpy')
-            M_numpy.__file__ = '{}\\numpy\\__init__.py'.format(_env_pyp)
-            M_numpy.__package__ = ''
-            try:
-                sys.modules['numpy'] = M_numpy
-                import importlib,numpy
-                importlib.reload(numpy)
-                importlib.invalidate_caches()
-                importlib.util.resolve_name('numpy', __spec__.parent)
-                logger.info(M_numpy.__dict__)
-                logger.info('\n' + str(M_numpy))
-                logger.info("\n\n\timport numpy seccessfully\n\n")
-            except:
-                logger.error(" 不同 Python 版本的 Numpy 无法共享 ")
-                logger.error(" 不同 Python 版本的 Numpy 无法共享 ")
-                logger.error(" 不同 Python 版本的 Numpy 无法共享 ")
-                continue
-            return env
-            logger.debug(f"请在终端执行指令 conda activate {pick_env} 手动激活环境")
-            logger.warning("\n\n\t\t[ tip ] : 方向上键 ^ 可调出调出历史指令\n\n")
-            exit()
-            os.system("conda deactivate")
-            os.system("deactivate")
-            os.system("cls")
-            python = sys.executable.replace(check_conda()[1],pick_env)
-            change_env = file_path.replace('main','change_env')
-            try:
-                args = shlex.split(f"conda create -n {pick_env} python==3.9.5 -y")
-                result = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0)
-                logger.debug(f"创建下载线程 PID: {result.pid}")
-                logger.warning("\n\n\t\t[ tip ] : 快捷键 CTRL + C 强制结束当前任务，CTRL + PAUSE_BREAK 强制结束所有任务并退出 Python\n\n")
-                result.wait()
-            except BaseException as e:
-                if isinstance(e, KeyboardInterrupt):
-                    logger.warning("用户中止了下载")
-                    logger.warning("当前窗口已完成使命，是时候和它告别了")
-                    exit()
-            #os.system(f"conda create -n {pick_env} python==3.9.5 -y")
-            # args = shlex.split(f"conda activate {pick_env}")
-            # result = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0)
-            logger.debug(check_conda()[0])
-            logger.debug(python)
-            logger.debug(file_path)
-            logger.debug(f"已创建的环境 : [ {pick_env} ]  请使用创建的环境重新运行\n\n")
-            logger.warning("\n\n\t\t[ tip ] : 方向上键 ^ 可调出调出历史指令\n\n")
-            exit()
-            return pick_env
+                    logger.error(" 不同 Python 版本的 Numpy 无法共享 ")
+                    logger.error(" 不同 Python 版本的 Numpy 无法共享 ")
+                    logger.error(" 不同 Python 版本的 Numpy 无法共享 ")
+                    continue
+                return env
+                logger.debug(f"请在终端执行指令 conda activate {pick_env} 手动激活环境")
+                logger.warning("\n\n\t\t[ tip ] : 方向上键 ^ 可调出调出历史指令\n\n")
+                exit()
+                os.system("conda deactivate")
+                os.system("deactivate")
+                os.system("cls")
+                python = sys.executable.replace(check_conda()[1],pick_env)
+                change_env = file_path.replace('main','change_env')
+                try:
+                    args = shlex.split(f"conda create -n {pick_env} python==3.9.5 -y")
+                    result = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0)
+                    logger.debug(f"创建下载线程 PID: {result.pid}")
+                    logger.warning("\n\n\t\t[ tip ] : 快捷键 CTRL + C 强制结束当前任务，CTRL + PAUSE_BREAK 强制结束所有任务并退出 Python\n\n")
+                    result.wait()
+                except BaseException as e:
+                    if isinstance(e, KeyboardInterrupt):
+                        logger.warning("用户中止了下载")
+                        logger.warning("当前窗口已完成使命，是时候和它告别了")
+                        exit()
+                #os.system(f"conda create -n {pick_env} python==3.9.5 -y")
+                # args = shlex.split(f"conda activate {pick_env}")
+                # result = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0)
+                logger.debug(check_conda()[0])
+                logger.debug(python)
+                logger.debug(file_path)
+                logger.debug(f"已创建的环境 : [ {pick_env} ]  请使用创建的环境重新运行\n\n")
+                logger.warning("\n\n\t\t[ tip ] : 方向上键 ^ 可调出调出历史指令\n\n")
+                exit()
+                return pick_env
 
 
 logger.info('尝试使用缓存')
