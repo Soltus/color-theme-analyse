@@ -93,12 +93,12 @@ def mainFunc():
         pass
     else:
         try:
-            from MMCQsc.scp import executable_check
-            logger.info('\n\n\t\t请留意最小化的新窗口\n\n')
             import platform
             if platform.system() == 'Linux':
                 img = '/home'
             else:
+                from MMCQsc.scp import executable_check
+                logger.info('\n\n\t\t请留意最小化的新窗口\n\n')
                 if struct.calcsize("P") * 8 == 32:
                     mydll = ctypes.CDLL(os.path.abspath(os.path.join(BASE_DIR,'MMCQsc','scp','dll','CommonOpenDialogDll.dll')))
                 else:
