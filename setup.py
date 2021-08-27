@@ -51,9 +51,12 @@ import setuptools
 import shutil
 import os
 
+# 删除旧的生成
 DIST_DIR = os.path.abspath('./dist')
 if os.path.exists(DIST_DIR):
     shutil.rmtree(DIST_DIR)
+
+# 读取许可证
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
