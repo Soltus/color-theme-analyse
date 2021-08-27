@@ -238,7 +238,7 @@ def domain(img):
         task_id = progress.add_task(
             "process", filename="正在多线程分析 ", start=False)
 
-        totaltime = time.time()  # 获取当前文件目录
+        totaltime = time.time()
 
         # 遍历删除图片
         path = os.path.join(SRC_DIR, "finish")
@@ -289,7 +289,7 @@ def domain(img):
 
             ptv = 0
             origin_list = []
-            path = os.walk(os.path.dirname(img))
+            path = os.walk(img)
             print(img)
             for root, dirs, files in path:
                 for f in files:

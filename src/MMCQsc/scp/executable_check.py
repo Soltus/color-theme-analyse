@@ -79,11 +79,11 @@ def get_dpkg(name):
         logger.debug(f"创建下载线程 PID: {result.pid}")
         logger.warning("\n\n\t\t[ tip ] : 快捷键 CTRL + C 强制结束当前任务，CTRL + PAUSE_BREAK 强制结束所有任务并退出 Python\n\n")
         result.wait()
-        PKG_D = PKG_D.replace('/','\\')
+        PKG_D = os.path.abspath(PKG_D)
         if PKG_D not in sys.path:
             sys.path.append(PKG_D)
         M_module = types.ModuleType(name)
-        M_module.__file__ = f'{PKG_D}\\{name}\\__init__.py'
+        M_module.__file__ = os.path.abspath(os.path.join(PKG_D, name, '__init__.py'))
         M_module.__package__ = ''
         try:
             exec(f"import importlib,sys;sys.modules['{name}']=M_module;import {name};importlib.reload({name});importlib.invalidate_caches();importlib.util.resolve_name('{name}', __spec__.parent)",globals(), locals())
@@ -260,8 +260,7 @@ except ImportError:
         from MMCQsc_dpkg import rich
         from MMCQsc_dpkg.PIL import Image as PImage
     except:
-        import platform
-        if platform.system() == 'Linux':
+        if os.name == 'posix':
             pick_env = 'noconda'
         else:
             pick_env = check_conda()[1]

@@ -106,6 +106,7 @@ def mainFunc():
                 else:
                     mydll = ctypes.CDLL(os.path.abspath(os.path.join(BASE_DIR,'MMCQsc','scp','dll','CommonOpenDialogDll64.dll')))
                 img = ctypes.c_wchar_p(mydll.mainFunc()).value
+                img = os.path.dirname(img)
             if img != None:  # 有传入才处理
                 buf[1] = len(img)
                 for i in range(2, 10, 1):
