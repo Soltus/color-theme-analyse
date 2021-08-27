@@ -309,7 +309,7 @@ def domain(img):
             with futures.ProcessPoolExecutor(max_workers=None) as prolist:
                 ffs = []
                 roots = []
-                path = os.walk(os.path.dirname(img))
+                path = os.walk(img)
                 for root, dirs, files in path:
                     ffs.append(files)
                     roots.append(root)
@@ -390,8 +390,7 @@ def domain(img):
                 print('\n\n\n')
                 curr_time = datetime.datetime.now()
                 # 将路径转为URL格式，不转则json.dump以ASCII格式写到JSON文件里
-                in_path_url = parse.quote(
-                    os.path.dirname(img), safe=";/?:@&=+$,")
+                in_path_url = parse.quote(img, safe=";/?:@&=+$,")
                 reportjson = {'date': curr_time.strftime(
                     "%Y-%m-%d"), 'time': curr_time.strftime("%H:%M:%S"), 'in_path_url': in_path_url, 'in_files': ptv, 'cost_times': cost_times}
                 reportfile = os.path.join(
