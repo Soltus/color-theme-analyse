@@ -48,8 +48,10 @@ MANIFEST.in 需要放在和 setup.py 同级的顶级目录下，setuptools 会�
 '''
 
 import setuptools
-__import__("pkg_resources").declare_namespace(__name__)
+import shutil
+import os
 
+shutil.rmtree(os.path.abspath('/dist'))
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
