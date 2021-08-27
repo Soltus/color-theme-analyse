@@ -43,7 +43,11 @@ from concurrent import futures
 from subprocess import Popen,PIPE
 import shlex
 import ctypes
-mydll = ctypes.CDLL(f"{BASE_DIR}\\MMCQsc\\scp\\dll\\CommonOpenDialogDll.dll")
+import struct
+if struct.calcsize("P") * 8 == 32:
+    mydll = ctypes.CDLL(f"{BASE_DIR}\\MMCQsc\\scp\\dll\\CommonOpenDialogDll.dll")
+else:
+    mydll = ctypes.CDLL(f"{BASE_DIR}\\MMCQsc\\scp\\dll\\CommonOpenDialogDll64.dll")
 
 def get_host_ip():
     """
@@ -110,7 +114,7 @@ def mainFunc():
         except BaseException as e:
             if isinstance(e, KeyboardInterrupt):
                 os.system('cls')
-                logger.info("http.server 进程服务已停止\t原因：用户强制退出")
+                logger.info("进程服务已停止\t原因：用户强制退出")
         finally:
             try:
                 os.remove(os.path.join(SRC_DIR + '\\index.js'))
