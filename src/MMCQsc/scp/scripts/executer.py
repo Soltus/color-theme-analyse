@@ -81,7 +81,7 @@ try:
     np = __import__('numpy', globals(), locals(), [], 0)
 except ImportError:
     try:
-        from hi_windom_lib import numpy as np
+        from MMCQsc_lib import numpy as np
     except:
         repo = pgd.task(im="numpy",re="numpy")
         dddd += repo
@@ -89,7 +89,7 @@ try:
     PIL = __import__('PIL', globals(), locals(), [], 0)
 except ImportError:
     try:
-        from hi_windom_lib import PIL
+        from MMCQsc_lib import PIL
     except:
         repo = pgd.task(im="PIL",re="Pillow")
         dddd += repo
@@ -97,7 +97,7 @@ try:
     rich = __import__('rich', globals(), locals(), [], 0)
 except ImportError:
     try:
-        from hi_windom_lib import rich
+        from MMCQsc_lib import rich
     except:
         repo = pgd.task(im="rich",re="rich")
         dddd += repo

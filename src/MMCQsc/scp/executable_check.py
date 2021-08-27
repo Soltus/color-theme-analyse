@@ -239,7 +239,7 @@ def run_in_env(env):
 
 logger.info('尝试使用缓存')
 try:
-    from hi_windom_lib import numpy as np
+    from MMCQsc_lib import numpy as np
 except ImportError:
     pick_env = check_conda()[1]
     while pick_env:
@@ -248,43 +248,43 @@ except ImportError:
         if pick_env == env_tmep:
             break
 
-PY3_VNO = ''
-for i in sys.version_info[:3]:
-        PY3_VNO += str(i)
-PY3_VNO = '.'.join(PY3_VNO)
-logger.warning("You are using Python {}".format(PY3_VNO))
-if fun_version(PY3_VNO,"3.8.0") == -1:
-    logger.critical("Required version : Python >= 3.8.0")
-    with os.popen("conda --version") as conda_v:
-        if "conda" in conda_v.read():
-            logger.info("You are using Conda , Press key 'y' to upgrade your Python")
-            logger.info("If you want to upgrade later by yourself , use command: conda install python==3.9.5")
-            logger.debug("Upgrade your Python to 3.9.5 ?  [Y/*]")
-        isupdate = input("main.py:123 >>> ")
-    if isupdate not in ['Y','y']:
-        exit()
-    os.system("cls")
-    logger.info("即将开始下载，这取决于你的网络")
-    try:
-        args = shlex.split(f"conda conda install python==3.9.5 -n {pick_env} -y")
-        result = Popen(args, bufsize=0, executable=r"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe", close_fds=False, shell=False, env=None, startupinfo=None, creationflags=0)
-        logger.debug(f"创建下载线程 PID: {result.pid}")
-        logger.warning("\n\n\t\t[ tip ] : 快捷键 CTRL + C 强制结束当前任务，CTRL + PAUSE_BREAK 强制结束所有任务并退出 Python\n\n")
-        result.wait()
-    except BaseException as e:
-        if isinstance(e, KeyboardInterrupt):
-            logger.warning("用户中止了下载")
-            logger.warning("当前窗口已完成使命，是时候和它告别了")
-            result.kill()
-    finally:
-        if result.returncode:
-            logger.error("下载失败，请手动升级 Python 后重试")
-        else:
-            args = [sys.executable, file_path]
-            logger.debug(args)
-            logger.debug(f"请在终端执行指令 conda activate {pick_env} 手动激活环境")
-            logger.warning("\n\n\t\t[ tip ] : 方向上键 ^ 可调出调出历史指令\n\n")
+    PY3_VNO = ''
+    for i in sys.version_info[:3]:
+            PY3_VNO += str(i)
+    PY3_VNO = '.'.join(PY3_VNO)
+    logger.warning("You are using Python {}".format(PY3_VNO))
+    if fun_version(PY3_VNO,"3.8.0") == -1:
+        logger.critical("Required version : Python >= 3.8.0")
+        with os.popen("conda --version") as conda_v:
+            if "conda" in conda_v.read():
+                logger.info("You are using Conda , Press key 'y' to upgrade your Python")
+                logger.info("If you want to upgrade later by yourself , use command: conda install python==3.9.5")
+                logger.debug("Upgrade your Python to 3.9.5 ?  [Y/*]")
+            isupdate = input("main.py:123 >>> ")
+        if isupdate not in ['Y','y']:
             exit()
-elif fun_version(PY3_VNO,"3.9.5") != 0:
-    logger.warning("Recommended version : Python == 3.9.5  However, it doesn't matter")
+        os.system("cls")
+        logger.info("即将开始下载，这取决于你的网络")
+        try:
+            args = shlex.split(f"conda conda install python==3.9.5 -n {pick_env} -y")
+            result = Popen(args, bufsize=0, executable=r"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe", close_fds=False, shell=False, env=None, startupinfo=None, creationflags=0)
+            logger.debug(f"创建下载线程 PID: {result.pid}")
+            logger.warning("\n\n\t\t[ tip ] : 快捷键 CTRL + C 强制结束当前任务，CTRL + PAUSE_BREAK 强制结束所有任务并退出 Python\n\n")
+            result.wait()
+        except BaseException as e:
+            if isinstance(e, KeyboardInterrupt):
+                logger.warning("用户中止了下载")
+                logger.warning("当前窗口已完成使命，是时候和它告别了")
+                result.kill()
+        finally:
+            if result.returncode:
+                logger.error("下载失败，请手动升级 Python 后重试")
+            else:
+                args = [sys.executable, file_path]
+                logger.debug(args)
+                logger.debug(f"请在终端执行指令 conda activate {pick_env} 手动激活环境")
+                logger.warning("\n\n\t\t[ tip ] : 方向上键 ^ 可调出调出历史指令\n\n")
+                exit()
+    elif fun_version(PY3_VNO,"3.9.5") != 0:
+        logger.warning("Recommended version : Python == 3.9.5  However, it doesn't matter")
 
