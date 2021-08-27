@@ -86,17 +86,13 @@ def get_dpkg(name):
         M_module.__file__ = f'{PKG_D}\\{name}\\__init__.py'
         M_module.__package__ = ''
         try:
-            sys.modules[name] = M_module
-            import importlib
-            _dpkg = __import__(name, globals(), locals(), [], 0)
-            importlib.reload(_dpkg)
-            importlib.invalidate_caches()
-            importlib.util.resolve_name(name, __spec__.parent)
-            logger.info(M_module.__dict__)
+            exec(f"import importlib,sys;sys.modules['{name}']=M_module;import {name};importlib.reload({name});importlib.invalidate_caches();importlib.util.resolve_name('{name}', __spec__.parent)",globals(), locals())
+            # logger.info(M_module.__dict__)
             logger.info('\n' + str(M_module))
             logger.info(f"\n\n\timport {name} seccessfully\n\n")
-        except:
-            logger.error(f" 从项目导入 {name} 失败 ")
+        except Exception as e:
+            logger.error(e)
+            logger.error(f"从项目导入 {name} 失败 ")
     except BaseException as e:
         if isinstance(e, KeyboardInterrupt):
             logger.warning("用户中止了下载")
@@ -109,7 +105,7 @@ def run_in_env(env):
     PY3_VNO = '.'.join(PY3_VNO)
     os.system("cls")
     logger.info("开始检测 Conda 环境")
-    if env == 'noconda':
+    if env: #env == 'noconda':
         logger.info('尝试安装 Numpy 到项目 [ 如果不存在缓存，将从网络下载并安装 ]')
         get_dpkg('numpy')
         get_dpkg('rich')
@@ -179,8 +175,9 @@ def run_in_env(env):
                         importlib.invalidate_caches()
                         importlib.util.resolve_name('numpy', __spec__.parent)
                         print(M_numpy)
-                        print(M_numpy.__dict__)
+                        # print(M_numpy.__dict__)
                         logger.info("import numpy seccessfully")
+                        get_dpkg('rich')
                     except:
                         logger.error(" 不同 Python 版本的 Numpy 无法共享 ")
                         logger.error(" 不同 Python 版本的 Numpy 无法共享 ")
@@ -210,7 +207,7 @@ def run_in_env(env):
                     importlib.reload(numpy)
                     importlib.invalidate_caches()
                     importlib.util.resolve_name('numpy', __spec__.parent)
-                    logger.info(M_numpy.__dict__)
+                    # logger.info(M_numpy.__dict__)
                     logger.info('\n' + str(M_numpy))
                     logger.info("\n\n\timport numpy seccessfully\n\n")
                 except:

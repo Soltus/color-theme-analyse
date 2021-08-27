@@ -26,8 +26,10 @@ import os,sys
 import json
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../..", ".."))
 SRC_DIR = os.path.abspath(os.path.join(BASE_DIR, 'MMCQsc','src'))
+DPKG_DIR = os.path.abspath(os.path.join(BASE_DIR, 'MMCQsc_dpkg'))
 if BASE_DIR not in sys.path:
     sys.path.append(BASE_DIR)
+    sys.path.append(DPKG_DIR)
 from MMCQsc.scp.lib import logger
 logger = logger.myLogging("gitee.com/soltus")
 # 全局变量
@@ -95,16 +97,20 @@ except ImportError:
         repo = pgd.task(im="PIL",re="Pillow")
         dddd += repo
 try:
-    rich = __import__('rich', globals(), locals(), [], 0)
+    # logger.debug("from rich import print")
     from rich import print
+    # logger.debug("from rich.console import Console")
     from rich.console import Console
     from rich.progress import (BarColumn,Progress,) # 实例化进度条，由于采用多进程+多线程，只能当分隔符使用
 except ImportError:
     try:
+        # logger.debug("from MMCQsc_dpkg.rich import print")
         from MMCQsc_dpkg.rich import print
+        # logger.debug("from MMCQsc_dpkg.rich.console import Console")
         from MMCQsc_dpkg.rich.console import Console
         from MMCQsc_dpkg.rich.progress import (BarColumn,Progress,) # 实例化进度条，由于采用多进程+多线程，只能当分隔符使用
-    except:
+    except Exception as e:
+        logger.error(e)
         repo = pgd.task(im="rich",re="rich")
         dddd += repo
 '''
