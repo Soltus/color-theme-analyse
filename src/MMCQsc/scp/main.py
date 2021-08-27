@@ -117,7 +117,6 @@ def mainFunc():
             else:
                 logger.error("无输入或无效输入")
                 shm.close()
-                sys.exit(101)
         except BaseException as e:
             if isinstance(e, KeyboardInterrupt):
                 os.system('cls')
@@ -135,12 +134,13 @@ def mainFunc():
                     logger.warning('未能删除自动生成文件')
             finally:
                 shm.close()
-                sys.exit(102)
+    shm.unlink()
+    sys.exit(102)
 
 
 if __name__ == '__main__':
     import multiprocessing as mp
-    mp.set_start_method('spawn')
+    mp.get_context('spawn')
     try:
         result = mainFunc()
     except BaseException as e:
