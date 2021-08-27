@@ -61,8 +61,10 @@ from hashlib import md5
 
 if os.name == 'posix':
     CLS = 'clear'
+    DIR_SPLIT = '/'
 else:
     CLS = 'cls'
+    DIR_SPLIT = '\\'
 class Pgd:
     def __init__(self):
         self.url = 'https://pypi.douban.com/simple/'
@@ -341,10 +343,7 @@ def domain(img):
             for root, dirs, files in path:
                 for f in files:
                     fname = os.path.splitext(os.path.basename(f))[0]
-                    if os.name == 'posix':
-                        fnames = fname.split('/')
-                    else:
-                        fnames = fname.split('\\')
+                    fnames = fname.split(DIR_SPLIT)
                     lastname = fnames[len(fnames) - 1]
                     fname = fname.replace(
                         lastname, re.sub(r'\__.*\__', '', lastname))  # 正则替换
@@ -419,8 +418,7 @@ def domain(img):
                     console.print(reportjson, justify='full',
                                   highlight=True)
                     for i in range(len(file_list)):
-                        file_list[i] = str(file_list[i]).replace(
-                            SRC_DIR.replace('\\', '/'), '')
+                        file_list[i] = str(file_list[i]).replace(SRC_DIR, '')
                     with open(os.path.join(SRC_DIR, 'index.js'), 'w', encoding='utf-8') as mainjs:
                         mainjs.write(
                             'class ImgShow extends React.Component {\n render() {\n return (<div id="imgbox"><div className="imgshow1" >\n')
@@ -480,8 +478,7 @@ def domain(img):
                             if os.name == 'posix':
                                 rf = re.sub(r'^.*/src', './', reportfile)
                             else:
-                                rf = re.sub(r'^.*\\src', './',
-                                            reportfile).replace('\\', '/')
+                                rf = re.sub(r'^.*\\src', './', reportfile).replace('\\', '/')
                             index_text = index_text.replace(
                                 '[[reportpath]]', rf)
                             mainjs.writelines(index_text)
