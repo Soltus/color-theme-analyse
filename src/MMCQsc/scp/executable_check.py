@@ -105,7 +105,7 @@ def run_in_env(env):
     PY3_VNO = '.'.join(PY3_VNO)
     os.system("cls")
     logger.info("开始检测 Conda 环境")
-    if env: #env == 'noconda':
+    if env == 'noconda':
         logger.info('尝试安装多个扩展包到项目 [ 如果不存在缓存，将从网络下载并安装 ]')
         get_dpkg('numpy')
         get_dpkg('rich')
@@ -167,7 +167,7 @@ def run_in_env(env):
                     if _env_pyp not in sys.path:
                         sys.path.append(_env_pyp)
                     M_numpy = types.ModuleType('numpy')
-                    M_numpy.__file__ = '{}\\numpy\\__init__.py'.format(_env_pyp)
+                    M_numpy.__file__ = os.path.abspath(os.path.join(_env_pyp,'numpy','__init__.py'))
                     M_numpy.__package__ = ''
                     try:
                         sys.modules['numpy'] = M_numpy
@@ -202,7 +202,7 @@ def run_in_env(env):
                 if _env_pyp not in sys.path:
                         sys.path.append(_env_pyp)
                 M_numpy = types.ModuleType('numpy')
-                M_numpy.__file__ = '{}\\numpy\\__init__.py'.format(_env_pyp)
+                M_numpy.__file__ = os.path.abspath(os.path.join(_env_pyp,'numpy','__init__.py'))
                 M_numpy.__package__ = ''
                 try:
                     sys.modules['numpy'] = M_numpy
@@ -260,7 +260,11 @@ except ImportError:
         from MMCQsc_dpkg import rich
         from MMCQsc_dpkg.PIL import Image as PImage
     except:
-        pick_env = check_conda()[1]
+        import platform
+        if platform.system() == 'Linux':
+            pick_env = 'noconda'
+        else:
+            pick_env = check_conda()[1]
         while pick_env:
             env_tmep = pick_env
             pick_env = run_in_env(pick_env)

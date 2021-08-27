@@ -72,6 +72,8 @@ Bug 反馈和 Issues 提交可以在 Bitbucket 或者 Gitee，**在 Gitee 会得
 
 调试请运行src/MMCQsc/scp/main.py
 
+这是为 Windows 平台开发的，无法在 Linux 中正常使用
+
 ### Feature
 
 ### Customize
