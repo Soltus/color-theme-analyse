@@ -70,6 +70,8 @@ Bug 反馈和 Issues 提交可以在 Bitbucket 或者 Gitee，**在 Gitee 会得
 
 `python setup.py bdist_wheel`
 
+调试请运行src/MMCQsc/scp/main.py
+
 ### Feature
 
 ### Customize
@@ -86,8 +88,4 @@ Bug 反馈和 Issues 提交可以在 Bitbucket 或者 Gitee，**在 Gitee 会得
 
 ### Scheme
 
-已将 `rich` 移植为扩展依赖
-
-已移除 `opency-python` 依赖
-
-已将 Numpy 移植为扩展依赖
+`embed 版本：Pillow 更换为嵌入版本，Numpy, rich 改为动态引用，弃用 OpenCV-Python`
