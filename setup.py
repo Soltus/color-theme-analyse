@@ -30,7 +30,7 @@ MANIFEST.in 需要放在和 setup.py 同级的顶级目录下，setuptools 会�
         用 upload 命令上传包已经过时（不安全），官方提供了 twine 工具专门用来与 PyPI 交互。
         项目成熟之前，应当使用 twine upload dist/* --verbose --repository testpypi
         testpypi 的数据库会被定期修剪，因此可以放心上传
-        频繁上传测试，命令行可以整合为一行 python setup.py bdist_wheel;twine upload dist/* --verbose --repository testpypi
+        频繁上传测试，命令行可以整合为一行 python setup.py bdist_wheel;python setup.py bdist_wheel;twine upload dist/* --verbose --repository testpypi
 
 //关于版本号：Python 的软件分发工具还支持 local version identifier 可用于标识不打算发布的本地开发构建.
 本地版本标识符采用以下形式 <public version identifier>+<local version label> 例如：
