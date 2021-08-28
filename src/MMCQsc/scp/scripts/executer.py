@@ -402,18 +402,24 @@ def domain(img):
                 with open(reportfile, 'w') as js:
                     file_list = []
                     logger.debug(os.path.join(SRC_DIR, 'prepare'))
-                    for dir in os.listdir(os.path.join(SRC_DIR, 'prepare')):
-                        child = os.path.join(SRC_DIR, 'prepare', dir)
-                        logger.debug(child)
-                        if os.path.isdir(child):
-                            for file in os.listdir(child):
-                                if os.path.splitext(file)[1].lower() in ['.jpg', '.jpeg', '.png']:
-                                    file = os.path.join(child, file)
-                                    if os.path.basename(child) != 'temp':
-                                        file_list.append(file.replace('\\', '/'))
-                        elif os.path.isfile(child):
-                            if os.path.splitext(child)[1].lower() in ['.jpg', '.jpeg', '.png']:
-                                file_list.append(child.replace('\\', '/'))
+                    with os.scandir(os.path.join(SRC_DIR, 'prepare')) as it:
+                        for entry in it:
+                            if entry.is_file():
+                                print(entry.name)
+                            else:
+                                pass
+                    # for dir in os.listdir(os.path.join(SRC_DIR, 'prepare')):
+                    #     child = os.path.join(SRC_DIR, 'prepare', dir)
+                    #     logger.debug(child)
+                    #     if os.path.isdir(child):
+                    #         for file in os.listdir(child):
+                    #             if os.path.splitext(file)[1].lower() in ['.jpg', '.jpeg', '.png']:
+                    #                 file = os.path.join(child, file)
+                    #                 if os.path.basename(child) != 'temp':
+                    #                     file_list.append(file.replace('\\', '/'))
+                    #     elif os.path.isfile(child):
+                    #         if os.path.splitext(child)[1].lower() in ['.jpg', '.jpeg', '.png']:
+                    #             file_list.append(child.replace('\\', '/'))
                     reportjson['origin_list'] = origin_list
                     json.dump(reportjson, js)
                     console.print(reportjson, justify='full', highlight=True)
