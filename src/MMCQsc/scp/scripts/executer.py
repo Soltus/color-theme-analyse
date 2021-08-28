@@ -75,7 +75,7 @@ class Pgd:
         import os
         repo = input('\n\n Unable to import package [{}] from \n\t{} , \n\n Do you want to download ? \n\n\t\tProccess ? [Y/n]\t'.format(self.im, sys.path))
         if repo in ['Y','y']:
-            os.system('cls')
+            os.system(CLS)
             os.system("pip install {} -i {}".format(self.re, self.url))
             return 1
         return 0
@@ -259,15 +259,12 @@ def domain(img):
         if os.path.exists(os.path.join(SRC_DIR, "reports")) == False:
             os.makedirs(os.path.join(SRC_DIR, "reports"))
         path = os.path.join(SRC_DIR, "prepare", "temp")
-        temp = os.path.join(SRC_DIR, "prepare", "temp")
+        temp = path
         if os.path.exists(path):
             shutil.rmtree(path)
         os.makedirs(path)
         path = os.walk(os.path.join(SRC_DIR, "prepare"))
-        if os.name == 'posix':
-            rerule = re.compile(r'/#.{6}/#.{6}/#.{6}/#.{6}/#.{6}/__')
-        else:
-            rerule = re.compile(r'\#.{6}\#.{6}\#.{6}\#.{6}\#.{6}\__')
+        rerule = re.compile(r'\#.{6}\#.{6}\#.{6}\#.{6}\#.{6}\__')
         rerule2 = re.compile(r'SCMD-P.*')  # 和定义的命名规则有关
         redoma = 0
         for root, dirs, files in path:
@@ -281,7 +278,7 @@ def domain(img):
         if redoma > 1:
             progress.update(task_id, visible=False, refresh=False)
             progress.stop()
-            os.system('cls')
+            os.system(CLS)
             redo = input(
                 '\n\n\n注意：检测到遗留的 {} 个任务未处理，是否先继续未完成的任务？\n\n  __ 输入 y 继续遗留任务，输入 n 放弃遗留任务，任意其他键退出 __\n'.format(redoma))
             if redo in ['y', 'Y']:

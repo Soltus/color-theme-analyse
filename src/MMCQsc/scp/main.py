@@ -141,7 +141,6 @@ def mainFunc():
                     result in locals()
                     logger.warning('未能删除自动生成文件')
                 except Exception as e:
-                    print(e)
                     pass
             finally:
                 shm.close()
