@@ -145,31 +145,34 @@ console = Console(color_system='auto', style=None)
 
 
 def procompress(files, root):
-    testshm = shared_memory.SharedMemory(name='main_run_share')
-    buf = testshm.buf
-    buf[3] += 1
-    console.rule(title=' 多进程 ProcessPoolExecutor {:<3} \t "./profile.json 配置文件加载成功"'.format(
-                 str(buf[3])), align='center')
+    try:
+        testshm = shared_memory.SharedMemory(name='main_run_share')
+        buf = testshm.buf
+        buf[3] += 1
+        console.rule(title=' 多进程 ProcessPoolExecutor {:<3} \t "./profile.json 配置文件加载成功"'.format(
+                    str(buf[3])), align='center')
 
-    ss = []
-    ipl = 0
-    console.print(f'get {files}', justify='full', highlight=True)
-    for f in files:
-        if os.path.splitext(f)[1].lower() in ['.jpg', 'jpeg', '.png']:
-            ipl = ipl + 1
-            new_file_path = r'%s%s_%s_%s%s' % (
-                os.path.join(PREPARE, 'img'), ipl, str(int(time.time()*10000)), os.path.splitext(f)[1])
-            newname = os.path.abspath(new_file_path)
-            oldname = os.path.join(root, f)
-            shutil.copy2(oldname, newname)
-            console.print(f'copy {oldname} to {newname}', justify='full', highlight=True)
-            ss.append(new_file_path)
+        ss = []
+        ipl = 0
+        console.print(f'get {files}', justify='full', highlight=True)
+        for f in files:
+            if os.path.splitext(f)[1].lower() in ['.jpg', 'jpeg', '.png']:
+                ipl = ipl + 1
+                new_file_path = r'%s%s_%s_%s%s' % (
+                    os.path.join(PREPARE, 'img'), ipl, str(int(time.time()*10000)), os.path.splitext(f)[1])
+                newname = os.path.abspath(new_file_path)
+                oldname = os.path.join(root, f)
+                console.print(f'copy {oldname} to {newname}', justify='full', highlight=True)
+                shutil.copy2(oldname, newname)
+                ss.append(new_file_path)
 
-    with futures.ThreadPoolExecutor(max_workers=255) as pool:  # 多线程
-        for si in ss:
-            results = pool.submit(compressImage, si)
-            results.add_done_callback(testMMCQ)  # 回调函数
-    testshm.close()
+        with futures.ThreadPoolExecutor(max_workers=64) as pool:  # 多线程
+            for si in ss:
+                results = pool.submit(compressImage, si)
+                results.add_done_callback(testMMCQ)  # 回调函数
+        testshm.close()
+    except Exception as e:
+        console.print(e, justify='full', highlight=True)
 
 
 def compressImage(srcPath):
@@ -196,12 +199,12 @@ def compressImage(srcPath):
             sImg.close()
             oldname = srcPath
             newname = srcPath.replace(filename.split('.')[1], 'jpg')
-            os.rename(oldname, newname)  # 不改找不到文件
             console.print(f'rename {oldname} to {newname}', justify='full', highlight=True)
+            os.rename(oldname, newname)  # 不改找不到文件
             return dstFile.replace(filename.split('.')[1], 'jpg')
 
         except Exception as e:
-            print(e)
+            console.print(e, justify='full', highlight=True)
 
 
     # 如果是文件夹就递归
@@ -212,40 +215,43 @@ def compressImage(srcPath):
 
 
 def testMMCQ(future):
-    testshm = shared_memory.SharedMemory(name='main_run_share')
-    buf = testshm.buf
-    if buf[4] < 255:
-        buf[4] += 1
-    elif buf[5] < 255:
-        buf[5] += 1
-    elif buf[6] < 255:
-        buf[6] += 1
-    elif buf[7] < 255:
-        buf[7] += 1  # 处理不超过255*4=1020张图片
-    thisbuf = str(buf[4] + buf[5] + buf[6] + buf[7])
+    try:
+        testshm = shared_memory.SharedMemory(name='main_run_share')
+        buf = testshm.buf
+        if buf[4] < 255:
+            buf[4] += 1
+        elif buf[5] < 255:
+            buf[5] += 1
+        elif buf[6] < 255:
+            buf[6] += 1
+        elif buf[7] < 255:
+            buf[7] += 1  # 处理不超过255*4=1020张图片
+        thisbuf = str(buf[4] + buf[5] + buf[6] + buf[7])
 
-    imgfile = os.path.abspath(future.result())
-    console.print(f'get {imgfile}', justify='full', highlight=True)
-    # rgb = list(map(lambda d: MMCQ(d, themes, file=imgfile, use='cv2').quantize(), [cv.imdecode(np.fromfile(
-    #     imgfile, dtype=np.uint8), cv.COLOR_BGR2RGB)]))
-    rgb = list(map(lambda d: MMCQ(d, themes, file=imgfile, use='PIL').quantize(), [PImage.open(imgfile).convert('RGB')]))
-    for i in range(len(rgb)):
-        strjoin = ''
-        for j in range(len(rgb[i])):
-            strs = '#'
-            for k in rgb[i][j]:
-                strs += str(hex(k))[-2:].replace('x', '0').upper()
-            strjoin += strs
-        console.rule(title='多线程 ThreadPoolExecutor {:<9}  结果 {}\n'.format(
-            thisbuf, strjoin.replace('#', ' ')), align='left')
-        strjoin += '__{}__'.format(thisbuf + str(int(time.time())))
-        filename = os.path.basename(imgfile)
-        extname = os.path.splitext(imgfile)[1]
-        oldname = imgfile.replace('compress', 'prepare')
-        newname = oldname.replace(filename, strjoin) + extname
-        os.rename(oldname, newname)
-        console.print(f'rename {oldname} to {newname}', justify='full', highlight=True)
-    testshm.close()
+        imgfile = os.path.abspath(future.result())
+        console.print(f'get {imgfile}', justify='full', highlight=True)
+        # rgb = list(map(lambda d: MMCQ(d, themes, file=imgfile, use='cv2').quantize(), [cv.imdecode(np.fromfile(
+        #     imgfile, dtype=np.uint8), cv.COLOR_BGR2RGB)]))
+        rgb = list(map(lambda d: MMCQ(d, themes, file=imgfile, use='PIL').quantize(), [PImage.open(imgfile).convert('RGB')]))
+        for i in range(len(rgb)):
+            strjoin = ''
+            for j in range(len(rgb[i])):
+                strs = '#'
+                for k in rgb[i][j]:
+                    strs += str(hex(k))[-2:].replace('x', '0').upper()
+                strjoin += strs
+            console.rule(title='多线程 ThreadPoolExecutor {:<9}  结果 {}\n'.format(
+                thisbuf, strjoin.replace('#', ' ')), align='left')
+            strjoin += '__{}__'.format(thisbuf + str(int(time.time())))
+            filename = os.path.basename(imgfile)
+            extname = os.path.splitext(imgfile)[1]
+            oldname = imgfile.replace('compress', 'prepare')
+            newname = oldname.replace(filename, strjoin) + extname
+            console.print(f'rename {oldname} to {newname}', justify='full', highlight=True)
+            os.rename(oldname, newname)
+        testshm.close()
+    except Exception as e:
+        console.print(e, justify='full', highlight=True)
 
 
 def domain(img):
@@ -319,7 +325,7 @@ def domain(img):
             progress.update(task_id, total=ptv)
             progress.start_task(task_id)
             progress.update(task_id, advance=ptv)
-            console.print(f'origin_list\n {origin_list}', justify='full', highlight=True)
+            console.print(f'{origin_list}', justify='full', highlight=True)
             if ptv > 1019:
                 console.rule(title='demo限制单次最多处理 1020 张图片（ {} 张已选择）'.format(
                     ptv), align='center')
