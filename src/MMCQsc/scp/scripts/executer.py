@@ -415,6 +415,7 @@ def domain(img):
                     reportjson['origin_list'] = origin_list
                     json.dump(reportjson, js)
                     console.print(reportjson, justify='full', highlight=True)
+                    logger.debug(file_list)
                     for i in range(len(file_list)):
                         print(file_list[i])
                         file_list[i] = str(file_list[i]).replace(SRC_DIR.replace('\\', '/') + '/', '')
