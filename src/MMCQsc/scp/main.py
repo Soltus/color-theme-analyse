@@ -66,9 +66,7 @@ def get_host_ip():
 
 
 def createServer():
-    global myip
     if os.name != 'posix':
-        myip = get_host_ip()
         netlocal = '（支持局域网访问）'
     else:
         netlocal = ''
@@ -85,7 +83,6 @@ def createServer():
     result.wait()
 
 def openhtml():
-    global myip
     if os.name == "posix":
        logger.info(f'\n\n\n\t\t浏览器访问：\n\n\t\t{myip}:{__PORT}\n\n')
     else:
@@ -123,6 +120,9 @@ def mainFunc():
                     buf[i] = 0
                 from MMCQsc.scp.scripts import executer
                 result = executer.domain(img)
+                global myip
+                if os.name != 'posix':
+                    myip = get_host_ip()
                 if buf[2] == 1 and result == 6:
                     with futures.ProcessPoolExecutor(max_workers=None) as prolist:
                         prolist.submit(createServer)
