@@ -217,6 +217,7 @@ def testMMCQ(future):
     thisbuf = str(buf[4] + buf[5] + buf[6] + buf[7])
 
     imgfile = os.path.abspath(future.result())
+    console.print(f'get {imgfile}', justify='full', highlight=True)
     # rgb = list(map(lambda d: MMCQ(d, themes, file=imgfile, use='cv2').quantize(), [cv.imdecode(np.fromfile(
     #     imgfile, dtype=np.uint8), cv.COLOR_BGR2RGB)]))
     rgb = list(map(lambda d: MMCQ(d, themes, file=imgfile, use='PIL').quantize(), [PImage.open(imgfile).convert('RGB')]))
@@ -232,10 +233,10 @@ def testMMCQ(future):
         strjoin += '__{}__'.format(thisbuf + str(int(time.time())))
         filename = os.path.basename(imgfile)
         extname = os.path.splitext(imgfile)[1]
-        newname = imgfile.replace(
-            'compress', 'prepare').replace(filename, strjoin)
-        os.rename(imgfile.replace(
-            'compress', 'prepare'), newname + extname)
+        oldname = imgfile.replace('compress', 'prepare')
+        newname = oldname.replace(filename, strjoin) + extname
+        os.rename(oldname, newname)
+        console.print(f'rename {oldname} to {newname}', justify='full', highlight=True)
     testshm.close()
 
 
