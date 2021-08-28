@@ -400,14 +400,23 @@ def domain(img):
                 reportfile = os.path.join(
                     SRC_DIR, 'reports', curr_time.strftime("%Y%m%d-%H%M%S_")) + 'report.json'
                 with open(reportfile, 'w') as js:
-                    file_list = []
-                    logger.debug(os.path.join(SRC_DIR, 'prepare'))
-                    with os.scandir(os.path.join(SRC_DIR, 'prepare')) as it:
-                        for entry in it:
-                            if entry.is_file():
-                                print(entry.name)
-                            else:
-                                pass
+                    def scantree(path) -> list:
+                        file_list = []
+                        logger.debug(path)
+                        try:
+                            with os.scandir(path) as it:
+                                for entry in it:
+                                    if entry.is_file():
+                                        if os.path.splitext(entry.name)[1].lower() in ['.jpg', '.jpeg', '.png']:
+                                            file_list.append(entry.path.replace('\\','/'))
+                                    elif os.name == 'posix' and entry.is_dir(follow_symlinks=False) or not entry.name.startswith('.') and not entry.is_symlink():
+                                        # 忽略以.开头的隐藏文件夹
+                                        scantree(entry.path)
+                            return file_list
+                        except Exception as e:
+                            console.print(e, justify='full', highlight=True)
+                            return []
+                    file_list = scantree(os.path.join(SRC_DIR, 'prepare'))
                     # for dir in os.listdir(os.path.join(SRC_DIR, 'prepare')):
                     #     child = os.path.join(SRC_DIR, 'prepare', dir)
                     #     logger.debug(child)
