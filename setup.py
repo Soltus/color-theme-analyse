@@ -65,12 +65,10 @@ ctypes.cdll.ucrtbase._tzset()
 # 调整为中国时间
 
 
-
-
 def git_v_control():
     """
     请确保命令行能够正确使用 Git 命令。
-    应当注意，将 tool.setuptools_scm 动态写入的 version.py 从 Git 中移除
+    应当注意，将构建时动态写入的文件从 Git 中移除
     """
     build_time = strftime('%Z %Y-%m-%d %H:%M:%S')
     args = shlex.split("git describe --tags")
@@ -104,8 +102,7 @@ def git_v_control():
     repo = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0, universal_newlines=True, stdout=PIPE)
     repo.wait()
 
-''' 没有配置好 Git 请勿执行 git_v_control() '''
-git_v_control()
+
 
 _i = 0
 while True:
@@ -222,3 +219,7 @@ setuptools.setup(
 
 
 print('看上去一切顺利，如果构建结果未能正确反映项目结构，尝试删除 .eggs 和 build 文件夹然后重试')
+
+
+''' 没有配置好 Git 请勿执行 git_v_control() '''
+git_v_control()
