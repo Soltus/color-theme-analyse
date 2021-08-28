@@ -80,7 +80,6 @@ def git_v_control():
     result.wait()
 
     vlist = vstr.split('-')[0].split('.')
-    print(vlist)
     v_n = (int(vlist[0]), int(vlist[1]), int(vlist[2]) + 2)
     it =  os.open("src/MMCQsc/__init__.py",os.O_RDWR|os.O_CREAT)
     '''
@@ -93,10 +92,10 @@ def git_v_control():
     os.write(it, fstr.encode('utf8'))
     print('注册版本号完成\n')
 
-    args = shlex.split(f"git tag {v_n[0]}.{v_n[1]}.{v_n[2]}")
+    args = shlex.split(f"git commit -a -m 'setup.py auto commit'")
     repo = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0, universal_newlines=True, stdout=PIPE)
     repo.wait()
-    args = shlex.split(f"git commit -a -m 'setup.py auto commit'")
+    args = shlex.split(f"git tag {v_n[0]}.{v_n[1]}.{v_n[2]}")
     repo = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0, universal_newlines=True, stdout=PIPE)
     repo.wait()
 
