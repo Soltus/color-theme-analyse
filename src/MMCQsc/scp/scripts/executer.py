@@ -188,8 +188,10 @@ def compressImage(srcPath):
             dImg.save(dstFile.replace(filename.split('.')[1], 'jpg'))
             dImg.close()
             sImg.close()
-            os.rename(srcPath, srcPath.replace(
-                filename.split('.')[1], 'jpg'))  # 不改找不到文件
+            oldname = srcPath
+            newname = srcPath.replace(filename.split('.')[1], 'jpg')
+            os.rename(oldname, newname)  # 不改找不到文件
+            console.print(f'rename {oldname} to {newname}', justify='full', highlight=True)
             return dstFile.replace(filename.split('.')[1], 'jpg')
 
         except Exception as e:
