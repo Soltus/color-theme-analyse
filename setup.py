@@ -100,8 +100,10 @@ os.lseek(it,0,2) # 移动至文件末尾
 os.lseek(it,-6,1) # 往回移动
 fstr = f"{build_time}  ->  {v_n}\n\n'''"
 os.write(it, fstr.encode('utf8'))
+
+''' 没有配置好 Git 请勿执行 git_v_control() '''
 git_v_control(v_n)
-v_n = (int(vlist[0]), int(vlist[1]), int(vlist[2]) + 3)
+
 print('注册版本号完成\n')
 
 _i = 0
@@ -220,6 +222,3 @@ setuptools.setup(
 
 print('看上去一切顺利，如果构建结果未能正确反映项目结构，尝试删除 .eggs 和 build 文件夹然后重试')
 
-
-''' 没有配置好 Git 请勿执行 git_v_control() '''
-git_v_control(v_n)
