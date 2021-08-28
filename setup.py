@@ -80,8 +80,8 @@ def git_v_control():
     result.wait()
 
     vlist = vstr.split('-')[0].split('.')
-    v_n = (int(vlist[0]), int(vlist[1]), int(vlist[2]) + 1)
-
+    print(vlist)
+    v_n = (int(vlist[0]), int(vlist[1]), int(vlist[2]) + 2)
     it =  os.open("src/MMCQsc/__init__.py",os.O_RDWR|os.O_CREAT)
     '''
     os.lseek(fd, pos, how)
