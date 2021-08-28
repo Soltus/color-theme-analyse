@@ -65,7 +65,7 @@ def get_host_ip():
     return ip
 
 
-def createServer():
+def createServer(myip,PORT):
     if os.name != 'posix':
         netlocal = '（支持局域网访问）'
     else:
@@ -82,7 +82,7 @@ def createServer():
     logger.warning("\n\n\t\t[ tip ] : 快捷键 CTRL + C 强制结束当前任务，CTRL + PAUSE_BREAK 强制结束所有任务并退出 Python\n\n")
     result.wait()
 
-def openhtml():
+def openhtml(myip,PORT):
     if os.name == "posix":
         logger.info(f'\n\n\n\t\t浏览器访问：\n\n\t\t{myip}:{PORT}\n\n')
     else:
@@ -127,9 +127,9 @@ def mainFunc():
                     myip = get_host_ip()
                 if buf[2] == 1 and result == 6:
                     with futures.ProcessPoolExecutor(max_workers=None) as prolist:
-                        prolist.submit(createServer)
+                        prolist.submit(createServer,(myip,PORT))
                         time.sleep(2)
-                        prolist.submit(openhtml)  # 多进程才能打开
+                        prolist.submit(openhtml,(myip,PORT))  # 多进程才能打开
             else:
                 logger.error("无输入或无效输入")
                 shm.close()
