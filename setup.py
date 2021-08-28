@@ -79,7 +79,7 @@ def git_v_control():
     vstr = result.stdout.read()
     result.wait()
 
-    vlist = vstr.split('.')
+    vlist = vstr.split('-')[0].split('.')
     v_n = (int(vlist[0]), int(vlist[1]), int(vlist[2]) + 1)
 
     it =  os.open("src/MMCQsc/__init__.py",os.O_RDWR|os.O_CREAT)
@@ -93,8 +93,15 @@ def git_v_control():
     os.write(it, fstr.encode('utf8'))
     print('注册版本号完成\n')
 
+    args = shlex.split(f"git checkout embed")
+    repo = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0, universal_newlines=True, stdout=PIPE)
+    repo.wait()
+    args = shlex.split(f"git commit -a -m 'setup.py auto commit'")
+    repo = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0, universal_newlines=True, stdout=PIPE)
+    repo.wait()
     args = shlex.split(f"git tag {v_n[0]}.{v_n[1]}.{v_n[2]}")
-    Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0, universal_newlines=True, stdout=PIPE)
+    repo = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0, universal_newlines=True, stdout=PIPE)
+    repo.wait()
 
 ''' 没有配置好 Git 请勿执行 git_v_control() '''
 git_v_control()
