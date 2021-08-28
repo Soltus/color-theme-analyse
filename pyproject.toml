@@ -12,5 +12,4 @@ write_to = "src/MMCQsc/version.py"
 write_to_template = '''
 __version__ = "{version}"
 version = "{version}"
-version_tuple = ({version[0]}, {version[2]}, {version[4]})
 '''

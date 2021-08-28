@@ -5,9 +5,11 @@ try:
     __version__ = version("MMCQsc")
 except PackageNotFoundError:
     # package is not installed
-    from .version import __version__, version, version_tuple
+    from .version import __version__, version
 
 __doc__ = f'''
-MMCQsc version: [{version}]
-build time: [[build_time]]
+
+___________  build history  ____________
+
+
 '''

@@ -51,24 +51,77 @@ MANIFEST.in 需要放在和 setup.py 同级的顶级目录下，setuptools 会�
 import setuptools
 import shutil
 import os
+import re
+from time import strftime, sleep
+from subprocess import Popen,PIPE
+import shlex
+import ctypes, locale
+locale.setlocale(locale.LC_ALL, '')
+ctypes.cdll.ucrtbase._tzset()
+# 调整为中国时间
 
-# 删除旧的生成
-DIST_DIR = os.path.abspath('./dist')
-if os.path.exists(DIST_DIR):
-    shutil.rmtree(DIST_DIR)
 
-from time import gmtime, strftime
-build_time = strftime("%a, %d %b %Y %H:%M:%S +0000", gmtime())
-with open("src/MMCQsc/__init__.py", "w+", encoding="utf-8") as it:
-    origin = it.read()
-    it.write(origin.replace('[[build_time]]', build_time))
+
+
+def git_v_control():
+    build_time = strftime('%Z %Y-%m-%d %H:%M:%S')
+    args = shlex.split("git describe --tags")
+    result = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0, universal_newlines=True, stdout=PIPE)
+    # 如果 stdout 参数是 PIPE，此属性是一个类似 open() 返回的可读流。从流中读取子进程提供的输出。
+    # 如果 encoding 或 errors 参数被指定或者 universal_newlines 参数为 True，此流为文本流，否则为字节流。如果 stdout 参数非 PIPE，此属性为 None。
+    vstr = result.stdout.read()
+    result.wait()
+
+    vlist = vstr.split('.')
+    v_n = (int(vlist[0]), int(vlist[1]), int(vlist[2]) + 1)
+
+    it =  os.open("src/MMCQsc/__init__.py",os.O_RDWR|os.O_CREAT)
+    '''
+    os.lseek(fd, pos, how)
+    将文件描述符 fd 的当前位置设置为 pos，位置的计算方式 how 如下：设置为 SEEK_SET 或 0 表示从文件开头计算，设置为 SEEK_CUR 或 1 表示从文件当前位置计算，设置为 SEEK_END 或 2 表示文件末尾计算。返回新指针位置，这个位置是从文件开头计算的，单位是字节。'''
+
+    os.lseek(it,0,2) # 移动至文件末尾
+    os.lseek(it,-6,1) # 往回移动
+    fstr = f"{build_time}  ->  {v_n}\n\n'''"
+    os.write(it, fstr.encode('utf8'))
+    print('注册版本号完成\n')
+
+    args = shlex.split(f"git tag {v_n[0]}.{v_n[1]}.{v_n[2]}")
+    Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0, universal_newlines=True, stdout=PIPE)
+
+''' 没有配置好 Git 请勿执行 git_v_control() '''
+git_v_control()
+
+_i = 0
+while True:
+    try:
+        # 删除旧的生成
+        if _i > 0:
+            print(f'第 {_i} 次重试')
+            sleep(1)
+        DIST_DIR = os.path.abspath('./dist')
+        if os.path.exists(DIST_DIR):
+            shutil.rmtree(DIST_DIR)
+        break
+    except OSError as e:
+        print(e)
+        if _i > 99:
+                print('\n程序放弃重试\n')
+                exit(99)
+        print('请解除占用以继续，程序将等待 3 秒。如需禁用删除旧的生成请修改 setup.py \n')
+        _i = _i + 1
+        sleep(2)
+        continue
+
+
+
 # 读取许可证
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
-print('许可证已加载')
-print('如果第一次构建或者删除了缓存，则需要等待，这取决于当前环境')
-print('开始执行，若长时间无响应，请检查是否有误')
+print('许可证已加载\n')
+print('如果第一次构建或者删除了缓存，则需要等待，这取决于当前环境\n')
+print('开始执行，若长时间无响应，请检查是否有误\n')
 
 setuptools.setup(
     name="color-theme-analyse", # 在 PyPI 上搜索的项目名称
@@ -149,5 +202,8 @@ setuptools.setup(
         'https://pypi.org/simple',
     ],
 )
+
+
+
 
 print('看上去一切顺利，如果构建结果未能正确反映项目结构，尝试删除 .eggs 和 build 文件夹然后重试')
