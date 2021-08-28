@@ -95,6 +95,7 @@ def git_v_control():
     args = shlex.split(f"git commit -a -m 'setup.py auto commit'")
     repo = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0, universal_newlines=True, stdout=PIPE)
     repo.wait()
+    # 打标签应当在提交之后，生成干净的无本地标识符的包
     args = shlex.split(f"git tag {v_n[0]}.{v_n[1]}.{v_n[2]}")
     repo = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0, universal_newlines=True, stdout=PIPE)
     repo.wait()
