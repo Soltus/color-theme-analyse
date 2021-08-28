@@ -47,9 +47,6 @@ import ctypes
 import struct
 from random import randint
 
-PORT = "9999"
-myip = 'localhost'
-
 def get_host_ip():
     """
     查询本机ip地址
@@ -120,11 +117,11 @@ def mainFunc():
                     buf[i] = 0
                 from MMCQsc.scp.scripts import executer
                 result = executer.domain(img)
-                global myip
-                global PORT
                 PORT = randint(5800,5858)
                 if os.name != 'posix':
                     myip = get_host_ip()
+                else:
+                    myip = 'localhost'
                 if buf[2] == 1 and result == 6:
                     with futures.ProcessPoolExecutor(max_workers=None) as prolist:
                         prolist.submit(createServer,(myip,PORT))
