@@ -45,7 +45,9 @@ from subprocess import Popen,PIPE
 import shlex
 import ctypes
 import struct
+from random import randint
 
+__PORT = randint(5800,5858)
 
 def get_host_ip():
     """
@@ -63,16 +65,21 @@ def get_host_ip():
 
 
 def createServer():
-    myip = get_host_ip()
+    if os.name != 'posix':
+        myip = get_host_ip()
+        netlocal = '（支持局域网访问）'
+    else:
+        myip = 'localhost'
+        netlocal = ''
     logger.info(SRC_DIR)
-    args = shlex.split(f"pyhton -m http.server 5858")
+    args = shlex.split(f"pyhton -m http.server {__PORT}")
     '''
     cwd 工作目录，设置为正确值以确保 launch ../src/index.html
     executable 参数指定一个要执行的替换程序。这很少需要。当 shell=True， executable 替换 args 指定运行的程序。但是，原始的 args 仍然被传递给程序。大多数程序将被 args 指定的程序作为命令名对待，这可以与实际运行的程序不同。
     '''
     result =  Popen(args, bufsize=0, executable=sys.executable, close_fds=False, shell=False, cwd=SRC_DIR, startupinfo=None, creationflags=0) # shell=False cwd=SRC_DIR 非常重要
     logger.debug(f"http.server进程 PID: {result.pid}")
-    logger.info(f'\n\n\n\t\t本地服务器创建成功：\n\n\t\t{myip}:5858\n\n\t\t（支持局域网访问）\n\n')
+    logger.info(f'\n\n\n\t\t本地服务器创建成功：\n\n\t\t{myip}:{__PORT}\n\n\t\t{netlocal}\n\n')
     logger.warning("\n\n\t\t[ tip ] : 快捷键 CTRL + C 强制结束当前任务，CTRL + PAUSE_BREAK 强制结束所有任务并退出 Python\n\n")
     result.wait()
 
@@ -80,10 +87,10 @@ def openhtml():
     myip = get_host_ip()
     time.sleep(2)
     if os.name == "posix":
-       logger.info(f'\n\n\n\t\t浏览器访问：\n\n\t\t{myip}:5858\n\n')
+       logger.info(f'\n\n\n\t\t浏览器访问：\n\n\t\t{myip}:{__PORT}\n\n')
     else:
-        logger.info(f'\n\n\n\t\t即将默认浏览器打开：\n\n\t\t{myip}:5858\n\n')
-        os.system(f'start http://{myip}:5858')
+        logger.info(f'\n\n\n\t\t即将默认浏览器打开：\n\n\t\t{myip}:{__PORT}\n\n')
+        os.system(f'start http://{myip}:{__PORT}')
 
 def mainFunc():
     try:

@@ -313,7 +313,7 @@ def domain(img):
 
             # 开始处理
 
-            with futures.ProcessPoolExecutor(max_workers=None) as prolist:
+            with futures.ProcessPoolExecutor(max_workers=8) as prolist:
                 ffs = []
                 roots = []
                 path = os.walk(img)
