@@ -65,31 +65,11 @@ ctypes.cdll.ucrtbase._tzset()
 # 调整为中国时间
 
 
-def git_v_control():
+def git_v_control(v_n):
     """
     请确保命令行能够正确使用 Git 命令。
     应当注意，将构建时动态写入的文件从 Git 中移除
     """
-    build_time = strftime('%Z %Y-%m-%d %H:%M:%S')
-    args = shlex.split("git describe --tags")
-    result = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0, universal_newlines=True, stdout=PIPE)
-    # 如果 stdout 参数是 PIPE，此属性是一个类似 open() 返回的可读流。从流中读取子进程提供的输出。
-    # 如果 encoding 或 errors 参数被指定或者 universal_newlines 参数为 True，此流为文本流，否则为字节流。如果 stdout 参数非 PIPE，此属性为 None。
-    vstr = result.stdout.read()
-    result.wait()
-
-    vlist = vstr.split('-')[0].split('.')
-    v_n = (int(vlist[0]), int(vlist[1]), int(vlist[2]) + 2)
-    it =  os.open("src/MMCQsc/__init__.py",os.O_RDWR|os.O_CREAT)
-    '''
-    os.lseek(fd, pos, how)
-    将文件描述符 fd 的当前位置设置为 pos，位置的计算方式 how 如下：设置为 SEEK_SET 或 0 表示从文件开头计算，设置为 SEEK_CUR 或 1 表示从文件当前位置计算，设置为 SEEK_END 或 2 表示文件末尾计算。返回新指针位置，这个位置是从文件开头计算的，单位是字节。'''
-
-    os.lseek(it,0,2) # 移动至文件末尾
-    os.lseek(it,-6,1) # 往回移动
-    fstr = f"{build_time}  ->  {v_n}\n\n'''"
-    os.write(it, fstr.encode('utf8'))
-    print('注册版本号完成\n')
     args = shlex.split(f"git add .")
     repo = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0, universal_newlines=True, stdout=PIPE)
     repo.wait()
@@ -103,6 +83,26 @@ def git_v_control():
     repo.wait()
 
 
+build_time = strftime('%Z %Y-%m-%d %H:%M:%S')
+args = shlex.split("git describe --tags")
+result = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0, universal_newlines=True, stdout=PIPE)
+# 如果 stdout 参数是 PIPE，此属性是一个类似 open() 返回的可读流。从流中读取子进程提供的输出。
+# 如果 encoding 或 errors 参数被指定或者 universal_newlines 参数为 True，此流为文本流，否则为字节流。如果 stdout 参数非 PIPE，此属性为 None。
+vstr = result.stdout.read()
+result.wait()
+vlist = vstr.split('-')[0].split('.')
+v_n = (int(vlist[0]), int(vlist[1]), int(vlist[2]) + 2)
+it =  os.open("src/MMCQsc/__init__.py",os.O_RDWR|os.O_CREAT)
+'''
+os.lseek(fd, pos, how)
+将文件描述符 fd 的当前位置设置为 pos，位置的计算方式 how 如下：设置为 SEEK_SET 或 0 表示从文件开头计算，设置为 SEEK_CUR 或 1 表示从文件当前位置计算，设置为 SEEK_END 或 2 表示文件尾计算。返回新指针位置，这个位置是从文件开头计算的，单位是字节。'''
+os.lseek(it,0,2) # 移动至文件末尾
+os.lseek(it,-6,1) # 往回移动
+fstr = f"{build_time}  ->  {v_n}\n\n'''"
+os.write(it, fstr.encode('utf8'))
+git_v_control(v_n)
+v_n = (int(vlist[0]), int(vlist[1]), int(vlist[2]) + 3)
+print('注册版本号完成\n')
 
 _i = 0
 while True:
@@ -222,4 +222,4 @@ print('看上去一切顺利，如果构建结果未能正确反映项目结构�
 
 
 ''' 没有配置好 Git 请勿执行 git_v_control() '''
-git_v_control()
+git_v_control(v_n)
