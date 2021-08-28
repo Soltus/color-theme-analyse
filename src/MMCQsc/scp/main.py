@@ -117,13 +117,13 @@ def mainFunc():
                     buf[i] = 0
                 from MMCQsc.scp.scripts import executer
                 result = executer.domain(img)
-                PORT = randint(5800,5858)
-                if os.name != 'posix':
-                    myip = get_host_ip()
-                else:
-                    myip = 'localhost'
                 if buf[2] == 1 and result == 6:
                     with futures.ProcessPoolExecutor(max_workers=None) as prolist:
+                        PORT = randint(5800,5858)
+                        if os.name != 'posix':
+                            myip = get_host_ip()
+                        else:
+                            myip = 'localhost'
                         prolist.submit(createServer,(myip,PORT))
                         time.sleep(2)
                         prolist.submit(openhtml,(myip,PORT))  # 多进程才能打开
