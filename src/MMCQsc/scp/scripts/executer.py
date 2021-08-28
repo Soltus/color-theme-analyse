@@ -253,7 +253,7 @@ def testMMCQ(future):
         logger.error(e)
 
 
-def domain(img):
+def domain(img) -> int:
     testshm = shared_memory.SharedMemory(name='main_run_share')
     buf = testshm.buf
     with progress:
@@ -308,7 +308,7 @@ def domain(img):
                 progress.update(task_id, visible=True, refresh=True)
                 progress.start_task(task_id)
             else:
-                exit()
+                return 0
 
         if img != None:  # 有传入才处理
 
@@ -410,7 +410,9 @@ def domain(img):
             #              cost_times, title="处理完成", choices=(" 生成报告 ", " 完成 "))
 
             # 点击生成报告触发事件
-            if cc == 1:
+            if cc != 1:
+                return 0
+            else:
                 print('\n\n\n')
                 curr_time = datetime.datetime.now()
                 # 将路径转为URL格式，不转则json.dump以ASCII格式写到JSON文件里
@@ -524,4 +526,7 @@ def domain(img):
                 buf[2] = 1
                 cc1.close()
                 return 6
+            return 5
+        return 4
+    return 3
 
