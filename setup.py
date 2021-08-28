@@ -57,6 +57,11 @@ DIST_DIR = os.path.abspath('./dist')
 if os.path.exists(DIST_DIR):
     shutil.rmtree(DIST_DIR)
 
+from time import gmtime, strftime
+build_time = strftime("%a, %d %b %Y %H:%M:%S +0000", gmtime())
+with open("src/MMCQsc/__init__.py", "w+", encoding="utf-8") as it:
+    origin = it.read()
+    it.write(origin.replace('[[build_time]]', build_time))
 # 读取许可证
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
