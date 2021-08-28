@@ -47,7 +47,7 @@ import ctypes
 import struct
 from random import randint
 
-__PORT = randint(5800,5858)
+PORT = "9999"
 myip = 'localhost'
 
 def get_host_ip():
@@ -71,23 +71,23 @@ def createServer():
     else:
         netlocal = ''
     logger.info(SRC_DIR)
-    args = shlex.split(f"pyhton -m http.server {__PORT}")
+    args = shlex.split(f"pyhton -m http.server {PORT}")
     '''
     cwd 工作目录，设置为正确值以确保 launch ../src/index.html
     executable 参数指定一个要执行的替换程序。这很少需要。当 shell=True， executable 替换 args 指定运行的程序。但是，原始的 args 仍然被传递给程序。大多数程序将被 args 指定的程序作为命令名对待，这可以与实际运行的程序不同。
     '''
     result =  Popen(args, bufsize=0, executable=sys.executable, close_fds=False, shell=False, cwd=SRC_DIR, startupinfo=None, creationflags=0) # shell=False cwd=SRC_DIR 非常重要
     logger.debug(f"http.server进程 PID: {result.pid}")
-    logger.info(f'\n\n\n\t\t本地服务器创建成功：\n\n\t\t{myip}:{__PORT}\n\n\t\t{netlocal}\n\n')
+    logger.info(f'\n\n\n\t\t本地服务器创建成功：\n\n\t\t{myip}:{PORT}\n\n\t\t{netlocal}\n\n')
     logger.warning("\n\n\t\t[ tip ] : 快捷键 CTRL + C 强制结束当前任务，CTRL + PAUSE_BREAK 强制结束所有任务并退出 Python\n\n")
     result.wait()
 
 def openhtml():
     if os.name == "posix":
-       logger.info(f'\n\n\n\t\t浏览器访问：\n\n\t\t{myip}:{__PORT}\n\n')
+        logger.info(f'\n\n\n\t\t浏览器访问：\n\n\t\t{myip}:{PORT}\n\n')
     else:
-        logger.info(f'\n\n\n\t\t即将默认浏览器打开：\n\n\t\t{myip}:{__PORT}\n\n')
-        os.system(f'start http://{myip}:{__PORT}')
+        logger.info(f'\n\n\n\t\t即将默认浏览器打开：\n\n\t\t{myip}:{PORT}\n\n')
+        os.system(f'start http://{myip}:{PORT}')
 
 def mainFunc():
     try:
@@ -121,6 +121,8 @@ def mainFunc():
                 from MMCQsc.scp.scripts import executer
                 result = executer.domain(img)
                 global myip
+                global PORT
+                PORT = randint(5800,5858)
                 if os.name != 'posix':
                     myip = get_host_ip()
                 if buf[2] == 1 and result == 6:
