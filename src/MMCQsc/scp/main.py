@@ -124,9 +124,9 @@ def mainFunc():
                             myip = get_host_ip()
                         else:
                             myip = 'localhost'
-                        prolist.submit(createServer,(myip,PORT))
+                        prolist.submit(createServer,myip,PORT)
                         time.sleep(2)
-                        prolist.submit(openhtml,(myip,PORT))  # 多进程才能打开
+                        prolist.submit(openhtml,myip,PORT)  # 多进程才能打开
             else:
                 logger.error("无输入或无效输入")
                 shm.close()
