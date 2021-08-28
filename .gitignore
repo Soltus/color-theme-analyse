@@ -62,6 +62,5 @@ Thumbs.db
 /src/MMCQsc/src/index.js
 /.eggs
 /build
-/src/MMCQsc/version.py
 /src/MMCQsc/scp/lib/bin
 python-3_9_6-embed-win32/
