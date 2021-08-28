@@ -31,8 +31,8 @@ if BASE_DIR not in sys.path:
     sys.path.append(BASE_DIR)
 if DPKG_DIR not in sys.path:
     sys.path.append(DPKG_DIR)
-from MMCQsc.scp.lib import logger
-logger = logger.myLogging("gitee.com/soltus")
+from MMCQsc.scp.lib.logger import *
+logger = myLogging("gitee.com/soltus")
 # 全局变量
 try:
     profile = json.load(open(os.path.abspath(os.path.join(BASE_DIR,'MMCQsc','scp','scripts','profile.json')), 'r+'))
@@ -172,7 +172,7 @@ def procompress(files, root):
                 results.add_done_callback(testMMCQ)  # 回调函数
         testshm.close()
     except Exception as e:
-        console.print(e, justify='full', highlight=True)
+        logger.error(e)
 
 
 def compressImage(srcPath):
@@ -204,7 +204,7 @@ def compressImage(srcPath):
             return dstFile.replace(filename.split('.')[1], 'jpg')
 
         except Exception as e:
-            console.print(e, justify='full', highlight=True)
+            logger.error(e)
 
 
     # 如果是文件夹就递归
@@ -251,7 +251,7 @@ def testMMCQ(future):
             os.rename(oldname, newname)
         testshm.close()
     except Exception as e:
-        console.print(e, justify='full', highlight=True)
+        logger.error(e)
 
 
 def domain(img):
@@ -434,7 +434,7 @@ def domain(img):
                                         scantree(entry.path)
                             return file_list
                         except Exception as e:
-                            console.print(e, justify='full', highlight=True)
+                            logger.error(e)
                             return []
                     file_list = scantree(PREPARE)
                     # for dir in os.listdir(os.path.join(SRC_DIR, 'prepare')):
