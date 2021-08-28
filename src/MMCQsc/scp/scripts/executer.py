@@ -401,8 +401,10 @@ def domain(img):
                     SRC_DIR, 'reports', curr_time.strftime("%Y%m%d-%H%M%S_")) + 'report.json'
                 with open(reportfile, 'w') as js:
                     file_list = []
+                    logger.debug(os.path.join(SRC_DIR, 'prepare'))
                     for dir in os.listdir(os.path.join(SRC_DIR, 'prepare')):
                         child = os.path.join(SRC_DIR, 'prepare', dir)
+                        logger.debug(child)
                         if os.path.isdir(child):
                             for file in os.listdir(child):
                                 if os.path.splitext(file)[1].lower() in ['.jpg', '.jpeg', '.png']:
@@ -417,9 +419,7 @@ def domain(img):
                     console.print(reportjson, justify='full', highlight=True)
                     logger.debug(file_list)
                     for i in range(len(file_list)):
-                        print(file_list[i])
                         file_list[i] = str(file_list[i]).replace(SRC_DIR.replace('\\', '/') + '/', '')
-                        print(file_list[i])
                     logger.debug('写入index.js')
                     with open(os.path.join(SRC_DIR, 'index.js'), 'w', encoding='utf-8') as mainjs:
                         mainjs.write(
