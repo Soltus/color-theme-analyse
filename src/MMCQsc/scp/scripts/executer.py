@@ -416,7 +416,9 @@ def domain(img):
                     json.dump(reportjson, js)
                     console.print(reportjson, justify='full', highlight=True)
                     for i in range(len(file_list)):
+                        print(file_list[i])
                         file_list[i] = str(file_list[i]).replace(SRC_DIR.replace('\\', '/') + '/', '')
+                        print(file_list[i])
                     logger.debug('写入index.js')
                     with open(os.path.join(SRC_DIR, 'index.js'), 'w', encoding='utf-8') as mainjs:
                         mainjs.write(
