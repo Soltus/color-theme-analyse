@@ -198,7 +198,7 @@ def compressImage(srcPath):
             sImg.close()
             oldname = srcPath
             newname = srcPath.replace(filename.split('.')[1], 'jpg')
-            console.print(f'rename {oldname} to {newname}', justify='full', highlight=True)
+            console.print(f'rename\n {oldname} \nto\n {newname}', justify='full', highlight=True)
             os.rename(oldname, newname)  # 不改找不到文件
             return dstFile.replace(filename.split('.')[1], 'jpg')
 
@@ -246,7 +246,7 @@ def testMMCQ(future):
             extname = os.path.splitext(imgfile)[1]
             oldname = imgfile.replace('compress', 'prepare')
             newname = oldname.replace(filename, strjoin) + extname
-            console.print(f'rename {oldname} to {newname}', justify='full', highlight=True)
+            console.print(f'rename\n {oldname} \nto\n {newname}', justify='full', highlight=True)
             os.rename(oldname, newname)
         testshm.close()
     except Exception as e:
