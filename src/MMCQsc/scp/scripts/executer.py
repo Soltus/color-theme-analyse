@@ -153,6 +153,7 @@ def procompress(files, root):
 
     ss = []
     ipl = 0
+    console.print(f'get {files}', justify='full', highlight=True)
     for f in files:
         if os.path.splitext(f)[1].lower() in ['.jpg', 'jpeg', '.png']:
             ipl = ipl + 1
@@ -318,6 +319,7 @@ def domain(img):
             progress.update(task_id, total=ptv)
             progress.start_task(task_id)
             progress.update(task_id, advance=ptv)
+            console.print(f'origin_list\n {origin_list}', justify='full', highlight=True)
             if ptv > 1019:
                 console.rule(title='demo限制单次最多处理 1020 张图片（ {} 张已选择）'.format(
                     ptv), align='center')
