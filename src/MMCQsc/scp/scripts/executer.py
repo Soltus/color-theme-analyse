@@ -255,10 +255,12 @@ def domain(img):
 
         # 遍历删除图片
         path = os.path.join(SRC_DIR, "finish")
+        console.print(f'checking {path}', justify='full', highlight=True)
         if os.path.exists(path):
             shutil.rmtree(path)
         os.mkdir(path)
         path = os.path.join(SRC_DIR, "compress")
+        console.print(f'checking {path}', justify='full', highlight=True)
         if os.path.exists(path):
             shutil.rmtree(path)
         os.mkdir(path)
@@ -266,6 +268,7 @@ def domain(img):
             os.makedirs(os.path.join(SRC_DIR, "reports"))
         path = os.path.join(SRC_DIR, "prepare", "temp")
         temp = path
+        console.print(f'checking {path}', justify='full', highlight=True)
         if os.path.exists(path):
             shutil.rmtree(path)
         os.makedirs(path)
@@ -273,6 +276,7 @@ def domain(img):
         rerule = re.compile(r'\#.{6}\#.{6}\#.{6}\#.{6}\#.{6}\__')
         rerule2 = re.compile(r'SCMD-P.*')  # 和定义的命名规则有关
         redoma = 0
+        console.print(f'checking {path}', justify='full', highlight=True)
         for root, dirs, files in path:
             for f in files:
                 if rerule.search(f) or rerule2.search(f):
