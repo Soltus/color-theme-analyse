@@ -154,6 +154,7 @@ def procompress(files, root):
             ipl = ipl + 1
             new_file_path = r'%s\%s_%s_%s%s' % (
                 os.path.join(SRC_DIR, "prepare"), 'img', ipl, str(int(time.time()*10000)), os.path.splitext(f)[1])
+            new_file_path = os.path.abspath(new_file_path)
             shutil.copy2(os.path.join(root, f), new_file_path)
             ss.append(new_file_path)
 
