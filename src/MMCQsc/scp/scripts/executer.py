@@ -215,7 +215,7 @@ def testMMCQ(future):
         buf[7] += 1  # 处理不超过255*4=1020张图片
     thisbuf = str(buf[4] + buf[5] + buf[6] + buf[7])
 
-    imgfile = future.result()
+    imgfile = os.path.abspath(future.result())
     # rgb = list(map(lambda d: MMCQ(d, themes, file=imgfile, use='cv2').quantize(), [cv.imdecode(np.fromfile(
     #     imgfile, dtype=np.uint8), cv.COLOR_BGR2RGB)]))
     rgb = list(map(lambda d: MMCQ(d, themes, file=imgfile, use='PIL').quantize(), [PImage.open(imgfile).convert('RGB')]))
@@ -268,8 +268,7 @@ def domain(img):
             rerule = re.compile(r'/#.{6}/#.{6}/#.{6}/#.{6}/#.{6}/__')
         else:
             rerule = re.compile(r'\#.{6}\#.{6}\#.{6}\#.{6}\#.{6}\__')
-        rerule2 = re.compile(
-            r'SCMD-P.*')  # 和定义的命名规则有关
+        rerule2 = re.compile(r'SCMD-P.*')  # 和定义的命名规则有关
         redoma = 0
         for root, dirs, files in path:
             for f in files:
