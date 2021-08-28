@@ -69,7 +69,8 @@ ctypes.cdll.ucrtbase._tzset()
 
 def git_v_control():
     """
-    请确保命令行能够正确使用 Git 命令
+    请确保命令行能够正确使用 Git 命令。
+    应当注意，将 tool.setuptools_scm 动态写入的 version.py 从 Git 中移除
     """
     build_time = strftime('%Z %Y-%m-%d %H:%M:%S')
     args = shlex.split("git describe --tags")

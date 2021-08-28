@@ -64,3 +64,4 @@ Thumbs.db
 /build
 /src/MMCQsc/scp/lib/bin
 python-3_9_6-embed-win32/
+/src/MMCQsc/version.py
