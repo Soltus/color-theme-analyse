@@ -154,8 +154,10 @@ def procompress(files, root):
             ipl = ipl + 1
             new_file_path = r'%s%s_%s_%s%s' % (
                 os.path.join(SRC_DIR, 'prepare', 'img'), ipl, str(int(time.time()*10000)), os.path.splitext(f)[1])
-            new_file_path = os.path.abspath(new_file_path)
-            shutil.copy2(os.path.join(root, f), new_file_path)
+            newname = os.path.abspath(new_file_path)
+            oldname = os.path.join(root, f)
+            shutil.copy2(oldname, newname)
+            console.print(f'copy {oldname} to {newname}', justify='full', highlight=True)
             ss.append(new_file_path)
 
     with futures.ThreadPoolExecutor(max_workers=255) as pool:  # 多线程
