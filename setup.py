@@ -39,6 +39,7 @@ MANIFEST.in 需要放在和 setup.py 同级的顶级目录下，setuptools 会�
         1.2.1+fedora.4                # Package with downstream Fedora patches applied
 
 另请注意，使用 setuptools_scm 控制版本后，使用了本地版本标识符是无法上传到 PyPi 的，因此 local_scheme = "no-local-version" 在 pyproject.toml
+使用setuptools_scm方案，则版本号是在setup()函数中自动生成的。 主模块的__version__如果需要和它保持一致，就需要读取已安装的当前包的版本号。
 修改 Release 版本号需要使用 Git 打上版本号标签，在熟悉之前应当使用 x.x.x 形式的标签（例如 1.0.2 ）
 如果不熟悉 Git 命令行操作，可以使用软件 Sourcetree 直观的提交和打标签。如果没有标签，你生成的包将始终为 0.1.dev*
 建议的版本号规则：
@@ -46,12 +47,15 @@ MANIFEST.in 需要放在和 setup.py 同级的顶级目录下，setuptools 会�
 1、修复bug，小改动，增加z。
 2、增加新特性，可向后兼容，增加y
 3、有很大的改动，无法向下兼容,增加x
+当前 commit 就在标签上，代码没有修改： {tag}
+当前 commit 就在标签上，代码有修改： {tag}+dYYYMMMDD
+当前 commit 不在标签上，代码没有修改：{next_version}.dev{distance}+{scm letter}{revision hash}
+当前 commit 不在标签上，代码有修改： {next_version}.dev{distance}+{scm letter}{revision hash}.dYYYMMMDD
 '''
 
 import setuptools
 import shutil
 import os
-import re
 from time import strftime, sleep
 from subprocess import Popen,PIPE
 import shlex
@@ -64,6 +68,9 @@ ctypes.cdll.ucrtbase._tzset()
 
 
 def git_v_control():
+    """
+    请确保命令行能够正确使用 Git 命令
+    """
     build_time = strftime('%Z %Y-%m-%d %H:%M:%S')
     args = shlex.split("git describe --tags")
     result = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0, universal_newlines=True, stdout=PIPE)
