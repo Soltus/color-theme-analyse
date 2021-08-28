@@ -416,12 +416,12 @@ def domain(img):
                     json.dump(reportjson, js)
                     console.print(reportjson, justify='full', highlight=True)
                     for i in range(len(file_list)):
-                        file_list[i] = str(file_list[i]).replace(SRC_DIR, '')
-                    print('写入index.js')
+                        file_list[i] = str(file_list[i]).replace(SRC_DIR.replace('\\', '/') + '/', '')
+                    logger.debug('写入index.js')
                     with open(os.path.join(SRC_DIR, 'index.js'), 'w', encoding='utf-8') as mainjs:
                         mainjs.write(
                             'class ImgShow extends React.Component {\n render() {\n return (<div id="imgbox"><div className="imgshow1" >\n')
-                    print('注入index.js')
+                    logger.debug('注入index.js')
                     with open(os.path.join(SRC_DIR, 'index.js'), 'a', encoding='utf-8') as mainjs:
                         img1 = len(file_list) // 2
                         img2_w = False
