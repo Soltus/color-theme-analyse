@@ -264,7 +264,10 @@ def domain(img):
             shutil.rmtree(path)
         os.makedirs(path)
         path = os.walk(os.path.join(SRC_DIR, "prepare"))
-        rerule = re.compile(r'\#.{6}\#.{6}\#.{6}\#.{6}\#.{6}\__')
+        if os.name == 'posix':
+            rerule = re.compile(r'/#.{6}/#.{6}/#.{6}/#.{6}/#.{6}/__')
+        else:
+            rerule = re.compile(r'\#.{6}\#.{6}\#.{6}\#.{6}\#.{6}\__')
         rerule2 = re.compile(
             r'SCMD-P.*')  # 和定义的命名规则有关
         redoma = 0
@@ -327,8 +330,7 @@ def domain(img):
                 nowlist = len(os.listdir(
                     os.path.join(SRC_DIR, "finish")))
                 time.sleep(2)
-                while nowlist != len(os.listdir(
-                        os.path.join(SRC_DIR, "finish"))):
+                while nowlist != len(os.listdir(os.path.join(SRC_DIR, "finish"))):
                     continue
                 buf[1] = 0
                 break
@@ -336,8 +338,7 @@ def domain(img):
             path = os.walk(os.path.join(SRC_DIR, "compress"))
             for root, dirs, files in path:
                 for f in files:
-                    shutil.move(os.path.join(root, f), os.path.join(
-                        SRC_DIR, "finish", f))
+                    shutil.move(os.path.join(root, f), os.path.join(SRC_DIR, "finish", f))
 
             path = os.walk(os.path.join(SRC_DIR, "prepare"))
             for root, dirs, files in path:
@@ -345,8 +346,10 @@ def domain(img):
                     fname = os.path.splitext(os.path.basename(f))[0]
                     fnames = fname.split(DIR_SPLIT)
                     lastname = fnames[len(fnames) - 1]
-                    fname = fname.replace(
-                        lastname, re.sub(r'\__.*\__', '', lastname))  # 正则替换
+                    if os.name == 'posix':
+                        fname = fname.replace(lastname, re.sub(r'/__.*/__', '', lastname))  # 正则替换
+                    else:
+                        fname = fname.replace(lastname, re.sub(r'\__.*\__', '', lastname))  # 正则替换
 
                     curr_time = datetime.datetime.now()
                     with open(os.path.join(root, f), mode="rb") as bf:
@@ -408,20 +411,20 @@ def domain(img):
                                 if os.path.splitext(file)[1].lower() in ['.jpg', '.jpeg', '.png']:
                                     file = os.path.join(child, file)
                                     if os.path.basename(child) != 'temp':
-                                        file_list.append(
-                                            file.replace('\\', '/'))
+                                        file_list.append(file.replace('\\', '/'))
                         elif os.path.isfile(child):
                             if os.path.splitext(child)[1].lower() in ['.jpg', '.jpeg', '.png']:
                                 file_list.append(child.replace('\\', '/'))
                     reportjson['origin_list'] = origin_list
                     json.dump(reportjson, js)
-                    console.print(reportjson, justify='full',
-                                  highlight=True)
+                    console.print(reportjson, justify='full', highlight=True)
                     for i in range(len(file_list)):
                         file_list[i] = str(file_list[i]).replace(SRC_DIR, '')
+                    print('写入index.js')
                     with open(os.path.join(SRC_DIR, 'index.js'), 'w', encoding='utf-8') as mainjs:
                         mainjs.write(
                             'class ImgShow extends React.Component {\n render() {\n return (<div id="imgbox"><div className="imgshow1" >\n')
+                    print('注入index.js')
                     with open(os.path.join(SRC_DIR, 'index.js'), 'a', encoding='utf-8') as mainjs:
                         img1 = len(file_list) // 2
                         img2_w = False
@@ -454,8 +457,7 @@ def domain(img):
                                         r'<img className="img wow fadeIn" data-wow-delay="0.2s" data-wow-duration="0.5s" data-wow-offset="20" src={"' + name + r'"} />' + '\n')
                                 else:
                                     if img2_w == False:
-                                        mainjs.writelines(
-                                            '</div>\n<div className='"'imgshow2'"'>\n')
+                                        mainjs.writelines('</div>\n<div className='"'imgshow2'"'>\n')
                                         img2_w = True
                                     mainjs.writelines(
                                         r'<div className="colorbox wow fadeIn" data-wow-delay="0.2s" data-wow-duration="0.5s" data-wow-offset="20">')
