@@ -13,7 +13,7 @@
 # ---------------------------------
 # Need help ?  => 694357845@qq.com
 # ---------------------------------
-#  作者很懒，还没想好说些什么
+#  导入应当使用 from logger import * 而不是 import logger
 # ---------------------------------
 '''
 
@@ -57,7 +57,8 @@ class ColoredFormatter(logging.Formatter):
 
 
 LOGFORMAT = " >>> %(filename)s:%(lineno)d [ %(levelname)s ]\t%(asctime)s    %(message)s\t%(name)s"
-LOG_LEVEL = logging.DEBUG
+LOG_LEVEL = logging.INFO
+# 通过logger.setLevel()设置logger的级别，分别为DEBUG、INFO、WARNING、ERROR、CRITICAL
 formatter = ColoredFormatter(LOGFORMAT)
 stream = logging.StreamHandler()
 stream.setLevel(LOG_LEVEL)
