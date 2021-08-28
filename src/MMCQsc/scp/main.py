@@ -86,7 +86,6 @@ def createServer():
 
 def openhtml():
     global myip
-    time.sleep(2)
     if os.name == "posix":
        logger.info(f'\n\n\n\t\t浏览器访问：\n\n\t\t{myip}:{__PORT}\n\n')
     else:
@@ -127,6 +126,7 @@ def mainFunc():
                 if buf[2] == 1 and result == 6:
                     with futures.ProcessPoolExecutor(max_workers=None) as prolist:
                         prolist.submit(createServer)
+                        time.sleep(2)
                         prolist.submit(openhtml)  # 多进程才能打开
             else:
                 logger.error("无输入或无效输入")
@@ -157,8 +157,8 @@ def mainFunc():
 
 
 if __name__ == '__main__':
-    import multiprocessing as mp
-    mp.get_context('spawn')
+    # import multiprocessing as mp
+    # mp.get_context('spawn')
     try:
         result = mainFunc()
     except BaseException as e:
