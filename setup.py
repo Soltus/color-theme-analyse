@@ -227,4 +227,4 @@ setuptools.setup(
 
 
 print('看上去一切顺利，如果构建结果未能正确反映项目结构，尝试删除 .eggs 和 build 文件夹然后重试')
-
+print(SETUPTOOLS_SCM_DEBUG)
