@@ -55,7 +55,7 @@ MANIFEST.in 需要放在和 setup.py 同级的顶级目录下，setuptools 会�
 
 import setuptools
 import shutil
-import os
+import os,sys
 from time import strftime, sleep
 from subprocess import Popen,PIPE
 import shlex
@@ -63,8 +63,11 @@ import ctypes, locale
 locale.setlocale(locale.LC_ALL, '')
 ctypes.cdll.ucrtbase._tzset()
 # 调整为中国时间
-
-
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "src"))
+if BASE_DIR not in sys.path:
+    sys.path.append(BASE_DIR)
+import MMCQsc
+MY_V = MMCQsc.version
 def git_v_control(v_n):
     """
     请确保命令行能够正确使用 Git 命令。
@@ -91,7 +94,10 @@ result = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, en
 vstr = result.stdout.read()
 result.wait()
 vlist = vstr.split('-')[0].split('.')
-v_n = (int(vlist[0]), int(vlist[1]), int(vlist[2]) + 2)
+if vstr.split('-')[0] == MY_V:
+    v_n = (int(vlist[0]), int(vlist[1]), int(vlist[2]) + 1)
+else:
+    v_n = (int(vlist[0]), int(vlist[1]), int(vlist[2]) + 2)
 it =  os.open("src/MMCQsc/__init__.py",os.O_RDWR|os.O_CREAT)
 '''
 os.lseek(fd, pos, how)
