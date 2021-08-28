@@ -7,7 +7,8 @@ requires = [
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools_scm]
-local_scheme = "clean_scheme"
+local_scheme = "no-local-version"
+version_scheme = "python-simplified-semver"
 write_to = "src/MMCQsc/version.py"
 write_to_template = '''
 __version__ = "{version}"
