@@ -59,6 +59,10 @@ import binascii
 import re
 from hashlib import md5
 
+FINISH = os.path.join(SRC_DIR, "finish")
+PREPARE = os.path.join(SRC_DIR, "prepare")
+COMPRESS = os.path.join(SRC_DIR, "compress")
+REPORTS = os.path.join(SRC_DIR, "reports")
 if os.name == 'posix':
     CLS = 'clear'
     DIR_SPLIT = '/'
@@ -153,7 +157,7 @@ def procompress(files, root):
         if os.path.splitext(f)[1].lower() in ['.jpg', 'jpeg', '.png']:
             ipl = ipl + 1
             new_file_path = r'%s%s_%s_%s%s' % (
-                os.path.join(SRC_DIR, 'prepare', 'img'), ipl, str(int(time.time()*10000)), os.path.splitext(f)[1])
+                os.path.join(PREPARE, 'img'), ipl, str(int(time.time()*10000)), os.path.splitext(f)[1])
             newname = os.path.abspath(new_file_path)
             oldname = os.path.join(root, f)
             shutil.copy2(oldname, newname)
@@ -173,8 +177,7 @@ def compressImage(srcPath):
         try:
             # 打开原图片缩小后保存，可以用if srcFile.endswith(".jpg")或者split，splitext等函数等针对特定文件压缩
             filename = os.path.basename(srcPath)
-            dstFile = os.path.join(os.path.join(
-                SRC_DIR, "compress"), filename)
+            dstFile = os.path.join(COMPRESS, filename)
             sImg = PImage.open(srcPath)
             dImg = sImg.convert('RGB')
             w, h = sImg.size
@@ -254,29 +257,29 @@ def domain(img):
         totaltime = time.time()
 
         # 遍历删除图片
-        path = os.path.join(SRC_DIR, "finish")
+        path = FINISH
         console.print(f'checking {path}', justify='full', highlight=True)
         if os.path.exists(path):
             shutil.rmtree(path)
         os.mkdir(path)
-        path = os.path.join(SRC_DIR, "compress")
+        path = COMPRESS
         console.print(f'checking {path}', justify='full', highlight=True)
         if os.path.exists(path):
             shutil.rmtree(path)
         os.mkdir(path)
-        if os.path.exists(os.path.join(SRC_DIR, "reports")) == False:
-            os.makedirs(os.path.join(SRC_DIR, "reports"))
-        path = os.path.join(SRC_DIR, "prepare", "temp")
+        if os.path.exists(REPORTS) == False:
+            os.makedirs(REPORTS)
+        path = os.path.join(PREPARE, "temp")
         temp = path
         console.print(f'checking {path}', justify='full', highlight=True)
         if os.path.exists(path):
             shutil.rmtree(path)
         os.makedirs(path)
-        path = os.walk(os.path.join(SRC_DIR, "prepare"))
+        path = os.walk(PREPARE)
         rerule = re.compile(r'\#.{6}\#.{6}\#.{6}\#.{6}\#.{6}\__')
         rerule2 = re.compile(r'SCMD-P.*')  # 和定义的命名规则有关
         redoma = 0
-        console.print(f'checking {path}', justify='full', highlight=True)
+        console.print(f'waiting {path}', justify='full', highlight=True)
         for root, dirs, files in path:
             for f in files:
                 if rerule.search(f) or rerule2.search(f):
@@ -306,7 +309,7 @@ def domain(img):
             ptv = 0
             origin_list = []
             path = os.walk(img)
-            print(img)
+            console.print(f'checking {img}', justify='full', highlight=True)
             for root, dirs, files in path:
                 for f in files:
                     if os.path.splitext(f)[1].lower() in ['.jpg', '.jpeg', '.png']:
@@ -326,6 +329,7 @@ def domain(img):
                 ffs = []
                 roots = []
                 path = os.walk(img)
+                console.print(f'waiting {path}', justify='full', highlight=True)
                 for root, dirs, files in path:
                     ffs.append(files)
                     roots.append(root)
@@ -333,20 +337,20 @@ def domain(img):
                 prolist.map(procompress, ffs, roots)
 
             while True:  # 定时检测文件夹文件数量
-                nowlist = len(os.listdir(
-                    os.path.join(SRC_DIR, "finish")))
+                nowlist = len(os.listdir(FINISH))
                 time.sleep(2)
-                while nowlist != len(os.listdir(os.path.join(SRC_DIR, "finish"))):
+                console.print(f'watching {FINISH}', justify='full', highlight=True)
+                while nowlist != len(os.listdir(FINISH)):
                     continue
                 buf[1] = 0
                 break
 
-            path = os.walk(os.path.join(SRC_DIR, "compress"))
+            path = os.walk(COMPRESS)
             for root, dirs, files in path:
                 for f in files:
-                    shutil.move(os.path.join(root, f), os.path.join(SRC_DIR, "finish", f))
+                    shutil.move(os.path.join(root, f), os.path.join(FINISH, f))
 
-            path = os.walk(os.path.join(SRC_DIR, "prepare"))
+            path = os.walk(PREPARE)
             for root, dirs, files in path:
                 for f in files:
                     fname = os.path.splitext(os.path.basename(f))[0]
@@ -406,8 +410,7 @@ def domain(img):
                 in_path_url = parse.quote(img, safe=";/?:@&=+$,")
                 reportjson = {'date': curr_time.strftime(
                     "%Y-%m-%d"), 'time': curr_time.strftime("%H:%M:%S"), 'in_path_url': in_path_url, 'in_files': ptv, 'cost_times': cost_times}
-                reportfile = os.path.join(
-                    SRC_DIR, 'reports', curr_time.strftime("%Y%m%d-%H%M%S_")) + 'report.json'
+                reportfile = os.path.join(REPORTS, curr_time.strftime("%Y%m%d-%H%M%S_")) + 'report.json'
                 with open(reportfile, 'w') as js:
                     def scantree(path) -> list:
                         file_list = []
@@ -425,7 +428,7 @@ def domain(img):
                         except Exception as e:
                             console.print(e, justify='full', highlight=True)
                             return []
-                    file_list = scantree(os.path.join(SRC_DIR, 'prepare'))
+                    file_list = scantree(PREPARE)
                     # for dir in os.listdir(os.path.join(SRC_DIR, 'prepare')):
                     #     child = os.path.join(SRC_DIR, 'prepare', dir)
                     #     logger.debug(child)
