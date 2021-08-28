@@ -93,13 +93,10 @@ def git_v_control():
     os.write(it, fstr.encode('utf8'))
     print('注册版本号完成\n')
 
-    args = shlex.split(f"git checkout embed")
+    args = shlex.split(f"git tag {v_n[0]}.{v_n[1]}.{v_n[2]}")
     repo = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0, universal_newlines=True, stdout=PIPE)
     repo.wait()
     args = shlex.split(f"git commit -a -m 'setup.py auto commit'")
-    repo = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0, universal_newlines=True, stdout=PIPE)
-    repo.wait()
-    args = shlex.split(f"git tag {v_n[0]}.{v_n[1]}.{v_n[2]}")
     repo = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0, universal_newlines=True, stdout=PIPE)
     repo.wait()
 
