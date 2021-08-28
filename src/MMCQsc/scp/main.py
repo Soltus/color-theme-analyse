@@ -48,6 +48,7 @@ import struct
 from random import randint
 
 __PORT = randint(5800,5858)
+myip = 'localhost'
 
 def get_host_ip():
     """
@@ -65,11 +66,11 @@ def get_host_ip():
 
 
 def createServer():
+    global myip
     if os.name != 'posix':
         myip = get_host_ip()
         netlocal = '（支持局域网访问）'
     else:
-        myip = 'localhost'
         netlocal = ''
     logger.info(SRC_DIR)
     args = shlex.split(f"pyhton -m http.server {__PORT}")
@@ -84,7 +85,7 @@ def createServer():
     result.wait()
 
 def openhtml():
-    myip = get_host_ip()
+    global myip
     time.sleep(2)
     if os.name == "posix":
        logger.info(f'\n\n\n\t\t浏览器访问：\n\n\t\t{myip}:{__PORT}\n\n')

@@ -158,7 +158,7 @@ def procompress(files, root):
             shutil.copy2(os.path.join(root, f), new_file_path)
             ss.append(new_file_path)
 
-    with futures.ThreadPoolExecutor(max_workers=None) as pool:  # 多线程
+    with futures.ThreadPoolExecutor(max_workers=255) as pool:  # 多线程
         for si in ss:
             results = pool.submit(compressImage, si)
             results.add_done_callback(testMMCQ)  # 回调函数
