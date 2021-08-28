@@ -76,6 +76,9 @@ def fun_version(v1,v2):
 
 file_path = sys.argv[0]
 def check_conda():
+    """
+    检测 Conda 环境并返回值
+    """
     if "\\envs\\" in sys.executable:
         conda_exec = os.path.abspath(os.path.join(os.path.dirname(sys.executable), "../..", "Script", "conda.exe"))
         conda_env = sys.executable.split("\\")[-2]
@@ -90,6 +93,9 @@ import shlex
 import types
 
 def get_dpkg(name):
+    """
+    获取动态包
+    """
     try:
         PKG_D = DPKG_DIR
         # python = sys.executable.replace(check_conda()[1],pick_env)
@@ -121,6 +127,9 @@ def get_dpkg(name):
             exit()
 
 def run_in_env(env):
+    """
+    提供交互式环境解决方案
+    """
     PY3_VNO = ''
     for i in sys.version_info[:3]:
         PY3_VNO += str(i)

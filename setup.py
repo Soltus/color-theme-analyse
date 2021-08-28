@@ -72,6 +72,9 @@ def git_v_control():
     请确保命令行能够正确使用 Git 命令
     """
     build_time = strftime('%Z %Y-%m-%d %H:%M:%S')
+    args = shlex.split(f"git commit -a -m 'setup.py auto commit'")
+    repo = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0, universal_newlines=True, stdout=PIPE)
+    repo.wait()
     args = shlex.split("git describe --tags")
     result = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0, universal_newlines=True, stdout=PIPE)
     # 如果 stdout 参数是 PIPE，此属性是一个类似 open() 返回的可读流。从流中读取子进程提供的输出。

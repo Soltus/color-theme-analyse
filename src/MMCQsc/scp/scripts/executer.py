@@ -145,6 +145,9 @@ console = Console(color_system='auto', style=None)
 
 
 def procompress(files, root):
+    """
+    分发压缩图片任务
+    """
     try:
         testshm = shared_memory.SharedMemory(name='main_run_share')
         buf = testshm.buf
@@ -175,6 +178,9 @@ def procompress(files, root):
 
 
 def compressImage(srcPath):
+    """
+    执行压缩图片命令
+    """
     # 如果是文件就处理
     if os.path.isfile(srcPath):
         try:
@@ -214,6 +220,9 @@ def compressImage(srcPath):
 
 
 def testMMCQ(future):
+    """
+    调用MMCQ获取颜色主题
+    """
     try:
         testshm = shared_memory.SharedMemory(name='main_run_share')
         buf = testshm.buf
@@ -254,6 +263,9 @@ def testMMCQ(future):
 
 
 def domain(img) -> int:
+    """
+    主函数，递归路径获取所有图片的颜色主题
+    """
     testshm = shared_memory.SharedMemory(name='main_run_share')
     buf = testshm.buf
     with progress:
