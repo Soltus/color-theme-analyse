@@ -71,7 +71,7 @@ class GVC(distutils.cmd.Command):
   description = '适用于修复 bug 的频繁版本迭代'
   user_options = [
       # The format is (long option, short option, description).
-      ('version=', 'v=', 'path to Pylint config file'),
+      ('version=', 'v=', 'define build version'),
   ]
 
   def initialize_options(self):
@@ -189,7 +189,7 @@ print('开始执行，若长时间无响应，请检查是否有误\n')
 setuptools.setup(
     name="color-theme-analyse", # 在 PyPI 上搜索的项目名称
     cmdclass={
-        'pylint': GVC,
+        'GVC': GVC,
         'build_py': BuildPyCommand,
     },
     # setup_requires=['setuptools_scm'], # 指定运行 setup.py 文件本身所依赖的包
