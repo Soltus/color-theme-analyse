@@ -98,7 +98,7 @@ class GVC(distutils.cmd.Command):
 
     def finalize_options(self):
         """接收到命令行传过来的值之后的处理， 也可以什么都不干."""
-        pass
+        self.default_nv()
 
     def run(self):
         """命令运行时的操作."""
@@ -106,11 +106,11 @@ class GVC(distutils.cmd.Command):
         print("======= command is running =======")
         self.default_nv()
         if CLEAN_TAG == True:
-            send_version = '0.0.0'
+            args = ['gitup.py','--version',self.version,'--workdir',os.getcwd(),'--no-commit']
         else:
-            send_version = self.version
+            print('no-commit')
+            args = ['gitup.py','--version',self.version,'--workdir',os.getcwd(),'--commit']
         command = [f'{sys.executable}']
-        args = ['gitup.py','--version',send_version,'--workdir',os.getcwd(),'--commit']
         if self.version:
             for i in args:
                 command.append(i)
@@ -127,7 +127,7 @@ class GVC(distutils.cmd.Command):
         result.wait()
         vlist = vstr.split('-')[0].split('.')
         if vstr.split('-')[0] == MY_V:
-            v_n = (int(vlist[0]), int(vlist[1]), int(vlist[2]))
+            v_n = (int(vlist[0]), int(vlist[1]), int(vlist[2]) + 1)
             self.version = f'{v_n[0]}.{v_n[1]}.{v_n[2]}'
             global CLEAN_TAG
             CLEAN_TAG = True
@@ -153,7 +153,6 @@ class BuildPyCommand(setuptools.command.build_py.build_py):
     """python setup.py build_py."""
 
     def run(self):
-        self.run_command('GVC')
         self.run_command('GVC')
         setuptools.command.build_py.build_py.run(self)
 

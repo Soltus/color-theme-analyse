@@ -18,12 +18,11 @@ def git_v_tag(v,c,cwd):
     请确保命令行能够正确使用 Git 命令。
     应当注意，将构建时动态写入的文件从 Git 中移除
     """
-    if c == '0.0.0':
-        return 0
-    args = shlex.split(f"git add .")
-    repo = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0, universal_newlines=True, stdout=PIPE, cwd=cwd)
-    repo.wait()
-    # 工作区 -> 暂存区
+    if c:
+        args = shlex.split(f"git add .")
+        repo = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0, universal_newlines=True, stdout=PIPE, cwd=cwd)
+        repo.wait()
+        # 工作区 -> 暂存区
     if c:
         args = shlex.split(f"git commit -a -m 'setup.py auto commit'")
         repo = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0, universal_newlines=True, stdout=PIPE, cwd=cwd)
