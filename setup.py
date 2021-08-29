@@ -302,7 +302,7 @@ if IN_GVC == False:
     while True:
         sleep(1)
         j += 1
-        if j >= 6:
+        if j >= 3:
             break
         if os.path.exists(DIST_DIR):
             args = shlex.split(f"start dist") # 打开 dist 文件夹
