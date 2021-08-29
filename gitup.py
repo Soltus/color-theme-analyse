@@ -22,5 +22,5 @@ parser.add_argument('--workdir',default=None, action=Cgitup, help='工作区')
 parser.add_argument('--mode',choices=['r','w'],required=False)
 # gitup = gitupC()
 
-args = parser.parse_args(args=sys.argv)
+args = parser.parse_args()
 print(args.version)
