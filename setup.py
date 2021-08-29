@@ -71,20 +71,10 @@ build_time = strftime('%Z %Y-%m-%d %H:%M:%S')
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "src"))
 if BASE_DIR not in sys.path:
     sys.path.append(BASE_DIR)
-import MMCQsc
-MY_V = MMCQsc.version
+from MMCQsc import version as MY_V
 
-args = shlex.split("git describe --tags")
-result = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0, universal_newlines=True, stdout=PIPE)
-# 如果 stdout 参数是 PIPE，此属性是一个类似 open() 返回的可读流。从流中读取子进程提供的输出。
-# 如果 encoding 或 errors 参数被指定或者 universal_newlines 参数为 True，此流为文本流，否则为字节流。如果 stdout 参数非 PIPE，此属性为 None。
-vstr = result.stdout.read()
-result.wait()
-vlist = vstr.split('-')[0].split('.')
-if vstr.split('-')[0] == MY_V:
-    v_n = (int(vlist[0]), int(vlist[1]), int(vlist[2]) + 1)
-else:
-    v_n = (int(vlist[0]), int(vlist[1]), int(vlist[2]) + 2)
+
+
 
 class GVC(distutils.cmd.Command):
     """适用于修复 bug 的频繁版本迭代."""
@@ -96,23 +86,34 @@ class GVC(distutils.cmd.Command):
         # 需要值的选项，长名字后面有等号，最后的值会传给`self.<长名字>`（-会用_代替），使用形式 --version=1.1.1 或者 -v 1.1.1
         ('version=', 'v', 'define build version'),
         ('commit','c','git commit')
-
   ]
 
     def initialize_options(self):
         """设置选项的默认值, 每个选项都要有初始值，否则报错."""
         # Each user option must be listed here with their default value.
-        self.version = f'{v_n[0]}.{v_n[1]}.{v_n[2]}'
+        self.version = MY_V
         self.commit = False
 
     def finalize_options(self):
         """接收到命令行传过来的值之后的处理， 也可以什么都不干."""
         if self.version:
-            assert self.version, ('Version %s does not define.' % self.version)
+            assert len(self.version.split('.')) <= 3, (f'非法版本号 {self.version}')
+        else:
+            v_n = self.default_nv()
+            self.version = f'{v_n[0]}.{v_n[1]}.{v_n[2]}'
 
     def run(self):
         """命令运行时的操作."""
         print("======= command is running =======")
+        it =  os.open("src/MMCQsc/__init__.py",os.O_RDWR|os.O_CREAT)
+        '''
+        os.lseek(fd, pos, how)
+        将文件描述符 fd 的当前位置设置为 pos，位置的计算方式 how 如下：设置为 SEEK_SET 或 0 表示从文件开头计算，设置为 SEEK_CUR 或 1 表示从文件当前位置计算，设置为 SEEK_END 或 2 表示文件尾计算。返回新指针位置，这个位置是从文件开头计算的，单位是字节。'''
+        os.lseek(it,0,2) # 移动至文件末尾
+        os.lseek(it,-6,1) # 往回移动
+        fstr = f"{build_time}  ->  {self.version}\n\n'''"
+        os.write(it, fstr.encode('utf8'))
+        print('注册版本号完成\n')
         command = [f'{sys.executable}']
         args = ['gitup.py','--version',self.version,'--workdir',os.getcwd()]
         if self.version:
@@ -120,6 +121,25 @@ class GVC(distutils.cmd.Command):
                 command.append(i)
             self.announce('Running command: %s' % str(command),level=distutils.log.INFO)
             check_call(command)
+        sys.exit(0)
+
+    def default_nv(self) -> tuple:
+        args = shlex.split("git describe --tags")
+        result = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0, universal_newlines=True, stdout=PIPE)
+        # 如果 stdout 参数是 PIPE，此属性是一个类似 open() 返回的可读流。从流中读取子进程提供的输出。
+        # 如果 encoding 或 errors 参数被指定或者 universal_newlines 参数为 True，此流为文本流，否则为字节流。如果 stdout 参数非 PIPE，此属性为 None。
+        vstr = result.stdout.read()
+        print(f'latest version: {vstr}')
+        result.wait()
+        vlist = vstr.split('-')[0].split('.')
+        if vstr.split('-')[0] == MY_V:
+            v_n = (int(vlist[0]), int(vlist[1]), int(vlist[2]) + 1)
+        else:
+            v_n = (int(vlist[0]), int(vlist[1]), int(vlist[2]) + 2)
+        return v_n
+
+    def Version(self) -> str:
+        return self.version
 
 import setuptools.command.build_py
 class BuildPyCommand(setuptools.command.build_py.build_py):
@@ -131,37 +151,37 @@ class BuildPyCommand(setuptools.command.build_py.build_py):
 
 
 
-def git_v_control(v_n):
-    """
-    请确保命令行能够正确使用 Git 命令。
-    应当注意，将构建时动态写入的文件从 Git 中移除
-    """
-    args = shlex.split(f"git add .")
-    repo = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0, universal_newlines=True, stdout=PIPE)
-    repo.wait()
-    # 工作区 -> 暂存区
-    args = shlex.split(f"git commit -a -m 'setup.py auto commit'")
-    repo = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0, universal_newlines=True, stdout=PIPE)
-    repo.wait()
-    # 打标签应当在提交之后，生成干净的无本地标识符的包
-    args = shlex.split(f"git tag {v_n[0]}.{v_n[1]}.{v_n[2]}")
-    repo = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0, universal_newlines=True, stdout=PIPE)
-    repo.wait()
+# def git_v_control(v_n):
+#     """
+#     请确保命令行能够正确使用 Git 命令。
+#     应当注意，将构建时动态写入的文件从 Git 中移除
+#     """
+#     args = shlex.split(f"git add .")
+#     repo = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0, universal_newlines=True, stdout=PIPE)
+#     repo.wait()
+#     # 工作区 -> 暂存区
+#     args = shlex.split(f"git commit -a -m 'setup.py auto commit'")
+#     repo = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0, universal_newlines=True, stdout=PIPE)
+#     repo.wait()
+#     # 打标签应当在提交之后，生成干净的无本地标识符的包
+#     args = shlex.split(f"git tag {v_n[0]}.{v_n[1]}.{v_n[2]}")
+#     repo = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0, universal_newlines=True, stdout=PIPE)
+#     repo.wait()
 
 
-it =  os.open("src/MMCQsc/__init__.py",os.O_RDWR|os.O_CREAT)
-'''
-os.lseek(fd, pos, how)
-将文件描述符 fd 的当前位置设置为 pos，位置的计算方式 how 如下：设置为 SEEK_SET 或 0 表示从文件开头计算，设置为 SEEK_CUR 或 1 表示从文件当前位置计算，设置为 SEEK_END 或 2 表示文件尾计算。返回新指针位置，这个位置是从文件开头计算的，单位是字节。'''
-os.lseek(it,0,2) # 移动至文件末尾
-os.lseek(it,-6,1) # 往回移动
-fstr = f"{build_time}  ->  {v_n}\n\n'''"
-os.write(it, fstr.encode('utf8'))
+# it =  os.open("src/MMCQsc/__init__.py",os.O_RDWR|os.O_CREAT)
+# '''
+# os.lseek(fd, pos, how)
+# 将文件描述符 fd 的当前位置设置为 pos，位置的计算方式 how 如下：设置为 SEEK_SET 或 0 表示从文件开头计算，设置为 SEEK_CUR 或 1 表示从文件当前位置计算，设置为 SEEK_END 或 2 表示文件尾计算。返回新指针位置，这个位置是从文件开头计算的，单位是字节。'''
+# os.lseek(it,0,2) # 移动至文件末尾
+# os.lseek(it,-6,1) # 往回移动
+# fstr = f"{build_time}  ->  {v_n}\n\n'''"
+# os.write(it, fstr.encode('utf8'))
 
-''' 没有配置好 Git 请勿执行 git_v_control() '''
-git_v_control(v_n)
+# ''' 没有配置好 Git 请勿执行 git_v_control() '''
+# git_v_control(v_n)
 
-print('注册版本号完成\n')
+
 
 _i = 0
 while True:
@@ -202,7 +222,7 @@ setuptools.setup(
     },
     # setup_requires=['setuptools_scm'], # 指定运行 setup.py 文件本身所依赖的包
     # use_scm_version=True, # .gitignore 应与 setup.py 在同一文件夹 更多信息参考 https://pypi.org/project/setuptools-scm/
-    version=f"{v_n[0]}.{v_n[1]}.{v_n[2]}", # 默认的手动指定版本
+    version=GVC.Version, # 默认的手动指定版本
     author="Soltus",
     author_email="694357845@qq.com",
     description="SCSD-PY001 info: This is a simple demo of pictures color theme batch analysis use MMCQ with Python",
