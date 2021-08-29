@@ -21,5 +21,5 @@ parser.add_argument('--commit',default= False, action=argparse.BooleanOptionalAc
 parser.add_argument('--workdir',default=None, action=Cgitup, help='工作区')
 parser.add_argument('--mode',choices=['r','w'],required=False)
 # gitup = gitupC()
-# args = parser.parse_args(args=sys.argv,namespace=Cgitup)
+args = parser.parse_args(args=sys.argv)
 # print(args.version)
