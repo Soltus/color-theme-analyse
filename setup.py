@@ -305,4 +305,5 @@ setuptools.setup(
 
 
 print('看上去一切顺利，如果构建结果未能正确反映项目结构，尝试删除 .eggs 和 build 文件夹然后重试')
-
+args = shlex.split(f"start dist") # 打开 dist 文件夹
+Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0, universal_newlines=True, stdout=PIPE)
