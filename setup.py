@@ -65,45 +65,7 @@ locale.setlocale(locale.LC_ALL, '')
 ctypes.cdll.ucrtbase._tzset()
 # 调整为中国时间
 
-class GVC(distutils.cmd.Command):
-  """适用于修复 bug 的频繁版本迭代."""
-
-  description = '适用于修复 bug 的频繁版本迭代'
-  user_options = [
-      # The format is (long option, short option, description).
-      ('version=', 'v=', 'define build version'),
-  ]
-
-  def initialize_options(self):
-    """Set default values for options."""
-    # Each user option must be listed here with their default value.
-    self.pylint_rcfile = ''
-
-  def finalize_options(self):
-    """Post-process options."""
-    if self.pylint_rcfile:
-      assert os.path.exists(self.pylint_rcfile), (
-          'Pylint config file %s does not exist.' % self.pylint_rcfile)
-
-  def run(self):
-    """Run command."""
-    command = ['/usr/bin/pylint']
-    if self.pylint_rcfile:
-      command.append('--rcfile=%s' % self.pylint_rcfile)
-    command.append(os.getcwd())
-    self.announce(
-        'Running command: %s' % str(command),
-        level=distutils.log.INFO)
-    check_call(command)
-
-import setuptools.command.build_py
-class BuildPyCommand(setuptools.command.build_py.build_py):
-  """python setup.py build_py."""
-
-  def run(self):
-    self.run_command('GVC')
-    setuptools.command.build_py.build_py.run(self)
-
+build_time = strftime('%Z %Y-%m-%d %H:%M:%S')
 
 
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "src"))
@@ -111,6 +73,64 @@ if BASE_DIR not in sys.path:
     sys.path.append(BASE_DIR)
 import MMCQsc
 MY_V = MMCQsc.version
+
+args = shlex.split("git describe --tags")
+result = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0, universal_newlines=True, stdout=PIPE)
+# 如果 stdout 参数是 PIPE，此属性是一个类似 open() 返回的可读流。从流中读取子进程提供的输出。
+# 如果 encoding 或 errors 参数被指定或者 universal_newlines 参数为 True，此流为文本流，否则为字节流。如果 stdout 参数非 PIPE，此属性为 None。
+vstr = result.stdout.read()
+result.wait()
+vlist = vstr.split('-')[0].split('.')
+if vstr.split('-')[0] == MY_V:
+    v_n = (int(vlist[0]), int(vlist[1]), int(vlist[2]) + 1)
+else:
+    v_n = (int(vlist[0]), int(vlist[1]), int(vlist[2]) + 2)
+
+class GVC(distutils.cmd.Command):
+    """适用于修复 bug 的频繁版本迭代."""
+    # 命令的描述，会出现在`python setup.py --help`里
+    description = '适用于修复 bug 的频繁版本迭代'
+    user_options = [
+        # 格式是`(长名字，短名字，描述)`，描述同样会出现在doc里
+        # binary选项，长名字后面没有等号，最后的值会传给`self.<长名字>`，使用形式 --commit 或者 -c (使用了为 True，默认应为 False)
+        # 需要值的选项，长名字后面有等号，最后的值会传给`self.<长名字>`（-会用_代替），使用形式 --version=1.1.1 或者 -v 1.1.1
+        ('version=', 'v', 'define build version'),
+        ('commit','c','git commit')
+
+  ]
+
+    def initialize_options(self):
+        """设置选项的默认值, 每个选项都要有初始值，否则报错."""
+        # Each user option must be listed here with their default value.
+        self.version = f'{v_n[0]}.{v_n[1]}.{v_n[2]}'
+        self.commit = False
+
+    def finalize_options(self):
+        """接收到命令行传过来的值之后的处理， 也可以什么都不干."""
+        if self.version:
+            assert os.path.exists(self.version), (
+          'Pylint config file %s does not exist.' % self.version)
+
+    def run(self):
+        """命令运行时的操作."""
+        print("======= command is running =======")
+        command = ['python.exe']
+        if self.version:
+            command.append('--rcfile=%s' % self.version)
+            command.append(os.getcwd())
+            self.announce('Running command: %s' % str(command),level=distutils.log.INFO)
+            check_call(command)
+
+import setuptools.command.build_py
+class BuildPyCommand(setuptools.command.build_py.build_py):
+    """python setup.py build_py."""
+
+    def run(self):
+        self.run_command('GVC')
+        setuptools.command.build_py.build_py.run(self)
+
+
+
 def git_v_control(v_n):
     """
     请确保命令行能够正确使用 Git 命令。
@@ -129,18 +149,6 @@ def git_v_control(v_n):
     repo.wait()
 
 
-build_time = strftime('%Z %Y-%m-%d %H:%M:%S')
-args = shlex.split("git describe --tags")
-result = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0, universal_newlines=True, stdout=PIPE)
-# 如果 stdout 参数是 PIPE，此属性是一个类似 open() 返回的可读流。从流中读取子进程提供的输出。
-# 如果 encoding 或 errors 参数被指定或者 universal_newlines 参数为 True，此流为文本流，否则为字节流。如果 stdout 参数非 PIPE，此属性为 None。
-vstr = result.stdout.read()
-result.wait()
-vlist = vstr.split('-')[0].split('.')
-if vstr.split('-')[0] == MY_V:
-    v_n = (int(vlist[0]), int(vlist[1]), int(vlist[2]) + 1)
-else:
-    v_n = (int(vlist[0]), int(vlist[1]), int(vlist[2]) + 2)
 it =  os.open("src/MMCQsc/__init__.py",os.O_RDWR|os.O_CREAT)
 '''
 os.lseek(fd, pos, how)
