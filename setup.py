@@ -117,7 +117,7 @@ if dddd:
     sys.exit()
 
 from MMCQsc.version import version as my_v
-
+print(my_v)
 MY_V = my_v.split('.')
 CLEAN_TAG = False
 IN_GVC = False
@@ -158,7 +158,7 @@ class GVC(distutils.cmd.Command):
     def run(self):
         """命令运行时的操作."""
         global CLEAN_TAG
-        self.default_nv()
+        self.version = self.default_nv()
         print("======= command is running =======")
         _i = 0
         while True:
