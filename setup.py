@@ -169,7 +169,7 @@ class GVC(distutils.cmd.Command):
                     print(f'第 {_i} 次重试')
                     sleep(1)
                 if os.path.exists(DIST_DIR):
-                    shutil.rmtree(DIST_DIR)
+                    shutil.rmtree(DIST_DIR,ignore_errors=False)
                 break
             except OSError as e:
                 print(e)
