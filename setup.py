@@ -81,10 +81,11 @@ DIST_DIR = os.path.abspath('./dist')
 
 class GVC(distutils.cmd.Command):
     """适用于构建时修改内容的频繁版本迭代，允许自动完成一些操作，这在修复 bug 时期特别实用.
-    生成干净的可自动迭代的 dev 版本， 例如 color_theme_analyse-1.2.721.dev4-py3-none-any
+    生成干净的可自动迭代的 releas/dev 版本， 例如 color_theme_analyse-1.2.721.dev4-py3-none-any
     使用方法 python setup.py GVC，要求正确配置 Git 环境
     如果 PyPi 的账号密码的配置文件正确存在，可以使用以下括号内的命令一键构建并上传（以 testPyPi 为例）：
-    [python setup.py GVC;python setup.py bdist_wheel;twine upload dist/* --verbose --repository testpypi] """
+    [python setup.py GVC;python setup.py bdist_wheel;twine upload dist/* --verbose --repository testpypi]
+    频繁的上传测试仅限于依赖真实环境模拟的项目，否则不建议这么做 """
     # 命令的描述，会出现在`python setup.py --help`里
     description = '适用于修复 bug 的频繁版本迭代'
     user_options = [
@@ -160,15 +161,14 @@ class GVC(distutils.cmd.Command):
         else:
             v_n = (int(vlist[0]), int(vlist[1]), int(vlist[2]) + 10)
             self.version = f'{v_n[0]}.{v_n[1]}.{v_n[2]}'
-            it =  os.open("src/MMCQsc/__init__.py",os.O_RDWR|os.O_CREAT)
-            '''
-            os.lseek(fd, pos, how)
-            将文件描述符 fd 的当前位置设置为 pos，位置的计算方式 how 如下：设置为 SEEK_SET 或 0 表示从文件开头计算，设置为 SEEK_CUR 或 1 表示从文件当前位置计算，设置为 SEEK_END 或 2 表示文件尾计算。返回新指针位置，这个位置是从文件开头计算的，单位是字节。'''
-            os.lseek(it,0,2) # 移动至文件末尾
-            os.lseek(it,-6,1) # 往回移动
-            fstr = f"{build_time}  ->  {self.version}\n\n'''"
-            os.write(it, fstr.encode('utf8'))
-            print(f'注册版本号 {self.version}\n')
+        it =  os.open("src/MMCQsc/__init__.py",os.O_RDWR|os.O_CREAT)
+        '''
+        os.lseek(fd, pos, how)
+        将文件描述符 fd 的当前位置设置为 pos，位置的计算方式 how 如下：设置为 SEEK_SET 或 0 表示从文件开头计算，设置为 SEEK_CUR 或 1 表示从文件当前位置计算，设置为 SEEK_END 或 2 示文件尾计算。返回新指针位置，这个位置是从文件开头计算的，单位是字节。'''
+        os.lseek(it,0,2) # 移动至文件末尾
+        os.lseek(it,-6,1) # 往回移动
+        fstr = f"{build_time}  ->  {self.version}\n\n'''"
+        os.write(it, fstr.encode('utf8'))
         return self.version
 
     def Version(self) -> str:
