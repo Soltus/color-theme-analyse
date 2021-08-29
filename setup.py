@@ -344,20 +344,20 @@ setuptools.setup(
 )
 
 
-
-if is_admin():
-    print('看上去一切顺利，如果构建结果未能正确反映项目结构，尝试删除 .eggs 和 build 文件夹然后重试')
-    j = 0
-    while True:
-        sleep(1)
-        j += 1
-        if os.path.exists(DIST_DIR):
-            dd = DIST_DIR.replace('\\', '/')
-            args = shlex.split(f"start {DIST_DIR}") # 打开 dist 文件夹
-            s = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True)
-            s.wait()
-            break
-        if j >= 6:
-            break
-else:
-    ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, __file__, None, 1)
+if __name__ == '__main__':
+    if is_admin():
+        print('看上去一切顺利，如果构建结果未能正确反映项目结构，尝试删除 .eggs 和 build 文件夹然后重试')
+        j = 0
+        while True:
+            sleep(1)
+            j += 1
+            if os.path.exists(DIST_DIR):
+                dd = DIST_DIR.replace('\\', '/')
+                args = shlex.split(f"start {DIST_DIR}") # 打开 dist 文件夹
+                s = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True)
+                s.wait()
+                break
+            if j >= 6:
+                break
+    else:
+        ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, __file__, None, 1)
