@@ -80,7 +80,8 @@ IN_GVC = False
 DIST_DIR = os.path.abspath('./dist')
 
 class GVC(distutils.cmd.Command):
-    """适用于修复 bug 的频繁版本迭代."""
+    """适用于修复 bug 的频繁版本迭代.
+    使用方法 python setup.py GVC """
     # 命令的描述，会出现在`python setup.py --help`里
     description = '适用于修复 bug 的频繁版本迭代'
     user_options = [
@@ -95,7 +96,6 @@ class GVC(distutils.cmd.Command):
         """设置选项的默认值, 每个选项都要有初始值，否则报错."""
         # Each user option must be listed here with their default value.
         self.version = my_v
-        self.commit = False
 
     def finalize_options(self):
         """接收到命令行传过来的值之后的处理， 也可以什么都不干."""
@@ -127,7 +127,7 @@ class GVC(distutils.cmd.Command):
                 sleep(2)
                 continue
         if CLEAN_TAG == True:
-            args = ['gitup.py','--version',self.version,'--workdir',os.getcwd(),'--no-commit','--tag']
+            args = ['gitup.py','--version',self.version,'--workdir',os.getcwd(),'--no-commit','--no-tag']
         else:
             args = ['gitup.py','--version',self.version,'--workdir',os.getcwd(),'--commit','--tag']
         command = [f'{sys.executable}']
@@ -146,7 +146,10 @@ class GVC(distutils.cmd.Command):
         print(f'latest version: {vstr}')
         result.wait()
         vlist = vstr.split('-')[0].split('.')
-        if int(vlist[2]) <= int(MY_V[2]):
+        if len(my_v.split('.')) > 3:
+            v_n = (int(MY_V[0]), int(MY_V[1]), int(MY_V[2]) + 10)
+            self.version = f'{v_n[0]}.{v_n[1]}.{v_n[2]}'
+        elif int(vlist[2]) <= int(MY_V[2]):
             v_n = (int(MY_V[0]), int(MY_V[1]), int(MY_V[2]) + 10)
             self.version = f'{v_n[0]}.{v_n[1]}.{v_n[2]}'
             global CLEAN_TAG

@@ -34,7 +34,7 @@ def git_v_tag(v,c,t,cwd):
 
 
 parser = argparse.ArgumentParser(prog='gitup',formatter_class=argparse.RawDescriptionHelpFormatter, description='功能介绍', epilog='基于 MMCQ 对图片进行色彩主题分析，采用图片压缩和多进程来加速批量分析速度。\n\n https://gitee.com/hi-windom/color-theme-analyse  \n \n ')
-parser.add_argument('--version',default=None, action=Cgitup, help='define version')
+parser.add_argument('--version',default='0.0.0', action=Cgitup, help='define version')
 parser.add_argument('--commit',default=True, action=argparse.BooleanOptionalAction)
 parser.add_argument('--tag',default=True, action=argparse.BooleanOptionalAction)
 parser.add_argument('--workdir',default=None, action=Cgitup, help='工作区')
