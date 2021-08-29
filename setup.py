@@ -102,14 +102,14 @@ class GVC(distutils.cmd.Command):
         else:
             v_n = self.default_nv()
             assert int(v_n[2]), (f'非法版本号 {self.version}')
-        self.version = f'{v_n[0]}.{v_n[1]}.{int(v_n[2])+1}'
+        # self.version = f'{v_n[0]}.{v_n[1]}.{int(v_n[2])+1}'
 
     def run(self):
         """命令运行时的操作."""
         print("======= command is running =======")
         self.default_nv()
         command = [f'{sys.executable}']
-        args = ['gitup.py','--version',self.version,'--workdir',os.getcwd(),'--commit',True]
+        args = ['gitup.py','--version',self.version,'--workdir',os.getcwd(),'--commit']
         if self.version:
             for i in args:
                 command.append(i)
@@ -138,7 +138,7 @@ class GVC(distutils.cmd.Command):
         os.lseek(it,-6,1) # 往回移动
         fstr = f"{build_time}  ->  {self.version}\n\n'''"
         os.write(it, fstr.encode('utf8'))
-        print('注册版本号 {self.version}\n')
+        print(f'注册版本号 {self.version}\n')
         return self.version
 
     def Version(self) -> str:
