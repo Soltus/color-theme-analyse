@@ -213,7 +213,7 @@ class GVC(distutils.cmd.Command):
                 v_n = (int(MY_V[0]), int(MY_V[1]), int(MY_V[2]) + 1)
                 self.version = f'{v_n[0]}.{v_n[1]}.{v_n[2]}'
             else:
-                v_n = (int(MY_V[0]), int(MY_V[1]), int(MY_V[2]) + 10)
+                v_n = (int(MY_V[0]), int(MY_V[1]), int(MY_V[2]) + 1)
                 self.version = f'{v_n[0]}.{v_n[1]}.{v_n[2]}'
                 CLEAN_TAG = True
         else:
