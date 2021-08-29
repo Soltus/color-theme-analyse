@@ -104,6 +104,7 @@ class GVC(distutils.cmd.Command):
         """命令运行时的操作."""
         print("======= command is running =======")
         self.default_nv()
+        self.default_nv()
         global CLEAN_TAG
         if CLEAN_TAG == True:
             send_version = '0.0.0'
