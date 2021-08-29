@@ -74,7 +74,7 @@ if BASE_DIR not in sys.path:
     sys.path.append(BASE_DIR)
 from MMCQsc import version as MY_V
 
-
+CLEAN_TAG = False
 
 
 class GVC(distutils.cmd.Command):
@@ -127,9 +127,11 @@ class GVC(distutils.cmd.Command):
         result.wait()
         vlist = vstr.split('-')[0].split('.')
         if vstr.split('-')[0] == MY_V:
-            v_n = (int(vlist[0]), int(vlist[1]), int(vlist[2]) + 1)
+            v_n = (int(vlist[0]), int(vlist[1]), int(vlist[2]))
+            global CLEAN_TAG
+            CLEAN_TAG = True
         else:
-            v_n = (int(vlist[0]), int(vlist[1]), int(vlist[2]) + 2)
+            v_n = (int(vlist[0]), int(vlist[1]), int(vlist[2]) + 1)
         self.version = f'{v_n[0]}.{v_n[1]}.{v_n[2]}'
         it =  os.open("src/MMCQsc/__init__.py",os.O_RDWR|os.O_CREAT)
         '''
@@ -306,5 +308,6 @@ setuptools.setup(
 
 
 print('看上去一切顺利，如果构建结果未能正确反映项目结构，尝试删除 .eggs 和 build 文件夹然后重试')
-args = shlex.split(f"start dist") # 打开 dist 文件夹
-Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0, universal_newlines=True, stdout=PIPE)
+if CLEAN_TAG == True:
+    args = shlex.split(f"start dist") # 打开 dist 文件夹
+    Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0, universal_newlines=True, stdout=PIPE)
