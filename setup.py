@@ -105,6 +105,7 @@ class GVC(distutils.cmd.Command):
     def finalize_options(self):
         """接收到命令行传过来的值之后的处理， 也可以什么都不干."""
         global IN_GVC
+        print(self.quiet)
         if self.quiet:
             pass
         else:
