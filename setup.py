@@ -65,13 +65,13 @@ locale.setlocale(locale.LC_ALL, '')
 ctypes.cdll.ucrtbase._tzset()
 # 调整为中国时间
 
-class PylintCommand(distutils.cmd.Command):
-  """A custom command to run Pylint on all Python source files."""
+class GVC(distutils.cmd.Command):
+  """适用于修复 bug 的频繁版本迭代."""
 
-  description = 'run Pylint on Python source files'
+  description = '适用于修复 bug 的频繁版本迭代'
   user_options = [
       # The format is (long option, short option, description).
-      ('pylint-rcfile=', None, 'path to Pylint config file'),
+      ('version=', 'v=', 'path to Pylint config file'),
   ]
 
   def initialize_options(self):
@@ -98,10 +98,10 @@ class PylintCommand(distutils.cmd.Command):
 
 import setuptools.command.build_py
 class BuildPyCommand(setuptools.command.build_py.build_py):
-  """Custom build command."""
+  """python setup.py build_py."""
 
   def run(self):
-    self.run_command('pylint')
+    self.run_command('GVC')
     setuptools.command.build_py.build_py.run(self)
 
 
@@ -189,7 +189,7 @@ print('开始执行，若长时间无响应，请检查是否有误\n')
 setuptools.setup(
     name="color-theme-analyse", # 在 PyPI 上搜索的项目名称
     cmdclass={
-        'pylint': PylintCommand,
+        'pylint': GVC,
         'build_py': BuildPyCommand,
     },
     # setup_requires=['setuptools_scm'], # 指定运行 setup.py 文件本身所依赖的包
