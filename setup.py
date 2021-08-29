@@ -108,8 +108,8 @@ class GVC(distutils.cmd.Command):
     def finalize_options(self):
         """接收到命令行传过来的值之后的处理， 也可以什么都不干."""
         if self.version:
-            assert os.path.exists(self.version), (
-          'Pylint config file %s does not exist.' % self.version)
+            assert self.version, (
+          'Version %s does not define.' % self.version)
 
     def run(self):
         """命令运行时的操作."""
