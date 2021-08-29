@@ -117,7 +117,7 @@ class GVC(distutils.cmd.Command):
         command = [f'{sys.executable}']
         if self.version:
             command.append('gitup.py')
-            command.append('--version %s' % self.version)
+            command.append('--version 1')# %s' % self.version)
             command.append(os.getcwd())
             self.announce('Running command: %s' % str(command),level=distutils.log.INFO)
             check_call(command)
