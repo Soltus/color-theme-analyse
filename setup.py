@@ -114,7 +114,7 @@ class GVC(distutils.cmd.Command):
     def run(self):
         """命令运行时的操作."""
         print("======= command is running =======")
-        command = ['python.exe']
+        command = [f'{sys.executable}']
         if self.version:
             command.append('gitup.py --version %s' % self.version)
             command.append(os.getcwd())
