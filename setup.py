@@ -74,7 +74,7 @@ if BASE_DIR not in sys.path:
     sys.path.append(BASE_DIR)
 from MMCQsc import version as my_v
 
-MY_V = my_v.split('.')[:3]
+MY_V = my_v.split('.')
 CLEAN_TAG = False
 IN_GVC = False
 DIST_DIR = os.path.abspath('./dist')
@@ -142,25 +142,29 @@ class GVC(distutils.cmd.Command):
             check_call(command)
 
     def default_nv(self) -> str:
+        global CLEAN_TAG
         args = shlex.split("git describe --tags")
         result = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0, universal_newlines=True, stdout=PIPE)
         # 如果 stdout 参数是 PIPE，此属性是一个类似 open() 返回的可读流。从流中读取子进程提供的输出。
         # 如果 encoding 或 errors 参数被指定或者 universal_newlines 参数为 True，此流为文本流，否则为字节流。如果 stdout 参数非 PIPE，此属性为 None。
         vstr = result.stdout.read()
-        print(f'latest version: {vstr}')
+        print(f'latest git tag: {vstr}')
+        print(f'latest version: {my_v}')
         result.wait()
         vlist = vstr.split('-')[0].split('.')
-        if len(my_v.split('.')) > 3:
-            v_n = (int(MY_V[0]), int(MY_V[1]), int(MY_V[2]) + 10)
-            self.version = f'{v_n[0]}.{v_n[1]}.{v_n[2]}'
-        elif int(vlist[2]) <= int(MY_V[2]):
-            v_n = (int(MY_V[0]), int(MY_V[1]), int(MY_V[2]) + 10)
-            self.version = f'{v_n[0]}.{v_n[1]}.{v_n[2]}'
-            global CLEAN_TAG
-            CLEAN_TAG = True
+        if int(MY_V[2]) <= 999:
+            if len(my_v.split('.')) > 3:
+                v_n = (int(MY_V[0]), int(MY_V[1]), int(MY_V[2]) + 1)
+                self.version = f'{v_n[0]}.{v_n[1]}.{v_n[2]}'
+            else:
+                v_n = (int(MY_V[0]), int(MY_V[1]), int(MY_V[2]) + 10)
+                self.version = f'{v_n[0]}.{v_n[1]}.{v_n[2]}'
+                CLEAN_TAG = True
         else:
-            v_n = (int(vlist[0]), int(vlist[1]), int(vlist[2]) + 10)
+            v_n = (int(MY_V[0]), int(MY_V[1]) + 1, 0)
             self.version = f'{v_n[0]}.{v_n[1]}.{v_n[2]}'
+        # if int(vlist[2]) <= int(MY_V[2]):
+        #CLEAN_TAG = True
         it =  os.open("src/MMCQsc/__init__.py",os.O_RDWR|os.O_CREAT)
         '''
         os.lseek(fd, pos, how)
