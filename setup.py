@@ -348,8 +348,8 @@ if 1:
         j += 1
         if os.path.exists(DIST_DIR):
             args = shlex.split(f"start {DIST_DIR}") # 打开 dist 文件夹
-            s = Popen(args, bufsize=0, executable=None, close_fds=False, shell=False, env=None, startupinfo=None, creationflags=0, universal_newlines=True, stdout=PIPE)
-            s.kill()
+            s = Popen(args, bufsize=0, executable=None, close_fds=False, shell=False)
+            s.wait()
             break
         if j >= 6:
             break
