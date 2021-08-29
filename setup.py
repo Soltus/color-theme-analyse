@@ -98,13 +98,7 @@ class GVC(distutils.cmd.Command):
 
     def finalize_options(self):
         """接收到命令行传过来的值之后的处理， 也可以什么都不干."""
-        if self.version == MY_V:
-            # assert len(self.version.split('.')) <= 3, (f'非法版本号 {self.version}')
-            v_n = self.default_nv()
-        else:
-            v_n = self.default_nv()
-            assert int(v_n[2]), (f'非法版本号 {self.version}')
-        # self.version = f'{v_n[0]}.{v_n[1]}.{int(v_n[2])+1}'
+        pass
 
     def run(self):
         """命令运行时的操作."""
