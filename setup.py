@@ -151,7 +151,6 @@ class GVC(distutils.cmd.Command):
             check_call(command)
 
     def default_nv(self) -> str:
-        print(self.qmode)
         global CLEAN_TAG
         args = shlex.split("git describe --tags")
         result = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0, universal_newlines=True, stdout=PIPE)
