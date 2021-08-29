@@ -83,7 +83,7 @@ class GVC(distutils.cmd.Command):
     user_options = [
         # 格式是`(长名字，短名字，描述)`，描述同样会出现在doc里
         # binary选项，长名字后面没有等号，最后的值会传给`self.<长名字>`，使用形式 --commit 或者 -c (使用了为 True，默认应为 False)
-        # 需要值的选项，长名字后面有等号，最后的值会传给`self.<长名字>`（-会用_代替），使用形式 --version=1.1.1 或者 -v 1.1.1
+        # 需要值的选项，长名字后面有等号，最后的值会传给`self.<长名字>`（-会用_代替），使用形式 --version=1.1.1 或者 -v=1.1.1
         ('version=', 'v', 'define build version'),
         ('commit','c','git commit')
   ]
@@ -105,15 +105,7 @@ class GVC(distutils.cmd.Command):
     def run(self):
         """命令运行时的操作."""
         print("======= command is running =======")
-        it =  os.open("src/MMCQsc/__init__.py",os.O_RDWR|os.O_CREAT)
-        '''
-        os.lseek(fd, pos, how)
-        将文件描述符 fd 的当前位置设置为 pos，位置的计算方式 how 如下：设置为 SEEK_SET 或 0 表示从文件开头计算，设置为 SEEK_CUR 或 1 表示从文件当前位置计算，设置为 SEEK_END 或 2 表示文件尾计算。返回新指针位置，这个位置是从文件开头计算的，单位是字节。'''
-        os.lseek(it,0,2) # 移动至文件末尾
-        os.lseek(it,-6,1) # 往回移动
-        fstr = f"{build_time}  ->  {self.version}\n\n'''"
-        os.write(it, fstr.encode('utf8'))
-        print('注册版本号完成\n')
+        self.default_nv
         command = [f'{sys.executable}']
         args = ['gitup.py','--version',self.version,'--workdir',os.getcwd()]
         if self.version:
@@ -123,7 +115,7 @@ class GVC(distutils.cmd.Command):
             check_call(command)
         sys.exit(0)
 
-    def default_nv(self) -> tuple:
+    def default_nv(self) -> str:
         args = shlex.split("git describe --tags")
         result = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0, universal_newlines=True, stdout=PIPE)
         # 如果 stdout 参数是 PIPE，此属性是一个类似 open() 返回的可读流。从流中读取子进程提供的输出。
@@ -136,10 +128,20 @@ class GVC(distutils.cmd.Command):
             v_n = (int(vlist[0]), int(vlist[1]), int(vlist[2]) + 1)
         else:
             v_n = (int(vlist[0]), int(vlist[1]), int(vlist[2]) + 2)
-        return v_n
+        self.version = f'{v_n[0]}.{v_n[1]}.{v_n[2]}'
+        it =  os.open("src/MMCQsc/__init__.py",os.O_RDWR|os.O_CREAT)
+        '''
+        os.lseek(fd, pos, how)
+        将文件描述符 fd 的当前位置设置为 pos，位置的计算方式 how 如下：设置为 SEEK_SET 或 0 表示从文件开头计算，设置为 SEEK_CUR 或 1 表示从文件当前位置计算，设置为 SEEK_END 或 2 表示文件尾计算。返回新指针位置，这个位置是从文件开头计算的，单位是字节。'''
+        os.lseek(it,0,2) # 移动至文件末尾
+        os.lseek(it,-6,1) # 往回移动
+        fstr = f"{build_time}  ->  {self.version}\n\n'''"
+        os.write(it, fstr.encode('utf8'))
+        print('注册版本号完成\n')
+        return self.version
 
     def Version(self) -> str:
-        return self.version
+        return self.default_nv()
 
 import setuptools.command.build_py
 class BuildPyCommand(setuptools.command.build_py.build_py):
@@ -220,9 +222,9 @@ setuptools.setup(
         'GVC': GVC,
         'build_py': BuildPyCommand,
     },
-    # setup_requires=['setuptools_scm'], # 指定运行 setup.py 文件本身所依赖的包
-    # use_scm_version=True, # .gitignore 应与 setup.py 在同一文件夹 更多信息参考 https://pypi.org/project/setuptools-scm/
-    version=GVC.Version, # 默认的手动指定版本
+    setup_requires=['setuptools_scm','setuptools_scm_git_archive'], # 指定运行 setup.py 文件本身所依赖的包
+    use_scm_version=True, # .gitignore 应与 setup.py 在同一文件夹 更多信息参考 https://pypi.org/project/setuptools-scm/
+    # version='1.1.1', # 默认的手动指定版本
     author="Soltus",
     author_email="694357845@qq.com",
     description="SCSD-PY001 info: This is a simple demo of pictures color theme batch analysis use MMCQ with Python",
