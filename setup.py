@@ -158,7 +158,7 @@ class GVC(distutils.cmd.Command):
     def run(self):
         """命令运行时的操作."""
         global CLEAN_TAG
-        self.version = self.default_nv()
+        _version = self.default_nv()
         print("======= command is running =======")
         _i = 0
         while True:
@@ -180,9 +180,9 @@ class GVC(distutils.cmd.Command):
                 sleep(2)
                 continue
         if CLEAN_TAG == True:
-            args = ['gitup.py','--version',self.version,'--workdir',os.getcwd(),'--no-commit','--no-tag']
+            args = ['gitup.py','--old',_version[0],'--new',_version[1],'--workdir',os.getcwd(),'--no-commit','--no-tag']
         else:
-            args = ['gitup.py','--version',self.version,'--workdir',os.getcwd(),'--commit','--tag']
+            args = ['gitup.py','--old',_version[0],'--new',_version[1],'--workdir',os.getcwd(),'--commit','--tag']
         if self.qmode:
             pass
         else:
@@ -194,7 +194,7 @@ class GVC(distutils.cmd.Command):
             self.announce('Running command: %s' % str(command),level=distutils.log.INFO)
             check_call(command)
 
-    def default_nv(self) -> str:
+    def default_nv(self) -> list:
         global CLEAN_TAG
         global MY_V
         global my_v
@@ -214,11 +214,13 @@ class GVC(distutils.cmd.Command):
             MY_V[2] = vlist[2]
         if int(MY_V[2]) <= 999:
             if len(my_v.split('.')) > 3:
-                v_n = (int(MY_V[0]), int(MY_V[1]), int(MY_V[2]) + 1)
-                self.version = f'{v_n[0]}.{v_n[1]}.{v_n[2]}'
+                v_n = (int(MY_V[0]), int(MY_V[1]), int(MY_V[2]))
+                self.version = f'{v_n[0]}.{v_n[1]}.{v_n[2]+1}'
+                self.version2 = f'{v_n[0]}.{v_n[1]}.{v_n[2]+2}'
             else:
-                v_n = (int(MY_V[0]), int(MY_V[1]), int(MY_V[2]) + 1)
-                self.version = f'{v_n[0]}.{v_n[1]}.{v_n[2]}'
+                v_n = (int(MY_V[0]), int(MY_V[1]), int(MY_V[2]))
+                self.version = f'{v_n[0]}.{v_n[1]}.{v_n[2]+1}'
+                self.version2 = f'{v_n[0]}.{v_n[1]}.{v_n[2]+2}'
                 CLEAN_TAG = True
         else:
             v_n = (int(MY_V[0]), int(MY_V[1]) + 1, 0)
@@ -232,10 +234,8 @@ class GVC(distutils.cmd.Command):
         os.lseek(it,-6,1) # 往回移动
         fstr = f"{build_time}  ->  {self.version}\n\n'''"
         os.write(it, fstr.encode('utf8'))
-        return self.version
+        return [self.version,self.version2]
 
-    def Version(self) -> str:
-        return self.version
 
 import setuptools.command.build_py
 class BuildPyCommand(setuptools.command.build_py.build_py):
@@ -263,7 +263,7 @@ setuptools.setup(
         'GVC': GVC,
         'build_py': BuildPyCommand,
     },
-    setup_requires=[], # 指定运行 setup.py 文件本身所依赖的包 , 国内由于众所周知的原因会假死，使用动态导入作为替换
+    setup_requires=[], # 指定运行 setup.py 文件本身所依赖的包 , 国内由于众所周知的原因会假死，因此留空即可
     use_scm_version=True, # .gitignore 应与 setup.py 在同一文件夹 更多信息参考 https://pypi.org/project/setuptools-scm/
     # version='1.1.1', # 默认的手动指定版本
     author="Soltus",
