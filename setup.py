@@ -102,10 +102,9 @@ class GVC(distutils.cmd.Command):
 
     def run(self):
         """命令运行时的操作."""
+        global CLEAN_TAG
         print("======= command is running =======")
         self.default_nv()
-        self.default_nv()
-        global CLEAN_TAG
         if CLEAN_TAG == True:
             send_version = '0.0.0'
         else:
@@ -154,6 +153,7 @@ class BuildPyCommand(setuptools.command.build_py.build_py):
     """python setup.py build_py."""
 
     def run(self):
+        self.run_command('GVC')
         self.run_command('GVC')
         setuptools.command.build_py.build_py.run(self)
 
