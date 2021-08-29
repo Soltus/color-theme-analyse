@@ -96,16 +96,17 @@ class GVC(distutils.cmd.Command):
 
     def finalize_options(self):
         """接收到命令行传过来的值之后的处理， 也可以什么都不干."""
-        if self.version:
+        if self.version == MY_V:
             assert len(self.version.split('.')) <= 3, (f'非法版本号 {self.version}')
         else:
             v_n = self.default_nv()
-            self.version = f'{v_n[0]}.{v_n[1]}.{v_n[2]}'
+            assert int(v_n[2]), (f'非法版本号 {self.version}')
+            self.version = f'{v_n[0]}.{v_n[1]}.{int(v_n[2])+1}'
 
     def run(self):
         """命令运行时的操作."""
         print("======= command is running =======")
-        self.default_nv
+        self.default_nv()
         command = [f'{sys.executable}']
         args = ['gitup.py','--version',self.version,'--workdir',os.getcwd()]
         if self.version:
@@ -113,7 +114,6 @@ class GVC(distutils.cmd.Command):
                 command.append(i)
             self.announce('Running command: %s' % str(command),level=distutils.log.INFO)
             check_call(command)
-        sys.exit(0)
 
     def default_nv(self) -> str:
         args = shlex.split("git describe --tags")
