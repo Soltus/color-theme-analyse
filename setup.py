@@ -145,9 +145,9 @@ print('开始执行，若长时间无响应，请检查是否有误\n')
 
 setuptools.setup(
     name="color-theme-analyse", # 在 PyPI 上搜索的项目名称
-    setup_requires=['setuptools_scm'], # 指定运行 setup.py 文件本身所依赖的包
-    use_scm_version=True, # .gitignore 应与 setup.py 在同一文件夹 更多信息参考 https://pypi.org/project/setuptools-scm/
-    # version="0.0.5", # 默认的手动指定版本
+    # setup_requires=['setuptools_scm'], # 指定运行 setup.py 文件本身所依赖的包
+    # use_scm_version=True, # .gitignore 应与 setup.py 在同一文件夹 更多信息参考 https://pypi.org/project/setuptools-scm/
+    version=f"{v_n[0]}.{v_n[1]}.{v_n[2]}", # 默认的手动指定版本
     author="Soltus",
     author_email="694357845@qq.com",
     description="SCSD-PY001 info: This is a simple demo of pictures color theme batch analysis use MMCQ with Python",
