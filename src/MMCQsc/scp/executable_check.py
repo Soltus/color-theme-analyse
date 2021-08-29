@@ -108,8 +108,6 @@ def get_dpkg(name):
         logger.warning("\n\n\t\t[ tip ] : 快捷键 CTRL + C 强制结束当前任务，CTRL + PAUSE_BREAK 强制结束所有任务并退出 Python\n\n")
         result.wait()
         PKG_D = os.path.abspath(PKG_D)
-        if PKG_D not in sys.path:
-            sys.path.append(PKG_D)
         M_module = types.ModuleType(name)
         M_module.__file__ = os.path.abspath(os.path.join(PKG_D, name, '__init__.py'))
         M_module.__package__ = ''

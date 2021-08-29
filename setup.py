@@ -54,12 +54,12 @@ MANIFEST.in 需要放在和 setup.py 同级的顶级目录下，setuptools 会�
 '''
 import distutils.cmd
 import distutils.log
-import setuptools
 import shutil
 import os,sys
 from time import strftime, sleep
 from subprocess import Popen,PIPE,check_call
 import shlex
+import types
 import ctypes, locale
 locale.setlocale(locale.LC_ALL, '')
 ctypes.cdll.ucrtbase._tzset()
@@ -67,11 +67,56 @@ ctypes.cdll.ucrtbase._tzset()
 
 build_time = strftime('%Z %Y-%m-%d %H:%M:%S')
 
-
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "src"))
+DPKG_DIR = os.path.abspath(os.path.join(BASE_DIR, 'MMCQsc_dpkg'))
 if BASE_DIR not in sys.path:
     sys.path.append(BASE_DIR)
-from MMCQsc import version as my_v
+if DPKG_DIR not in sys.path:
+    sys.path.append(DPKG_DIR)
+
+
+class Pgd:
+    def __init__(self):
+        self.url = 'https://pypi.douban.com/simple/'
+
+    def task(self,im,re):
+        self.im = im
+        self.re = re
+        import os
+        repo = input('\n\n Unable to import package [{}] from \n\t{} , \n\n Do you want to download ? \n\n\t\tProccess ? [Y/n]\t'.format(self.im, sys.path))
+        if repo in ['Y','y']:
+            os.system("pip install {} -i {}".format(self.re, self.url))
+            return 1
+        return 0
+
+dddd = 0
+pgd = Pgd()
+try:
+    setuptools = __import__('setuptools', globals(), locals(), [], 0)
+except ImportError:
+    try:
+        import setuptools
+    except:
+        repo = pgd.task(im="setuptools",re="setuptools")
+        dddd += repo
+try:
+    setuptools_scm = __import__('setuptools_scm', globals(), locals(), [], 0)
+    setuptools_scm_git_archive = __import__('setuptools_scm_git_archive', globals(), locals(), [], 0)
+except ImportError:
+    try:
+        import setuptools_scm
+        import setuptools_scm_git_archive
+    except:
+        repo = pgd.task(im="setuptools_scm",re="setuptools_scm")
+        dddd += repo
+        repo = pgd.task(im="setuptools_scm_git_archive",re="setuptools_scm_git_archive")
+        dddd += repo
+
+if dddd:
+    print(f'\n\t\t{dddd} new packages already installed .\n\n\t\ttry to launch again .\n\n')
+    sys.exit()
+
+from MMCQsc.version import version as my_v
 
 MY_V = my_v.split('.')
 CLEAN_TAG = False
@@ -214,7 +259,7 @@ setuptools.setup(
         'GVC': GVC,
         'build_py': BuildPyCommand,
     },
-    setup_requires=['setuptools_scm','setuptools_scm_git_archive'], # 指定运行 setup.py 文件本身所依赖的包 , 建议手动安装它们
+    setup_requires=[], # 指定运行 setup.py 文件本身所依赖的包 , 国内由于众所周知的原因会假死，使用动态导入作为替换
     use_scm_version=True, # .gitignore 应与 setup.py 在同一文件夹 更多信息参考 https://pypi.org/project/setuptools-scm/
     # version='1.1.1', # 默认的手动指定版本
     author="Soltus",
