@@ -81,8 +81,10 @@ DIST_DIR = os.path.abspath('./dist')
 
 class GVC(distutils.cmd.Command):
     """适用于构建时修改内容的频繁版本迭代，允许自动完成一些操作，这在修复 bug 时期特别实用.
-    生成干净的 dev 版本， 例如 color_theme_analyse-1.2.721.dev4-py3-none-any
-    使用方法 python setup.py GVC """
+    生成干净的可自动迭代的 dev 版本， 例如 color_theme_analyse-1.2.721.dev4-py3-none-any
+    使用方法 python setup.py GVC，要求正确配置 Git 环境
+    如果 PyPi 的账号密码的配置文件正确存在，可以使用以下括号内的命令一键构建并上传（以 testPyPi 为例）：
+    [python setup.py GVC;python setup.py bdist_wheel;twine upload dist/* --verbose --repository testpypi] """
     # 命令的描述，会出现在`python setup.py --help`里
     description = '适用于修复 bug 的频繁版本迭代'
     user_options = [
