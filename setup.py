@@ -137,6 +137,8 @@ class GVC(distutils.cmd.Command):
         else:
             args = ['gitup.py','--version',self.version,'--workdir',os.getcwd(),'--commit','--tag']
         if self.quiet:
+            pass
+        else:
             args.append('--quiet')
         command = [f'{sys.executable}']
         if self.version:
@@ -153,6 +155,8 @@ class GVC(distutils.cmd.Command):
         # 如果 encoding 或 errors 参数被指定或者 universal_newlines 参数为 True，此流为文本流，否则为字节流。如果 stdout 参数非 PIPE，此属性为 None。
         vstr = result.stdout.read()
         if self.quiet == False:
+            pass
+        else:
             print(f'latest git tag: {vstr}')
             print(f'latest version: {my_v}')
         result.wait()
