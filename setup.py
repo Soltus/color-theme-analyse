@@ -96,6 +96,16 @@ class PylintCommand(distutils.cmd.Command):
         level=distutils.log.INFO)
     check_call(command)
 
+import setuptools.command.build_py
+class BuildPyCommand(setuptools.command.build_py.build_py):
+  """Custom build command."""
+
+  def run(self):
+    self.run_command('pylint')
+    setuptools.command.build_py.build_py.run(self)
+
+
+
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "src"))
 if BASE_DIR not in sys.path:
     sys.path.append(BASE_DIR)
@@ -180,6 +190,7 @@ setuptools.setup(
     name="color-theme-analyse", # 在 PyPI 上搜索的项目名称
     cmdclass={
         'pylint': PylintCommand,
+        'build_py': BuildPyCommand,
     },
     # setup_requires=['setuptools_scm'], # 指定运行 setup.py 文件本身所依赖的包
     # use_scm_version=True, # .gitignore 应与 setup.py 在同一文件夹 更多信息参考 https://pypi.org/project/setuptools-scm/
