@@ -224,8 +224,9 @@ class GVC(distutils.cmd.Command):
                 self.version2 = f'{v_n[0]}.{v_n[1]}.{v_n[2]+2}'
                 CLEAN_TAG = True
         else:
-            v_n = (int(MY_V[0]), int(MY_V[1]) + 1, 0)
-            self.version = f'{v_n[0]}.{v_n[1]}.{v_n[2]}'
+            v_n = (int(MY_V[0]), int(MY_V[1]), 0)
+            self.version = f'{v_n[0]}.{v_n[1]+1}.{v_n[2]}'
+            self.version2 = f'{v_n[0]}.{v_n[1]+1}.{v_n[2]+1}'
 
         it =  os.open("src/MMCQsc/__init__.py",os.O_RDWR|os.O_CREAT)
         '''
