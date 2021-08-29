@@ -105,7 +105,9 @@ class GVC(distutils.cmd.Command):
     def finalize_options(self):
         """接收到命令行传过来的值之后的处理， 也可以什么都不干."""
         global IN_GVC
-        if self.quiet == False:
+        if self.quiet:
+            pass
+        else:
             IN_GVC = True
         self.default_nv()
 
@@ -154,7 +156,7 @@ class GVC(distutils.cmd.Command):
         # 如果 stdout 参数是 PIPE，此属性是一个类似 open() 返回的可读流。从流中读取子进程提供的输出。
         # 如果 encoding 或 errors 参数被指定或者 universal_newlines 参数为 True，此流为文本流，否则为字节流。如果 stdout 参数非 PIPE，此属性为 None。
         vstr = result.stdout.read()
-        if self.quiet == False:
+        if self.quiet:
             pass
         else:
             print(f'latest git tag: {vstr}')
@@ -296,9 +298,9 @@ if IN_GVC == False:
     print('看上去一切顺利，如果构建结果未能正确反映项目结构，尝试删除 .eggs 和 build 文件夹然后重试')
     j = 0
     while True:
-        sleep(2)
+        sleep(1)
         j += 1
-        if j >= 30:
+        if j >= 6:
             break
         if os.path.exists(DIST_DIR):
             args = shlex.split(f"start dist") # 打开 dist 文件夹
