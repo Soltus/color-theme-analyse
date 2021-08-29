@@ -113,7 +113,6 @@ class GVC(distutils.cmd.Command):
 
     def run(self):
         """命令运行时的操作."""
-        print(self.quiet)
         global CLEAN_TAG
         print("======= command is running =======")
         _i = 0
@@ -151,6 +150,7 @@ class GVC(distutils.cmd.Command):
             check_call(command)
 
     def default_nv(self) -> str:
+        print(self.quiet)
         global CLEAN_TAG
         args = shlex.split("git describe --tags")
         result = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0, universal_newlines=True, stdout=PIPE)
