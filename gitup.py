@@ -10,7 +10,7 @@ class Cgitup(argparse.Action):
         super().__init__(option_strings, dest, **kwargs)
 
     def __call__(self, parser, namespace, values, option_string=None):
-        print('%r | %r' % (values, option_string))
+        print('\n%r = %r' % (values, option_string))
         setattr(namespace, self.dest, values)
         print(namespace)
 
