@@ -351,6 +351,7 @@ if 1:
             args = shlex.split(f"start {dd}") # 打开 dist 文件夹
             s = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True)
             s.wait()
+            os.system(f'start {DIST_DIR}')
             break
         if j >= 6:
             break
