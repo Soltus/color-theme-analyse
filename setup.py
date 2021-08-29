@@ -76,7 +76,7 @@ from MMCQsc import version as my_v
 
 MY_V = my_v.split('.')[:3]
 CLEAN_TAG = False
-
+DIST_DIR = os.path.abspath('./dist')
 
 class GVC(distutils.cmd.Command):
     """适用于修复 bug 的频繁版本迭代."""
@@ -104,12 +104,29 @@ class GVC(distutils.cmd.Command):
         """命令运行时的操作."""
         global CLEAN_TAG
         print("======= command is running =======")
-        self.default_nv()
+        _i = 0
+        while True:
+            try:
+                # 删除旧的生成
+                if _i > 0:
+                    print(f'第 {_i} 次重试')
+                    sleep(1)
+                if os.path.exists(DIST_DIR):
+                    shutil.rmtree(DIST_DIR)
+                break
+            except OSError as e:
+                print(e)
+                if _i > 99:
+                        print('\n程序放弃重试\n')
+                        exit(99)
+                print('请解除占用以继续，程序将等待 3 秒。如需禁用删除旧的生成请修改 setup.py \n')
+                _i = _i + 1
+                sleep(2)
+                continue
         if CLEAN_TAG == True:
-            args = ['gitup.py','--version',self.version,'--workdir',os.getcwd(),'--no-commit']
+            args = ['gitup.py','--version',self.version,'--workdir',os.getcwd(),'--no-commit','--tag']
         else:
-            print('no-commit')
-            args = ['gitup.py','--version',self.version,'--workdir',os.getcwd(),'--commit']
+            args = ['gitup.py','--version',self.version,'--workdir',os.getcwd(),'--commit','--tag']
         command = [f'{sys.executable}']
         if self.version:
             for i in args:
@@ -126,13 +143,13 @@ class GVC(distutils.cmd.Command):
         print(f'latest version: {vstr}')
         result.wait()
         vlist = vstr.split('-')[0].split('.')
-        if vstr.split('-')[0] == MY_V or int(vlist[2]) <= int(MY_V[2]):
+        if int(vlist[2]) <= int(MY_V[2]):
             v_n = (int(MY_V[0]), int(MY_V[1]), int(MY_V[2]) + 1)
             self.version = f'{v_n[0]}.{v_n[1]}.{v_n[2]}'
             global CLEAN_TAG
             CLEAN_TAG = True
         else:
-            v_n = (int(vlist[0]), int(vlist[1]), int(vlist[2]) + 1)
+            v_n = (int(vlist[0]), int(vlist[1]), int(vlist[2]) + 10)
             self.version = f'{v_n[0]}.{v_n[1]}.{v_n[2]}'
             it =  os.open("src/MMCQsc/__init__.py",os.O_RDWR|os.O_CREAT)
             '''
@@ -153,7 +170,7 @@ class BuildPyCommand(setuptools.command.build_py.build_py):
     """python setup.py build_py."""
 
     def run(self):
-        self.run_command('GVC')
+        # self.run_command('GVC')
         setuptools.command.build_py.build_py.run(self)
 
 
@@ -189,27 +206,6 @@ class BuildPyCommand(setuptools.command.build_py.build_py):
 # git_v_control(v_n)
 
 
-
-_i = 0
-while True:
-    try:
-        # 删除旧的生成
-        if _i > 0:
-            print(f'第 {_i} 次重试')
-            sleep(1)
-        DIST_DIR = os.path.abspath('./dist')
-        if os.path.exists(DIST_DIR):
-            shutil.rmtree(DIST_DIR)
-        break
-    except OSError as e:
-        print(e)
-        if _i > 99:
-                print('\n程序放弃重试\n')
-                exit(99)
-        print('请解除占用以继续，程序将等待 3 秒。如需禁用删除旧的生成请修改 setup.py \n')
-        _i = _i + 1
-        sleep(2)
-        continue
 
 
 
