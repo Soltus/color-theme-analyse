@@ -116,7 +116,7 @@ class GVC(distutils.cmd.Command):
         print("======= command is running =======")
         command = ['python.exe']
         if self.version:
-            command.append('--rcfile=%s' % self.version)
+            command.append('gitup.py --version %s' % self.version)
             command.append(os.getcwd())
             self.announce('Running command: %s' % str(command),level=distutils.log.INFO)
             check_call(command)
