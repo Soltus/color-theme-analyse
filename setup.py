@@ -152,8 +152,6 @@ class GVC(distutils.cmd.Command):
         """接收到命令行传过来的值之后的处理， 也可以什么都不干."""
         global IN_GVC
         if self.qmode:
-            pass
-        else:
             IN_GVC = True
 
     def run(self):
@@ -213,7 +211,7 @@ class GVC(distutils.cmd.Command):
         vlist = vstr.split('-')[0].split('.')
         if int(MY_V[2]) < int(vlist[2]):
             MY_V[2] = vlist[2]
-        if int(MY_V[2]) <= 999:
+        if int(MY_V[2]) < 999:
             if len(my_v.split('.')) > 3:
                 v_n = (int(MY_V[0]), int(MY_V[1]), int(MY_V[2]))
                 self.version = f'{v_n[0]}.{v_n[1]}.{v_n[2]+10}'
