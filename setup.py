@@ -81,6 +81,7 @@ DIST_DIR = os.path.abspath('./dist')
 
 class GVC(distutils.cmd.Command):
     """适用于修复 bug 的频繁版本迭代.
+    生成干净的 dev 版本， 例如 color_theme_analyse-1.2.721.dev4-py3-none-any
     使用方法 python setup.py GVC """
     # 命令的描述，会出现在`python setup.py --help`里
     description = '适用于修复 bug 的频繁版本迭代'
