@@ -222,7 +222,7 @@ setuptools.setup(
         'GVC': GVC,
         'build_py': BuildPyCommand,
     },
-    setup_requires=['setuptools_scm','setuptools_scm_git_archive'], # 指定运行 setup.py 文件本身所依赖的包
+    setup_requires=['setuptools_scm','setuptools_scm_git_archive'], # 指定运行 setup.py 文件本身所依赖的包 , 建议手动安装它们
     use_scm_version=True, # .gitignore 应与 setup.py 在同一文件夹 更多信息参考 https://pypi.org/project/setuptools-scm/
     # version='1.1.1', # 默认的手动指定版本
     author="Soltus",
