@@ -100,7 +100,7 @@ class GVC(distutils.cmd.Command):
         """设置选项的默认值, 每个选项都要有初始值，否则报错."""
         # Each user option must be listed here with their default value.
         self.version = my_v
-        self.quiet = True
+        self.quiet = False
 
     def finalize_options(self):
         """接收到命令行传过来的值之后的处理， 也可以什么都不干."""
