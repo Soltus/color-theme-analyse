@@ -117,7 +117,7 @@ if dddd:
     sys.exit()
 
 from MMCQsc.version import version as my_v
-print(my_v)
+
 MY_V = my_v.split('.')
 CLEAN_TAG = False
 IN_GVC = False
@@ -196,6 +196,8 @@ class GVC(distutils.cmd.Command):
 
     def default_nv(self) -> str:
         global CLEAN_TAG
+        global MY_V
+        global my_v
         args = shlex.split("git describe --tags")
         result = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0, universal_newlines=True, stdout=PIPE)
         # 如果 stdout 参数是 PIPE，此属性是一个类似 open() 返回的可读流。从流中读取子进程提供的输出。
@@ -208,6 +210,8 @@ class GVC(distutils.cmd.Command):
             print(f'latest version: {my_v}')
         result.wait()
         vlist = vstr.split('-')[0].split('.')
+        if int(MY_V[2]) < int(vlist[2]):
+            MY_V[2] = vlist[2]
         if int(MY_V[2]) <= 999:
             if len(my_v.split('.')) > 3:
                 v_n = (int(MY_V[0]), int(MY_V[1]), int(MY_V[2]) + 1)
