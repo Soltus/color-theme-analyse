@@ -80,11 +80,6 @@ def is_admin():
     except:
         return False
 
-if is_admin():
-    pass
-else:
-    ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, __file__, None, 1)
-
 class Pgd:
     def __init__(self):
         self.url = 'https://pypi.douban.com/simple/'
@@ -350,7 +345,7 @@ setuptools.setup(
 
 
 
-if 1:
+if is_admin():
     print('看上去一切顺利，如果构建结果未能正确反映项目结构，尝试删除 .eggs 和 build 文件夹然后重试')
     j = 0
     while True:
@@ -364,3 +359,5 @@ if 1:
             break
         if j >= 6:
             break
+else:
+    ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, __file__, None, 1)
