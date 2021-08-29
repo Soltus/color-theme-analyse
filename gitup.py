@@ -47,7 +47,7 @@ parser.add_argument('--version',default='0.0.0', action=Cgitup, help='define ver
 parser.add_argument('--commit',default=True, action=argparse.BooleanOptionalAction)
 parser.add_argument('--tag',default=True, action=argparse.BooleanOptionalAction)
 parser.add_argument('--workdir',default=None, action=Cgitup, help='工作区')
-parser.add_argument('--quiet',default=True,choices=[True,False],required=False)
+parser.add_argument('--quiet',default=True,action=argparse.BooleanOptionalAction,required=False)
 
 args = parser.parse_args()
 git_v_tag(v=args.version,c=args.commit,t=args.tag,q=args.quiet,cwd=args.workdir)
