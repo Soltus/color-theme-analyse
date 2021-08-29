@@ -74,6 +74,16 @@ if BASE_DIR not in sys.path:
 if DPKG_DIR not in sys.path:
     sys.path.append(DPKG_DIR)
 
+def is_admin():
+    try:
+        return ctypes.windll.shell32.IsUserAnAdmin()
+    except:
+        return False
+
+if is_admin():
+    pass
+else:
+    ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, __file__, None, 1)
 
 class Pgd:
     def __init__(self):
@@ -351,7 +361,6 @@ if 1:
             args = shlex.split(f"start {DIST_DIR}") # 打开 dist 文件夹
             s = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True)
             s.wait()
-            os.system(f'explorer {DIST_DIR}')
             break
         if j >= 6:
             break
