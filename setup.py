@@ -108,7 +108,7 @@ class GVC(distutils.cmd.Command):
         print("======= command is running =======")
         self.default_nv()
         command = [f'{sys.executable}']
-        args = ['gitup.py','--version',self.version,'--workdir',os.getcwd()]
+        args = ['gitup.py','--version',self.version,'--workdir',os.getcwd(),'--commit',True]
         if self.version:
             for i in args:
                 command.append(i)
@@ -137,7 +137,7 @@ class GVC(distutils.cmd.Command):
         os.lseek(it,-6,1) # 往回移动
         fstr = f"{build_time}  ->  {self.version}\n\n'''"
         os.write(it, fstr.encode('utf8'))
-        print('注册版本号完成\n')
+        print('注册版本号 {self.version}\n')
         return self.version
 
     def Version(self) -> str:

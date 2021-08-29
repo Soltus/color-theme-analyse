@@ -10,7 +10,7 @@ class Cgitup(argparse.Action):
 
     def __call__(self, parser, namespace, values, option_string=None):
         setattr(namespace, self.dest, values)
-        print('\n%r = %r' % (option_string,values))
+        # print('\n%r = %r' % (option_string,values))
         # print(namespace)
 
 def git_v_tag(v,c,cwd):
