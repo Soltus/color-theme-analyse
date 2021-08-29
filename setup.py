@@ -108,8 +108,7 @@ class GVC(distutils.cmd.Command):
     def finalize_options(self):
         """接收到命令行传过来的值之后的处理， 也可以什么都不干."""
         if self.version:
-            assert self.version, (
-          'Version %s does not define.' % self.version)
+            assert self.version, ('Version %s does not define.' % self.version)
 
     def run(self):
         """命令运行时的操作."""
@@ -119,11 +118,6 @@ class GVC(distutils.cmd.Command):
         if self.version:
             for i in args:
                 command.append(i)
-            # command.append('gitup.py')
-            # command.append('--version')
-            # command.append(self.version)
-            # command.append('--workdir')
-            # command.append(os.getcwd())
             self.announce('Running command: %s' % str(command),level=distutils.log.INFO)
             check_call(command)
 
