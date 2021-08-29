@@ -106,9 +106,11 @@ class GVC(distutils.cmd.Command):
         self.default_nv()
         global CLEAN_TAG
         if CLEAN_TAG == True:
-            return 0
+            send_version = '0.0.0'
+        else:
+            send_version = self.version
         command = [f'{sys.executable}']
-        args = ['gitup.py','--version',self.version,'--workdir',os.getcwd(),'--commit']
+        args = ['gitup.py','--version',send_version,'--workdir',os.getcwd(),'--commit']
         if self.version:
             for i in args:
                 command.append(i)
