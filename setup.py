@@ -74,7 +74,7 @@ if BASE_DIR not in sys.path:
     sys.path.append(BASE_DIR)
 from MMCQsc import version as my_v
 
-MY_V = my_v.split('.')[:2]
+MY_V = my_v.split('.')[:3]
 CLEAN_TAG = False
 
 
@@ -93,7 +93,7 @@ class GVC(distutils.cmd.Command):
     def initialize_options(self):
         """设置选项的默认值, 每个选项都要有初始值，否则报错."""
         # Each user option must be listed here with their default value.
-        self.version = MY_V
+        self.version = my_v
         self.commit = False
 
     def finalize_options(self):
@@ -126,8 +126,8 @@ class GVC(distutils.cmd.Command):
         print(f'latest version: {vstr}')
         result.wait()
         vlist = vstr.split('-')[0].split('.')
-        if vstr.split('-')[0] == MY_V:
-            v_n = (int(vlist[0]), int(vlist[1]), int(vlist[2]) + 1)
+        if vstr.split('-')[0] == MY_V or int(vlist[2]) <= int(MY_V[2]):
+            v_n = (int(MY_V[0]), int(MY_V[1]), int(MY_V[2]) + 1)
             self.version = f'{v_n[0]}.{v_n[1]}.{v_n[2]}'
             global CLEAN_TAG
             CLEAN_TAG = True
