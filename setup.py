@@ -76,6 +76,7 @@ from MMCQsc import version as my_v
 
 MY_V = my_v.split('.')[:3]
 CLEAN_TAG = False
+IN_GVC = False
 DIST_DIR = os.path.abspath('./dist')
 
 class GVC(distutils.cmd.Command):
@@ -103,6 +104,8 @@ class GVC(distutils.cmd.Command):
     def run(self):
         """命令运行时的操作."""
         global CLEAN_TAG
+        global IN_GVC
+        IN_GVC = True
         print("======= command is running =======")
         _i = 0
         while True:
@@ -144,7 +147,7 @@ class GVC(distutils.cmd.Command):
         result.wait()
         vlist = vstr.split('-')[0].split('.')
         if int(vlist[2]) <= int(MY_V[2]):
-            v_n = (int(MY_V[0]), int(MY_V[1]), int(MY_V[2]) + 1)
+            v_n = (int(MY_V[0]), int(MY_V[1]), int(MY_V[2]) + 10)
             self.version = f'{v_n[0]}.{v_n[1]}.{v_n[2]}'
             global CLEAN_TAG
             CLEAN_TAG = True
@@ -175,45 +178,13 @@ class BuildPyCommand(setuptools.command.build_py.build_py):
 
 
 
-# def git_v_control(v_n):
-#     """
-#     请确保命令行能够正确使用 Git 命令。
-#     应当注意，将构建时动态写入的文件从 Git 中移除
-#     """
-#     args = shlex.split(f"git add .")
-#     repo = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0, universal_newlines=True, stdout=PIPE)
-#     repo.wait()
-#     # 工作区 -> 暂存区
-#     args = shlex.split(f"git commit -a -m 'setup.py auto commit'")
-#     repo = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0, universal_newlines=True, stdout=PIPE)
-#     repo.wait()
-#     # 打标签应当在提交之后，生成干净的无本地标识符的包
-#     args = shlex.split(f"git tag {v_n[0]}.{v_n[1]}.{v_n[2]}")
-#     repo = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0, universal_newlines=True, stdout=PIPE)
-#     repo.wait()
-
-
-# it =  os.open("src/MMCQsc/__init__.py",os.O_RDWR|os.O_CREAT)
-# '''
-# os.lseek(fd, pos, how)
-# 将文件描述符 fd 的当前位置设置为 pos，位置的计算方式 how 如下：设置为 SEEK_SET 或 0 表示从文件开头计算，设置为 SEEK_CUR 或 1 表示从文件当前位置计算，设置为 SEEK_END 或 2 表示文件尾计算。返回新指针位置，这个位置是从文件开头计算的，单位是字节。'''
-# os.lseek(it,0,2) # 移动至文件末尾
-# os.lseek(it,-6,1) # 往回移动
-# fstr = f"{build_time}  ->  {v_n}\n\n'''"
-# os.write(it, fstr.encode('utf8'))
-
-# ''' 没有配置好 Git 请勿执行 git_v_control() '''
-# git_v_control(v_n)
-
-
-
 
 
 # 读取许可证
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
+    print('许可证已加载\n')
 
-print('许可证已加载\n')
 print('如果第一次构建或者删除了缓存，则需要等待，这取决于当前环境\n')
 print('开始执行，若长时间无响应，请检查是否有误\n')
 
@@ -303,8 +274,11 @@ setuptools.setup(
 
 
 
-
-print('看上去一切顺利，如果构建结果未能正确反映项目结构，尝试删除 .eggs 和 build 文件夹然后重试')
-if CLEAN_TAG == True:
-    args = shlex.split(f"start dist") # 打开 dist 文件夹
-    Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0, universal_newlines=True, stdout=PIPE)
+if IN_GVC == False:
+    print('看上去一切顺利，如果构建结果未能正确反映项目结构，尝试删除 .eggs 和 build 文件夹然后重试')
+    while True:
+        sleep(2)
+        if os.path.exists(DIST_DIR):
+            args = shlex.split(f"start dist") # 打开 dist 文件夹
+            Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0, universal_newlines=True, stdout=PIPE)
+            break
