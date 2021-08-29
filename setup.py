@@ -121,8 +121,7 @@ my_v = version
 
 MY_V = my_v.split('.')
 CLEAN_TAG = False
-IN_GVC = False
-DIST_DIR = os.path.abspath('./dist')
+DIST_DIR = os.path.abspath(os.path.join(__file__,'dist'))
 
 class GVC(distutils.cmd.Command):
     """适用于构建时修改内容的频繁版本迭代，允许自动完成一些操作，这在修复 bug 时期特别实用.
@@ -150,9 +149,7 @@ class GVC(distutils.cmd.Command):
 
     def finalize_options(self):
         """接收到命令行传过来的值之后的处理， 也可以什么都不干."""
-        global IN_GVC
-        if self.qmode:
-            IN_GVC = True
+        pass
 
     def run(self):
         """命令运行时的操作."""
@@ -343,7 +340,7 @@ setuptools.setup(
 
 
 
-if IN_GVC == False:
+if 1:
     print('看上去一切顺利，如果构建结果未能正确反映项目结构，尝试删除 .eggs 和 build 文件夹然后重试')
     j = 0
     while True:
@@ -352,6 +349,6 @@ if IN_GVC == False:
         if j >= 3:
             break
         if os.path.exists(DIST_DIR):
-            args = shlex.split(f"start dist") # 打开 dist 文件夹
+            args = shlex.split(f"start {DIST_DIR}") # 打开 dist 文件夹
             Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0, universal_newlines=True, stdout=PIPE)
             break
