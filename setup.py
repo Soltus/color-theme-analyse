@@ -72,8 +72,9 @@ build_time = strftime('%Z %Y-%m-%d %H:%M:%S')
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "src"))
 if BASE_DIR not in sys.path:
     sys.path.append(BASE_DIR)
-from MMCQsc import version as MY_V
+from MMCQsc import version as my_v
 
+MY_V = my_v.split('.')[:2]
 CLEAN_TAG = False
 
 
