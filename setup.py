@@ -65,6 +65,16 @@ locale.setlocale(locale.LC_ALL, '')
 ctypes.cdll.ucrtbase._tzset()
 # 调整为中国时间
 
+
+def is_admin():
+    try:
+        return ctypes.windll.shell32.IsUserAnAdmin()
+    except:
+        return False
+if is_admin():
+    pass
+else:
+    ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, __file__, None, 1)
 build_time = strftime('%Z %Y-%m-%d %H:%M:%S')
 
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "src"))
@@ -74,11 +84,6 @@ if BASE_DIR not in sys.path:
 if DPKG_DIR not in sys.path:
     sys.path.append(DPKG_DIR)
 
-def is_admin():
-    try:
-        return ctypes.windll.shell32.IsUserAnAdmin()
-    except:
-        return False
 
 class Pgd:
     def __init__(self):
