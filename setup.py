@@ -128,20 +128,21 @@ class GVC(distutils.cmd.Command):
         vlist = vstr.split('-')[0].split('.')
         if vstr.split('-')[0] == MY_V:
             v_n = (int(vlist[0]), int(vlist[1]), int(vlist[2]))
+            self.version = f'{v_n[0]}.{v_n[1]}.{v_n[2]}'
             global CLEAN_TAG
             CLEAN_TAG = True
         else:
             v_n = (int(vlist[0]), int(vlist[1]), int(vlist[2]) + 1)
-        self.version = f'{v_n[0]}.{v_n[1]}.{v_n[2]}'
-        it =  os.open("src/MMCQsc/__init__.py",os.O_RDWR|os.O_CREAT)
-        '''
-        os.lseek(fd, pos, how)
-        将文件描述符 fd 的当前位置设置为 pos，位置的计算方式 how 如下：设置为 SEEK_SET 或 0 表示从文件开头计算，设置为 SEEK_CUR 或 1 表示从文件当前位置计算，设置为 SEEK_END 或 2 表示文件尾计算。返回新指针位置，这个位置是从文件开头计算的，单位是字节。'''
-        os.lseek(it,0,2) # 移动至文件末尾
-        os.lseek(it,-6,1) # 往回移动
-        fstr = f"{build_time}  ->  {self.version}\n\n'''"
-        os.write(it, fstr.encode('utf8'))
-        print(f'注册版本号 {self.version}\n')
+            self.version = f'{v_n[0]}.{v_n[1]}.{v_n[2]}'
+            it =  os.open("src/MMCQsc/__init__.py",os.O_RDWR|os.O_CREAT)
+            '''
+            os.lseek(fd, pos, how)
+            将文件描述符 fd 的当前位置设置为 pos，位置的计算方式 how 如下：设置为 SEEK_SET 或 0 表示从文件开头计算，设置为 SEEK_CUR 或 1 表示从文件当前位置计算，设置为 SEEK_END 或 2 表示文件尾计算。返回新指针位置，这个位置是从文件开头计算的，单位是字节。'''
+            os.lseek(it,0,2) # 移动至文件末尾
+            os.lseek(it,-6,1) # 往回移动
+            fstr = f"{build_time}  ->  {self.version}\n\n'''"
+            os.write(it, fstr.encode('utf8'))
+            print(f'注册版本号 {self.version}\n')
         return self.version
 
     def Version(self) -> str:
