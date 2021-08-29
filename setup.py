@@ -116,9 +116,8 @@ if dddd:
     print(f'\n\t\t{dddd} new packages already installed .\n\n\t\ttry to launch again .\n\n')
     sys.exit()
 
-# from MMCQsc.version import version as my_v
-import MMCQsc
-my_v = MMCQsc.__version__
+from MMCQsc.version import version
+my_v = version
 
 MY_V = my_v.split('.')
 CLEAN_TAG = False
