@@ -13,22 +13,31 @@ class Cgitup(argparse.Action):
         # print('\n%r = %r' % (option_string,values))
         # print(namespace)
 
-def git_v_tag(v,c,t,cwd):
+def git_v_tag(v,c,t,q,cwd):
     """
     请确保命令行能够正确使用 Git 命令。
     应当注意，将构建时动态写入的文件从 Git 中移除
     """
-    args = shlex.split(f"git add .")
+    command = "git add ."
+    if not q:
+        print(command)
+    args = shlex.split(command)
     repo = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0, universal_newlines=True, stdout=PIPE, cwd=cwd)
     repo.wait()
     # 工作区 -> 暂存区
     if c:
-        args = shlex.split(f"git commit -a -m 'setup.py auto commit'")
+        command = "git commit -a -m 'setup.py auto commit'"
+        if not q:
+            print(command)
+        args = shlex.split(command)
         repo = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0, universal_newlines=True, stdout=PIPE, cwd=cwd)
         repo.wait()
     if t:
         # 打标签应当在提交之后，生成干净的无本地标识符的包
-        args = shlex.split(f"git tag {v}")
+        command = f"git tag {v}"
+        if not q:
+            print(command)
+        args = shlex.split(command)
         repo = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0, universal_newlines=True, stdout=PIPE, cwd=cwd)
         repo.wait()
 
@@ -38,9 +47,9 @@ parser.add_argument('--version',default='0.0.0', action=Cgitup, help='define ver
 parser.add_argument('--commit',default=True, action=argparse.BooleanOptionalAction)
 parser.add_argument('--tag',default=True, action=argparse.BooleanOptionalAction)
 parser.add_argument('--workdir',default=None, action=Cgitup, help='工作区')
-# parser.add_argument('--mode',choices=['r','w'],required=False)
+parser.add_argument('--quiet',default=True,choices=[True,False],required=False)
 
 args = parser.parse_args()
-git_v_tag(v=args.version,c=args.commit,t=args.tag,cwd=args.workdir)
+git_v_tag(v=args.version,c=args.commit,t=args.tag,q=args.quiet,cwd=args.workdir)
 
 

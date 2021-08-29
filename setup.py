@@ -84,7 +84,7 @@ class GVC(distutils.cmd.Command):
     生成干净的可自动迭代的 releas/dev 版本， 例如 color_theme_analyse-1.2.721.dev4-py3-none-any
     使用方法 python setup.py GVC，要求正确配置 Git 环境
     如果 PyPi 的账号密码的配置文件正确存在，可以使用以下括号内的命令一键构建并上传（以 testPyPi 为例）：
-    [python setup.py GVC;python setup.py bdist_wheel;twine upload dist/* --verbose --repository testpypi]
+    [python setup.py GVC -q;python setup.py bdist_wheel;twine upload dist/* --verbose --repository testpypi]
     频繁的上传测试仅限于依赖真实环境模拟的项目，否则不建议这么做 """
     # 命令的描述，会出现在`python setup.py --help`里
     description = '适用于修复 bug 的频繁版本迭代'
@@ -93,23 +93,25 @@ class GVC(distutils.cmd.Command):
         # binary选项，长名字后面没有等号，最后的值会传给`self.<长名字>`，使用形式 --commit 或者 -c (使用了为 True，默认应为 False)
         # 需要值的选项，长名字后面有等号，最后的值会传给`self.<长名字>`（-会用_代替），使用形式 --version=1.1.1 或者 -v=1.1.1
         ('version=', 'v', 'define build version'),
-        ('commit','c','git commit')
+        ('quiet','q','queit mode')
   ]
 
     def initialize_options(self):
         """设置选项的默认值, 每个选项都要有初始值，否则报错."""
         # Each user option must be listed here with their default value.
         self.version = my_v
+        self.quiet = False
 
     def finalize_options(self):
         """接收到命令行传过来的值之后的处理， 也可以什么都不干."""
+        global IN_GVC
+        if self.quiet == False:
+            IN_GVC = True
         self.default_nv()
 
     def run(self):
         """命令运行时的操作."""
         global CLEAN_TAG
-        global IN_GVC
-        IN_GVC = True
         print("======= command is running =======")
         _i = 0
         while True:
@@ -134,6 +136,8 @@ class GVC(distutils.cmd.Command):
             args = ['gitup.py','--version',self.version,'--workdir',os.getcwd(),'--no-commit','--no-tag']
         else:
             args = ['gitup.py','--version',self.version,'--workdir',os.getcwd(),'--commit','--tag']
+        if self.quiet:
+            args.append('--queit')
         command = [f'{sys.executable}']
         if self.version:
             for i in args:
@@ -163,8 +167,7 @@ class GVC(distutils.cmd.Command):
         else:
             v_n = (int(MY_V[0]), int(MY_V[1]) + 1, 0)
             self.version = f'{v_n[0]}.{v_n[1]}.{v_n[2]}'
-        # if int(vlist[2]) <= int(MY_V[2]):
-        #CLEAN_TAG = True
+
         it =  os.open("src/MMCQsc/__init__.py",os.O_RDWR|os.O_CREAT)
         '''
         os.lseek(fd, pos, how)
@@ -176,7 +179,7 @@ class GVC(distutils.cmd.Command):
         return self.version
 
     def Version(self) -> str:
-        return self.default_nv()
+        return self.version
 
 import setuptools.command.build_py
 class BuildPyCommand(setuptools.command.build_py.build_py):
