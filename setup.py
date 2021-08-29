@@ -52,17 +52,50 @@ MANIFEST.in 需要放在和 setup.py 同级的顶级目录下，setuptools 会�
 当前 commit 不在标签上，代码没有修改：{next_version}.dev{distance}+{scm letter}{revision hash}
 当前 commit 不在标签上，代码有修改： {next_version}.dev{distance}+{scm letter}{revision hash}.dYYYMMMDD
 '''
-
+import distutils.cmd
+import distutils.log
 import setuptools
 import shutil
 import os,sys
 from time import strftime, sleep
-from subprocess import Popen,PIPE
+from subprocess import Popen,PIPE,check_call
 import shlex
 import ctypes, locale
 locale.setlocale(locale.LC_ALL, '')
 ctypes.cdll.ucrtbase._tzset()
 # 调整为中国时间
+
+class PylintCommand(distutils.cmd.Command):
+  """A custom command to run Pylint on all Python source files."""
+
+  description = 'run Pylint on Python source files'
+  user_options = [
+      # The format is (long option, short option, description).
+      ('pylint-rcfile=', None, 'path to Pylint config file'),
+  ]
+
+  def initialize_options(self):
+    """Set default values for options."""
+    # Each user option must be listed here with their default value.
+    self.pylint_rcfile = ''
+
+  def finalize_options(self):
+    """Post-process options."""
+    if self.pylint_rcfile:
+      assert os.path.exists(self.pylint_rcfile), (
+          'Pylint config file %s does not exist.' % self.pylint_rcfile)
+
+  def run(self):
+    """Run command."""
+    command = ['/usr/bin/pylint']
+    if self.pylint_rcfile:
+      command.append('--rcfile=%s' % self.pylint_rcfile)
+    command.append(os.getcwd())
+    self.announce(
+        'Running command: %s' % str(command),
+        level=distutils.log.INFO)
+    check_call(command)
+
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "src"))
 if BASE_DIR not in sys.path:
     sys.path.append(BASE_DIR)
@@ -145,6 +178,9 @@ print('开始执行，若长时间无响应，请检查是否有误\n')
 
 setuptools.setup(
     name="color-theme-analyse", # 在 PyPI 上搜索的项目名称
+    cmdclass={
+        'pylint': PylintCommand,
+    },
     # setup_requires=['setuptools_scm'], # 指定运行 setup.py 文件本身所依赖的包
     # use_scm_version=True, # .gitignore 应与 setup.py 在同一文件夹 更多信息参考 https://pypi.org/project/setuptools-scm/
     version=f"{v_n[0]}.{v_n[1]}.{v_n[2]}", # 默认的手动指定版本
