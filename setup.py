@@ -115,12 +115,15 @@ class GVC(distutils.cmd.Command):
         """命令运行时的操作."""
         print("======= command is running =======")
         command = [f'{sys.executable}']
+        args = ['gitup.py','--version',self.version,'--workdir',os.getcwd()]
         if self.version:
-            command.append('gitup.py')
-            command.append('--version')
-            command.append(self.version)
-            command.append('--workdir')
-            command.append(os.getcwd())
+            for i in args:
+                command.append(i)
+            # command.append('gitup.py')
+            # command.append('--version')
+            # command.append(self.version)
+            # command.append('--workdir')
+            # command.append(os.getcwd())
             self.announce('Running command: %s' % str(command),level=distutils.log.INFO)
             check_call(command)
 
