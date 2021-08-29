@@ -215,8 +215,8 @@ class GVC(distutils.cmd.Command):
         if int(MY_V[2]) <= 999:
             if len(my_v.split('.')) > 3:
                 v_n = (int(MY_V[0]), int(MY_V[1]), int(MY_V[2]))
-                self.version = f'{v_n[0]}.{v_n[1]}.{v_n[2]+1}'
-                self.version2 = f'{v_n[0]}.{v_n[1]}.{v_n[2]+2}'
+                self.version = f'{v_n[0]}.{v_n[1]}.{v_n[2]+10}'
+                self.version2 = f'{v_n[0]}.{v_n[1]}.{v_n[2]+11}'
             else:
                 v_n = (int(MY_V[0]), int(MY_V[1]), int(MY_V[2]))
                 self.version = f'{v_n[0]}.{v_n[1]}.{v_n[2]+1}'
