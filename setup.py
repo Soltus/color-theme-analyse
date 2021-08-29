@@ -90,9 +90,10 @@ class GVC(distutils.cmd.Command):
     description = '适用于修复 bug 的频繁版本迭代'
     user_options = [
         # 格式是`(长名字，短名字，描述)`，描述同样会出现在doc里
+        # 注意不要和全局选项冲突，例如 verbose(v) quiet(q) help(h)
         # binary选项，长名字后面没有等号，最后的值会传给`self.<长名字>`，使用形式 --commit 或者 -c (使用了为 True，默认应为 False)
         # 需要值的选项，长名字后面有等号，最后的值会传给`self.<长名字>`（-会用_代替），使用形式 --version=1.1.1 或者 -v=1.1.1
-        ('quiet=','q','queit mode'),
+        ('qmode','m','queit mode'),
         ('version=', 'v', 'define build version'),
   ]
 
@@ -100,12 +101,12 @@ class GVC(distutils.cmd.Command):
         """设置选项的默认值, 每个选项都要有初始值，否则报错."""
         # Each user option must be listed here with their default value.
         self.version = my_v
-        self.quiet = False
+        self.qmode = False
 
     def finalize_options(self):
         """接收到命令行传过来的值之后的处理， 也可以什么都不干."""
         global IN_GVC
-        if self.quiet:
+        if self.qmode:
             pass
         else:
             IN_GVC = True
@@ -138,7 +139,7 @@ class GVC(distutils.cmd.Command):
             args = ['gitup.py','--version',self.version,'--workdir',os.getcwd(),'--no-commit','--no-tag']
         else:
             args = ['gitup.py','--version',self.version,'--workdir',os.getcwd(),'--commit','--tag']
-        if self.quiet:
+        if self.qmode:
             pass
         else:
             args.append('--quiet')
@@ -150,14 +151,14 @@ class GVC(distutils.cmd.Command):
             check_call(command)
 
     def default_nv(self) -> str:
-        print(self.quiet)
+        print(self.qmode)
         global CLEAN_TAG
         args = shlex.split("git describe --tags")
         result = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0, universal_newlines=True, stdout=PIPE)
         # 如果 stdout 参数是 PIPE，此属性是一个类似 open() 返回的可读流。从流中读取子进程提供的输出。
         # 如果 encoding 或 errors 参数被指定或者 universal_newlines 参数为 True，此流为文本流，否则为字节流。如果 stdout 参数非 PIPE，此属性为 None。
         vstr = result.stdout.read()
-        if self.quiet:
+        if self.qmode:
             pass
         else:
             print(f'latest git tag: {vstr}')
