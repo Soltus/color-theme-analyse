@@ -84,7 +84,7 @@ class GVC(distutils.cmd.Command):
     生成干净的可自动迭代的 releas/dev 版本， 例如 color_theme_analyse-1.2.721.dev4-py3-none-any
     使用方法 python setup.py GVC，要求正确配置 Git 环境
     如果 PyPi 的账号密码的配置文件正确存在，可以使用以下括号内的命令一键构建并上传（以 testPyPi 为例）：
-    [python setup.py GVC -q;python setup.py bdist_wheel;twine upload dist/* --verbose --repository testpypi]
+    [python setup.py GVC -q --qmode;python setup.py bdist_wheel;twine upload dist/* --verbose --repository testpypi]
     频繁的上传测试仅限于依赖真实环境模拟的项目，否则不建议这么做 """
     # 命令的描述，会出现在`python setup.py --help`里
     description = '适用于修复 bug 的频繁版本迭代'
