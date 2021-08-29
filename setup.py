@@ -154,11 +154,11 @@ class GVC(distutils.cmd.Command):
             pass
         else:
             IN_GVC = True
-        self.default_nv()
 
     def run(self):
         """命令运行时的操作."""
         global CLEAN_TAG
+        self.default_nv()
         print("======= command is running =======")
         _i = 0
         while True:
