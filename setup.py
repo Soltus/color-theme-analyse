@@ -55,7 +55,6 @@ MANIFEST.in 需要放在和 setup.py 同级的顶级目录下，setuptools 会�
 import distutils.cmd
 import distutils.log
 import setuptools
-import setuptools_scm
 import shutil
 import os,sys
 from time import strftime, sleep
