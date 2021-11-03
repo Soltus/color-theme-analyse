@@ -246,7 +246,7 @@ class GVC(distutils.cmd.Command):
 
 import setuptools.command.build_py
 class BuildPyCommand(setuptools.command.build_py.build_py):
-    """python setup.py build_py."""
+    """python setup.py build_py"""
 
     def run(self):
         # self.run_command('GVC')
@@ -266,10 +266,7 @@ print('开始执行，若长时间无响应，请检查是否有误\n')
 
 setuptools.setup(
     name="color-theme-analyse", # 在 PyPI 上搜索的项目名称
-    cmdclass={
-        'GVC': GVC,
-        'build_py': BuildPyCommand,
-    },
+    cmdclass={'GVC': GVC,'build_py': BuildPyCommand,}, #报错不重要
     setup_requires=[], # 指定运行 setup.py 文件本身所依赖的包 , 国内由于众所周知的原因会假死，因此留空即可
     use_scm_version=True, # .gitignore 应与 setup.py 在同一文件夹 更多信息参考 https://pypi.org/project/setuptools-scm/
     # version='1.1.1', # 默认的手动指定版本
