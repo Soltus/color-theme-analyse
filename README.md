@@ -6,6 +6,10 @@
 
 `pip install color-theme-analyse --no-deps -i https://pypi.org.simple`
 
+如果你使用的是校园网，可以使用腾讯镜像下载本项目（俺也不知道为啥腾讯镜像连这都收录）
+
+`pip install color-theme-analyse --no-deps -i https://mirrors.tencent.com/pypi/simple`
+
 ### 项目地址
 
 [Bitbucket（最快更新）](https://bitbucket.org/hi-windom/colorthemeanalyse/ "默认仓库")

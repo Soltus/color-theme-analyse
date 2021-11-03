@@ -76,15 +76,15 @@ def createServer(myip,PORT):
     '''
     result =  Popen(args, bufsize=0, executable=sys.executable, close_fds=False, shell=False, cwd=SRC_DIR, startupinfo=None, creationflags=0) # shell=False cwd=SRC_DIR 非常重要
     logger.debug(f"http.server进程 PID: {result.pid}")
-    logger.info(f'\n\n\n\t\t本地服务器创建成功：\n\n\t\t{myip}:{PORT}\n\n\t\t{netlocal}\n\n')
+    logger.info(f'\n\n\n\t\t本地服务器创建成功：\n\n\t\t http://{myip}:{PORT}\n\n\t\t{netlocal}\n\n')
     logger.warning("\n\n\t\t[ tip ] : 快捷键 CTRL + C 强制结束当前任务，CTRL + PAUSE_BREAK 强制结束所有任务并退出 Python\n\n")
     result.wait()
 
 def openhtml(myip,PORT):
     if os.name == "posix":
-        logger.info(f'\n\n\n\t\t浏览器访问：\n\n\t\t{myip}:{PORT}\n\n')
+        logger.info(f'\n\n\n\t\t浏览器访问：\n\n\t\t http://{myip}:{PORT}\n\n')
     else:
-        logger.info(f'\n\n\n\t\t即将默认浏览器打开：\n\n\t\t{myip}:{PORT}\n\n')
+        logger.info(f'\n\n\n\t\t即将默认浏览器打开：\n\n\t\t http://{myip}:{PORT}\n\n')
         os.system(f'start http://{myip}:{PORT}')
 
 def mainFunc():
