@@ -200,7 +200,7 @@ class GVC(distutils.cmd.Command):
         if CLEAN_TAG == True:
             args = ['gitup.py','--old',_version[0],'--new',_version[1],'--workdir',os.getcwd(),'--no-commit','--no-tag']
         else:
-            args = ['gitup.py','--old',_version[0],'--new',_version[1],'--workdir',os.getcwd(),'--commit','--tag']
+            args = ['gitup.py','--old',f'{_version[0]}.dev1','--new',_version[1],'--workdir',os.getcwd(),'--commit','--tag']
         if self.qmode == False:
             args.append('--no-quiet')
         else:
@@ -230,7 +230,7 @@ class GVC(distutils.cmd.Command):
         if self.version != my_v:
             v_n = (int(MY_V[0]), int(MY_V[1]), int(MY_V[2]))
             self.version2 = self.version
-            self.version = f'{v_n[0]}.{v_n[1]}.{v_n[2]+1}'
+            self.version = f'{v_n[0]}.{v_n[1]}.{v_n[2]}'
         else:
             vlist = vstr.split('-')[0].split('.')
             if int(MY_V[2]) < int(vlist[2]):
