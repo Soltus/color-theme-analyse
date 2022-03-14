@@ -180,12 +180,13 @@ class GVC(distutils.cmd.Command):
                 if os.path.exists(DIST_DIR):
                     print(f"删除目录{DIST_DIR}")
                     shutil.rmtree(DIST_DIR,ignore_errors=False)
+                    sleep(3)
                     if os.path.exists(DIST_DIR):
                         print("清除旧的打包生成未能成功！")
                 break
             except OSError as e:
                 print(e)
-                if _i > 99:
+                if _i > 9:
                         print('\n程序放弃重试\n')
                         exit(99)
                 print('请解除占用以继续，程序将等待 3 秒。如需禁用删除旧的生成请修改 setup.py \n')
