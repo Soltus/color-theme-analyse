@@ -148,7 +148,7 @@ class GVC(distutils.cmd.Command):
         # 格式是`(长名字，短名字，描述)`，描述同样会出现在doc里
         # 注意不要和全局选项冲突，例如 verbose(v) quiet(q) help(h)
         # binary选项，长名字后面没有等号，最后的值会传给`self.<长名字>`，使用形式 --commit 或者 -c (使用了为 True，默认应为 False)
-        # 需要值的选项，长名字后面有等号，最后的值会传给`self.<长名字>`（-会用_代替），使用形式 --version=1.1.1 或者 -v=1.1.1
+        # 需要值的选项，长名字后面有等号，最后的值会传给`self.<长名字>`（-会用_代替），使用形式 --version=1.1.1 ，不能使用 -v=1.1.1
         ('qmode','m','queit mode'),
         ('version=', 'v', 'define build version'),
   ]
