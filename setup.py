@@ -81,6 +81,7 @@ else:
 build_time = strftime('%Z %Y-%m-%d %H:%M:%S')
 
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "src"))
+DIST_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__),'dist'))
 DPKG_DIR = os.path.abspath(os.path.join(BASE_DIR, 'MMCQsc_dpkg'))
 if BASE_DIR not in sys.path:
     sys.path.append(BASE_DIR)
@@ -134,7 +135,7 @@ my_v = version
 
 MY_V = my_v.split('.')
 CLEAN_TAG = False
-DIST_DIR = os.path.abspath(os.path.join(__file__,'dist'))
+
 
 class GVC(distutils.cmd.Command):
     """适用于构建时修改内容的频繁版本迭代，允许自动完成一些操作，这在修复 bug 时期特别实用.
@@ -180,7 +181,7 @@ class GVC(distutils.cmd.Command):
                 if os.path.exists(DIST_DIR):
                     print(f"删除目录{DIST_DIR}")
                     shutil.rmtree(DIST_DIR,ignore_errors=False)
-                    sleep(3)
+                    sleep(1)
                     if os.path.exists(DIST_DIR):
                         print("清除旧的打包生成未能成功！")
                     break
