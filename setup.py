@@ -44,6 +44,7 @@ MANIFEST.in 需要放在和 setup.py 同级的顶级目录下，setuptools 会�
 使用setuptools_scm方案，则版本号是在setup()函数中自动生成的。 主模块的__version__如果需要和它保持一致，就需要读取已安装的当前包的版本号。
 修改 Release 版本号需要使用 Git 打上版本号标签，在熟悉之前应当使用 x.x.x 形式的标签（例如 1.0.2 ）
 如果不熟悉 Git 命令行操作，可以使用软件 Sourcetree 直观的提交和打标签。如果没有标签，你生成的包将始终为 0.1.dev*
+（新增）你也可以用本文件提供的 GVC 模块来打标签，具体内容请跳转到 class GVC 查看
 建议的版本号规则：
 模块的版本号采用X.Y.Z的格式，
 1、修复bug，小改动，增加z。
@@ -139,18 +140,18 @@ class GVC(distutils.cmd.Command):
     """适用于构建时修改内容的频繁版本迭代，允许自动完成一些操作，这在修复 bug 时期特别实用.
     生成干净的可自动迭代的 releas/dev 版本， 例如 color_theme_analyse-1.2.721.dev4-py3-none-any
     使用方法 python setup.py GVC，要求正确配置 Git 环境
-    如果 PyPi 的账号密码的配置文件正确存在，可以使用以下括号内的命令一键构建并上传（以 testPyPi 为例）：
-    [python setup.py GVC --qmode;python setup.py bdist_wheel;twine upload dist/* --verbose --repository testpypi]
+    如果 PyPi 的账号密码的配置文件正确存在，可以使用以下括号内的命令一键构建并上传（以 testPyPi 为例，--version参数自行修改）：
+    [python setup.py GVC --qmode --version=1.1.1;python setup.py bdist_wheel;twine upload dist/* --verbose --repository testpypi]
     频繁的上传测试仅限于依赖真实环境模拟的项目，否则不建议这么做 """
     # 命令的描述，会出现在`python setup.py --help`里
     description = '适用于修复 bug 的频繁版本迭代（用户定义的）'
     user_options = [
         # 格式是`(长名字，短名字，描述)`，描述同样会出现在doc里
         # 注意不要和全局选项冲突，例如 verbose(v) quiet(q) help(h)
-        # binary选项，长名字后面没有等号，最后的值会传给`self.<长名字>`，使用形式 --commit 或者 -c (使用了为 True，默认应为 False)
+        # binary选项，长名字后面没有等号，最后的值会传给`self.<长名字>`，使用形式 --qmode 或者 -m (使用了为 True，默认应为 False)
         # 需要值的选项，长名字后面有等号，最后的值会传给`self.<长名字>`（-会用_代替），使用形式 --version=1.1.1 ，不能使用 -v=1.1.1
-        ('qmode','m','queit mode'),
-        ('version=', 'v', 'define build version'),
+        ('qmode','m','queit mode without debug info'),
+        ('version=', 'v', 'define git-tag and build-version'),
   ]
 
     def initialize_options(self):
@@ -217,23 +218,29 @@ class GVC(distutils.cmd.Command):
             print(f'latest git tag: {vstr}')
             print(f'latest version: {my_v}')
         result.wait()
-        vlist = vstr.split('-')[0].split('.')
-        if int(MY_V[2]) < int(vlist[2]):
-            MY_V[2] = vlist[2]
-        if int(MY_V[2]) < 999:
-            if len(my_v.split('.')) > 3:
-                v_n = (int(MY_V[0]), int(MY_V[1]), int(MY_V[2]))
-                self.version = f'{v_n[0]}.{v_n[1]}.{v_n[2]+10}'
-                self.version2 = f'{v_n[0]}.{v_n[1]}.{v_n[2]+11}'
-            else:
-                v_n = (int(MY_V[0]), int(MY_V[1]), int(MY_V[2]))
-                self.version = f'{v_n[0]}.{v_n[1]}.{v_n[2]+1}'
-                self.version2 = f'{v_n[0]}.{v_n[1]}.{v_n[2]+2}'
-                CLEAN_TAG = True
+        if self.version != my_v:
+            v_n = (int(MY_V[0]), int(MY_V[1]), int(MY_V[2]))
+            self.version2 = self.version
+            self.version = f'{v_n[0]}.{v_n[1]}.{v_n[2]+1}'
         else:
-            v_n = (int(MY_V[0]), int(MY_V[1]), 0)
-            self.version = f'{v_n[0]}.{v_n[1]+1}.{v_n[2]}'
-            self.version2 = f'{v_n[0]}.{v_n[1]+1}.{v_n[2]+1}'
+            vlist = vstr.split('-')[0].split('.')
+            if int(MY_V[2]) < int(vlist[2]):
+                MY_V[2] = vlist[2]
+            if int(MY_V[2]) < 999:
+                if len(my_v.split('.')) > 3:
+                    v_n = (int(MY_V[0]), int(MY_V[1]), int(MY_V[2]))
+                    self.version = f'{v_n[0]}.{v_n[1]}.{v_n[2]+10}'
+                    self.version2 = f'{v_n[0]}.{v_n[1]}.{v_n[2]+11}'
+                else:
+                    v_n = (int(MY_V[0]), int(MY_V[1]), int(MY_V[2]))
+                    self.version = f'{v_n[0]}.{v_n[1]}.{v_n[2]+1}'
+                    self.version2 = f'{v_n[0]}.{v_n[1]}.{v_n[2]+2}'
+                    CLEAN_TAG = True
+            else:
+                v_n = (int(MY_V[0]), int(MY_V[1]), 0)
+                self.version = f'{v_n[0]}.{v_n[1]+1}.{v_n[2]}'
+                self.version2 = f'{v_n[0]}.{v_n[1]+1}.{v_n[2]+1}'
+
 
         it =  os.open("src/MMCQsc/__init__.py",os.O_RDWR|os.O_CREAT)
         '''
