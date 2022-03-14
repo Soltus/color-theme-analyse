@@ -1,28 +1,40 @@
-项目依赖比较简单，推荐使用无依赖安装：
+项目依赖比较简单，可以使用无依赖安装：
 
 `pip install color-theme-analyse --no-deps`
 
-如果你设置了全局镜像，请使用以下的命令安装：
+如果你设置了全局镜像（多数镜像不会收录本项目），请使用以下的命令从官方仓库安装：
 
 `pip install color-theme-analyse --no-deps -i https://pypi.org.simple`
 
 如果你使用的是校园网，可以使用腾讯镜像下载本项目（俺也不知道为啥腾讯镜像连这都收录）
 
-`pip install color-theme-analyse --no-deps -i https://mirrors.tencent.com/pypi/simple`
+`pip install color-theme-analyse[base] -i https://mirrors.tencent.com/pypi/simple`
+
+---
+
+**如果出于pypi学习目的首次下载，建议使用下面的下载命令：（推荐）**
+
+`pip install color-theme-analyse[base,dev] -i https://mirrors.tencent.com/pypi/simple`
+
+等效于 `pip install color-theme-analyse[merge] -i https://mirrors.tencent.com/pypi/simple`
+
+**安装后使用终端命令RunMMCQsc运行（仅同步PyPi分支）**
+
+---
 
 ### 项目地址
 
-[Bitbucket（最快更新）](https://bitbucket.org/hi-windom/colorthemeanalyse/ "默认仓库")
+[Bitbucket](https://bitbucket.org/hi-windom/colorthemeanalyse/ "默认仓库")（最快更新）
 
-[Gitee（最快下载）](https://gitee.com/hi-windom/color-theme-analyse "主要同步仓库")
+[Gitee](https://gitee.com/hi-windom/color-theme-analyse "主要同步仓库")（建议下载）
 
-[Github（仅同步PyPi分支）](https://github.com/Soltus/color-theme-analyse)
+[Github](https://github.com/Soltus/color-theme-analyse)（偶尔同步）
 
-[GitLab](https://gitlab.com/liaoshanyi/ColorThemeAnalyse)
+[GitLab](https://gitlab.com/liaoshanyi/ColorThemeAnalyse)（偶尔同步）
 
-[Pypi](https://pypi.org/project/color-theme-analyse/ "https://pypi.org/project/color-theme-analyse/")
+[Pypi](https://pypi.org/project/color-theme-analyse/ "https://pypi.org/project/color-theme-analyse/")（官方仓库）
 
-[libraries.io](https://libraries.io/pypi/color-theme-analyse)
+[libraries.io](https://libraries.io/pypi/color-theme-analyse)（同步官方仓库）
 
 默认分支应为 `embed`
 
@@ -52,7 +64,7 @@ Bug 反馈和 Issues 提交可以在 Bitbucket 或者 Gitee，**在 Gitee 会得
 
 ### Requires
 
-要求的版本 3.10.0 > Python >= 3.8.0
+**要求的版本 3.10.0 > Python >= 3.9.0**
 
 建议的版本 Python == 3.9.5
 
@@ -62,7 +74,7 @@ Bug 反馈和 Issues 提交可以在 Bitbucket 或者 Gitee，**在 Gitee 会得
 
 建议的操作系统 Windows>=22000.100（ Win 11 Dev ）
 
-必要的 Python 第三方库依赖：numpy, opencv-python, pillow, easygui, rich
+必要的 Python 第三方库依赖：numpy, opencv-python, pillow, ~~easygui~~, rich
 
 本项目使用了 `React` 框架（非项目构建，只是运行时 `Babel`）
 
@@ -76,7 +88,7 @@ Bug 反馈和 Issues 提交可以在 Bitbucket 或者 Gitee，**在 Gitee 会得
 
 调试请运行src/MMCQsc/scp/main.py
 
-这是为 Windows 平台开发的，无法在 Linux 中正常使用
+这是为 Windows 平台开发的，无法在 Linux 中完美运行
 
 ### Feature
 
@@ -94,4 +106,4 @@ Bug 反馈和 Issues 提交可以在 Bitbucket 或者 Gitee，**在 Gitee 会得
 
 ### Scheme
 
-`embed 版本：Pillow 更换为嵌入版本，Numpy, rich 改为动态引用，弃用 OpenCV-Python`
+* [X] embed 版本：Pillow 更换为嵌入版本，Numpy, rich 改为动态引用，弃用 OpenCV-Python

@@ -10,20 +10,22 @@ MANIFEST.in 需要放在和 setup.py 同级的顶级目录下，setuptools 会�
 //关于打包：
 
         [1]
-        python setup.py sdist 生成 dist/*.tar.gz [源码];
+        python setup.py sdist  # ****************************************** 生成 dist/*.tar.gz [源码];
         [2]
-        python setup.py bdist_wheel 生成 dist/*.whl [通用包];
+        python setup.py bdist_wheel  # ************************************ 生成 dist/*.whl [通用包];
         [3]
         如果你的项目不是跨平台的，应当构建指定平台的包：
-        python setup.py bdist_wheel --plat-name win32 [win32平台构建]
-        python setup.py bdist_wheel --plat-name win_amd64 [win_amd64平台构建]
+        python setup.py bdist_wheel --plat-name win32  # ****************** [win32平台构建]
+        python setup.py bdist_wheel --plat-name win_amd64  # ************** [win_amd64平台构建]
         [4]
-        python setup.py bdist 生成 dist/*.zip [镜像构建，包含虚拟环境，不建议使用];
+        python setup.py bdist  # ****************************************** 生成 dist/*.zip [镜像构建，包含虚拟环境，不建议使用];
         [5]
-        python setup.py bdist_wininst 生成 dist/*.whl [Windows安装引导程序];
+        python setup.py bdist_wininst  # ********************************** 生成 dist/*.whl [Windows安装引导程序];
         ### 从 Python 3.8 开始不推荐使用 bdist_wininst ; bdist_msi从 Python 3.9 起被弃用。 ###
         [6]
         更多命令使用 python setup.py --help-commands 查看
+
+        如果遇到 error: invalid command 'bdist_wheel' 的报错，pip install wheel 后重试
 
 //关于上传：
 
@@ -141,7 +143,7 @@ class GVC(distutils.cmd.Command):
     [python setup.py GVC --qmode;python setup.py bdist_wheel;twine upload dist/* --verbose --repository testpypi]
     频繁的上传测试仅限于依赖真实环境模拟的项目，否则不建议这么做 """
     # 命令的描述，会出现在`python setup.py --help`里
-    description = '适用于修复 bug 的频繁版本迭代'
+    description = '适用于修复 bug 的频繁版本迭代（用户定义的）'
     user_options = [
         # 格式是`(长名字，短名字，描述)`，描述同样会出现在doc里
         # 注意不要和全局选项冲突，例如 verbose(v) quiet(q) help(h)
@@ -266,7 +268,7 @@ print('开始执行，若长时间无响应，请检查是否有误\n')
 
 setuptools.setup(
     name="color-theme-analyse", # 在 PyPI 上搜索的项目名称
-    cmdclass={'GVC': GVC,'build_py': BuildPyCommand,}, #报错不重要
+    cmdclass={'GVC': GVC,'build_py': BuildPyCommand,}, # ---> 直接运行/调试本文件而不附加合适的参数时，这里报错是正常情况！请跳转到本文件的头部查看合适的指令 <---
     setup_requires=[], # 指定运行 setup.py 文件本身所依赖的包 , 国内由于众所周知的原因会假死，因此留空即可
     use_scm_version=True, # .gitignore 应与 setup.py 在同一文件夹 更多信息参考 https://pypi.org/project/setuptools-scm/
     # version='1.1.1', # 默认的手动指定版本
@@ -322,7 +324,7 @@ setuptools.setup(
     scripts=['src/MMCQsc.cmd'],
     license="MIT",
     platforms=['Windows'],
-    python_requires=">=3.8.0,<=3.10.0",
+    python_requires=">=3.9.0,<=3.10.0",
     # 关于 install_requires， 有以下五种常用的表示方法：(指定包名是必须的，而版本控制与可选依赖，则是高级形式。 这不仅仅是install_requires的形式，而是对setup.py的所有require都适用)
     # 'argparse'，只包含包名。 这种形式只检查包的存在性，不检查版本。 方便，但不利于控制风险，更新时还会遇到依赖冲突问题。
     # 'setuptools==38.2.4' 指定版本。确保了开发、测试与部署的版本一致，不会出现意外。 缺点是不利于更新，每次更新都需要改动代码。
@@ -332,11 +334,13 @@ setuptools.setup(
     install_requires=[],
     # install_requires 在安装模块时会自动安装依赖包
     # extras_require 仅表示该模块依赖这些包，但不是必须的，需要用户手动安装。被依赖使用时，可以用类似'requests[download, advanced]'的形式来指定
+    # 下载时可以使用 pip install color-theme-analyse[base] 的命令安装额外的依赖组base
+    # 下载时可以使用 pip install color-theme-analyse[base,dev] 的命令安装额外的依赖组base和dev
     # extras_require 需要一个 dict ，其中按（自定义的）功能名称进行分组，每组一个 list
     extras_require={
         'base':['numpy>=1.21','pillow>=8.3','rich>=0.1',],
-        'download':['pipx>=0.1'],
-        'advanced':['pyinstaller>=4.3; platform_system == "Windows"'],
+        'dev':['wheel','pyinstaller>=4.3; platform_system == "Windows"','setuptools','setuptools_scm','setuptools_scm_git_archive'],
+        'merge':['numpy>=1.21','pillow>=8.3','rich>=0.1','wheel','pyinstaller>=4.3; platform_system == "Windows"','setuptools','setuptools_scm','setuptools_scm_git_archive'],
     },
     # dependency_links 已被弃用，因此使用 testPyPi 测试时，一些依赖项会无法下载（ https://test-files.pythonhosted.org 上没有），需要提前安装好依赖，然后 pip 后面加参数 --no-deps 无依赖下载
     dependency_links=[
