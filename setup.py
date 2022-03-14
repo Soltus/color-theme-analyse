@@ -191,8 +191,8 @@ class GVC(distutils.cmd.Command):
             args = ['gitup.py','--old',_version[0],'--new',_version[1],'--workdir',os.getcwd(),'--no-commit','--no-tag']
         else:
             args = ['gitup.py','--old',_version[0],'--new',_version[1],'--workdir',os.getcwd(),'--commit','--tag']
-        if self.qmode:
-            pass
+        if self.qmode == False:
+            args.append('--no-quiet')
         else:
             args.append('--quiet')
         command = [f'{sys.executable}']
