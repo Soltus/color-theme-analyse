@@ -375,7 +375,7 @@ if __name__ == '__main__':
             j += 1
             if os.path.exists(DIST_DIR):
                 dd = DIST_DIR.replace('\\', '/')
-                args = shlex.split(f"start {DIST_DIR}") # 打开 dist 文件夹
+                args = shlex.split(f"start {dd}") # 打开 dist 文件夹
                 s = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True)
                 s.wait()
                 break
