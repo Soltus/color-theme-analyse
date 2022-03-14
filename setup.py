@@ -174,11 +174,11 @@ class GVC(distutils.cmd.Command):
             try:
                 # 删除旧的生成
                 print("清除旧的打包生成...")
-                print(f"删除目录{DIST_DIR}")
                 if _i > 0:
                     print(f'第 {_i} 次重试')
                     sleep(1)
                 if os.path.exists(DIST_DIR):
+                    print(f"删除目录{DIST_DIR}")
                     shutil.rmtree(DIST_DIR,ignore_errors=False)
                     if os.path.exists(DIST_DIR):
                         print("清除旧的打包生成未能成功！")
