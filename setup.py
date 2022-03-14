@@ -183,7 +183,10 @@ class GVC(distutils.cmd.Command):
                     sleep(3)
                     if os.path.exists(DIST_DIR):
                         print("清除旧的打包生成未能成功！")
-                break
+                    break
+                else:
+                    print("不存在")
+                    break
             except OSError as e:
                 print(e)
                 if _i > 9:
