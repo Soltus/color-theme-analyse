@@ -3,5 +3,5 @@ pipelines:
   default:
   - step:
       script:
-      - pip install color-theme-analyse --force-reinstall
+      - pip install color-theme-analyse[merge] -i https://mirrors.tencent.com/pypi/simple --force-reinstall
       - RunMMCQsc
