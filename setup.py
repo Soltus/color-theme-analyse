@@ -180,6 +180,8 @@ class GVC(distutils.cmd.Command):
                     sleep(1)
                 if os.path.exists(DIST_DIR):
                     shutil.rmtree(DIST_DIR,ignore_errors=False)
+                    if os.path.exists(DIST_DIR):
+                        print("清除旧的打包生成未能成功！")
                 break
             except OSError as e:
                 print(e)
