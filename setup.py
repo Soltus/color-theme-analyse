@@ -173,6 +173,8 @@ class GVC(distutils.cmd.Command):
         while True:
             try:
                 # 删除旧的生成
+                print("清除旧的打包生成...")
+                print(f"删除目录{DIST_DIR}")
                 if _i > 0:
                     print(f'第 {_i} 次重试')
                     sleep(1)
