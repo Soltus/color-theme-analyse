@@ -200,7 +200,7 @@ class GVC(distutils.cmd.Command):
         if CLEAN_TAG == True:
             args = ['gitup.py','--old',_version[0],'--new',_version[1],'--workdir',os.getcwd(),'--no-commit','--no-tag']
         else:
-            args = ['gitup.py','--old',f'{_version[0]}.dev1','--new',_version[1],'--workdir',os.getcwd(),'--commit','--tag']
+            args = ['gitup.py','--old',f'{_version[1]}.dev1','--new',_version[1],'--workdir',os.getcwd(),'--commit','--tag']
         if self.qmode == False:
             args.append('--no-quiet')
         else:

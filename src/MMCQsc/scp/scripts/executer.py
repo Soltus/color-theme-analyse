@@ -69,44 +69,36 @@ if os.name == 'posix':
 else:
     CLS = 'cls'
     DIR_SPLIT = '\\'
-class Pgd:
-    def __init__(self):
-        self.url = 'https://pypi.douban.com/simple/'
 
-    def task(self,im,re):
-        self.im = im
-        self.re = re
-        import os
-        repo = input('\n\n Unable to import package [{}] from \n\t{} , \n\n Do you want to download ? \n\n\t\tProccess ? [Y/n]\t'.format(self.im, sys.path))
-        if repo in ['Y','y']:
-            os.system(CLS)
-            os.system("pip install {} -i {}".format(self.re, self.url))
-            return 1
-        return 0
-
+from MMCQsc.scp.lib import dpkg
 dddd = 0
-pgd = Pgd()
+pgd = dpkg.Pgd()
 
 
 
 try:
+    logger.info("全局加载 Numpy 模块")
     np = __import__('numpy', globals(), locals(), [], 0)
 except ImportError:
     try:
+        logger.debug("旁加载 Numpy 模块")
         from MMCQsc_dpkg import numpy as np
     except:
         repo = pgd.task(im="numpy",re="numpy")
         dddd += repo
 try:
+    logger.info("旁加载 Pillow 模块")
     from MMCQsc_dpkg.PIL import Image as PImage
 except ImportError:
     try:
+        logger.debug("全局加载 Pillow 模块")
         PIL = __import__('PIL', globals(), locals(), [], 0)
         from PIL import Image as PImage
     except:
         repo = pgd.task(im="PIL",re="Pillow")
         dddd += repo
 try:
+    logger.info("全局加载 Rich 模块")
     # logger.debug("from rich import print")
     from rich import print
     # logger.debug("from rich.console import Console")
@@ -114,6 +106,7 @@ try:
     from rich.progress import (BarColumn,Progress,) # 实例化进度条，由于采用多进程+多线程，只能当分隔符使用
 except ImportError:
     try:
+        logger.debug("旁加载 Rich 模块")
         # logger.debug("from MMCQsc_dpkg.rich import print")
         from MMCQsc_dpkg.rich import print
         # logger.debug("from MMCQsc_dpkg.rich.console import Console")
@@ -133,6 +126,7 @@ if dddd:
     logger.info(f'\n\t\t{dddd} new packages already installed .\n\n\t\ttry to launch again .\n\n')
     sys.exit()
 
+logger.info("旁加载核心模块 MMCQ")
 from MMCQsc.scp.lib.MMCQ import MMCQ # 第一个MMCQ是文件名，第二个是类名
 
 

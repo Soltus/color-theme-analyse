@@ -100,17 +100,21 @@ def mainFunc():
     else:
         try:
             if os.name == 'posix':
-                img = input('请输入路径: ~$ ')
-                img = os.path.abspath(img)
+                response = input('请输入路径: ~$ ')
+                img = os.path.abspath(response)
             else:
                 if struct.calcsize("P") * 8 == 32:
                     mydll = ctypes.CDLL(os.path.join(BASE_DIR,'MMCQsc','scp','dll','CommonOpenDialogDll.dll'))
-                else:
+                elif struct.calcsize("P") * 8 == 64:
                     mydll = ctypes.CDLL(os.path.join(BASE_DIR,'MMCQsc','scp','dll','CommonOpenDialogDll64.dll'))
-                logger.info('\n\n\t\t请留意最小化的新窗口\n\n')
-                img = ctypes.c_wchar_p(mydll.mainFunc()).value
-            if img != None:  # 有传入才处理
-                img = os.path.dirname(img)
+
+                logger.info(f'\n\n\t\t{mydll}\n\n')
+                mydll.mainFunc.restype = ctypes.c_wchar_p # 设置返回值格式
+                response = mydll.mainFunc()
+                # logger.info(f'\n\n\t\t{response}\n\n')
+
+            if response != None:  # 有传入才处理
+                img = os.path.dirname(response)
                 print('开始检查')
                 from MMCQsc.scp import executable_check
                 buf[1] = len(img)
@@ -135,6 +139,8 @@ def mainFunc():
             if isinstance(e, KeyboardInterrupt):
                 os.system('cls')
                 logger.info("进程服务已停止\t原因：用户强制退出")
+            else:
+                logger.debug(e)
         finally:
             try:
                 os.remove(os.path.join(SRC_DIR, 'index.js'))
@@ -144,7 +150,10 @@ def mainFunc():
                 logger.info('成功删除不重要的自动生成文件')
                 logger.warning("\n\n\t\t[ tip ] : 如需在当前窗口返回 Shell 环境，使用 CTRL + PAUSE_BREAK 强制结束所有任务并退出 Python\n\n")
             except Exception as e:
-                print(e)
+                if isinstance(e,FileNotFoundError):
+                    logger.warning('未检测到自动生成文件')
+                else:
+                    logger.error(e)
                 try:
                     result in locals()
                     logger.warning('未能删除自动生成文件')
