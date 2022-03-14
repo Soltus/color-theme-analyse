@@ -143,6 +143,7 @@ class GVC(distutils.cmd.Command):
     使用方法 python setup.py GVC，要求正确配置 Git 环境
     如果 PyPi 的账号密码的配置文件正确存在，可以使用以下括号内的命令一键构建并上传（以 testPyPi 为例，--version参数自行修改）：
     [python setup.py GVC --qmode --version=1.1.1;python setup.py bdist_wheel;twine upload dist/* --verbose --repository testpypi]
+    关于--version，需要注意：应该使用 --version=1.1.101 而不是 --version=1.1.001（不能含有无效的零）
     频繁的上传测试仅限于依赖真实环境模拟的项目，否则不建议这么做 """
     # 命令的描述，会出现在`python setup.py --help`里
     description = '适用于修复 bug 的频繁版本迭代（用户定义的）'
