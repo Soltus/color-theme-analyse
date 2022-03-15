@@ -29,6 +29,8 @@ if DPKG_DIR not in sys.path:
 from MMCQsc.scp.lib.error_sc import *
 from MMCQsc.scp.lib.logger import *
 logger = myLogging("gitee.com/soltus")
+from MMCQsc.scp.lib import dpkg
+pgd = dpkg.Pgd()
 import shutil
 if os.name == 'posix':
     CLS = 'clear'
@@ -50,79 +52,18 @@ if os.name == 'posix':
 else:
     CLS = 'cls'
 
-def fun_version(v1,v2):
-# v1 == v2 return 0
-# v1 > v2 return 1
-# v1 < v2 return -1
-
-    l_1 = v1.split('.')
-    l_2 = v2.split('.')
-    c = 0
-    while True:
-        if c == len(l_1) and c == len(l_2):
-            return 0
-        if len(l_1) == c:
-            l_1.append(0)
-        if len(l_2) == c:
-            l_2.append(0)
-        if int(l_1[c]) > int(l_2[c]):
-            return 1
-        elif int(l_1[c]) < int(l_2[c]):
-            return -1
-        c += 1
-
 
 # os.system(CLS)
 
 file_path = sys.argv[0]
-def check_conda():
-    """
-    检测 Conda 环境并返回值
-    """
-    if "\\envs\\" in sys.executable:
-        conda_exec = os.path.abspath(os.path.join(os.path.dirname(sys.executable), "../..", "Script", "conda.exe"))
-        conda_env = sys.executable.split("\\")[-2]
-    else:
-        conda_exec = os.path.abspath(os.path.join(os.path.dirname(sys.executable), "Script", "conda.exe"))
-        conda_env = "base"
-    return conda_exec, conda_env
+
 
 
 from subprocess import Popen
 import shlex
 import types
 
-def get_dpkg(name):
-    """
-    获取动态包
-    """
-    try:
-        PKG_D = DPKG_DIR
-        # python = sys.executable.replace(check_conda()[1],pick_env)
-        # nexe = python.replace('\\','/')
-        python = os.path.abspath(sys.executable).replace('\\','/')
-        print(python)
-        args = shlex.split(f"{python} -m pip install {name} --isolated --python-version 3.9 --ignore-requires-python --force-reinstall -t {PKG_D} -i https://pypi.douban.com/simple --extra-index-url https://pypi.mirrors.ustc.edu.cn --compile --timeout 30 --exists-action b --only-binary :all:")
-        result = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0)
-        logger.debug(f"创建下载线程 PID: {result.pid}")
-        logger.warning("\n\n\t\t[ tip ] : 快捷键 CTRL + C 强制结束当前任务，CTRL + PAUSE_BREAK 强制结束所有任务并退出 Python\n\n")
-        result.wait()
-        PKG_D = os.path.abspath(PKG_D)
-        M_module = types.ModuleType(name)
-        M_module.__file__ = os.path.abspath(os.path.join(PKG_D, name, '__init__.py'))
-        M_module.__package__ = ''
-        try:
-            exec(f"import importlib,sys;sys.modules['{name}']=M_module;import {name};importlib.reload({name});importlib.invalidate_caches();importlib.util.resolve_name('{name}', __spec__.parent)",globals(), locals())
-            # logger.info(M_module.__dict__)
-            logger.info('\n' + str(M_module))
-            logger.info(f"\n\n\timport {name} seccessfully\n\n")
-        except Exception as e:
-            logger.error(e)
-            logger.error(f"从项目导入 {name} 失败 ")
-    except BaseException as e:
-        if isinstance(e, KeyboardInterrupt):
-            logger.warning("用户中止了下载")
-            exit()
+
 
 def run_in_env(env):
     """
@@ -136,9 +77,9 @@ def run_in_env(env):
     logger.info("开始检测 Conda 环境")
     if env == 'noconda':
         logger.info('尝试安装多个扩展包到项目 [ 如果不存在缓存，将从网络下载并安装 ]')
-        get_dpkg('numpy')
-        get_dpkg('rich')
-        get_dpkg('Pillow')
+        pgd.get_dpkg('numpy')
+        pgd.get_dpkg('rich')
+        pgd.get_dpkg('Pillow')
         return env
     else:
         with os.popen("conda info --json") as CONDA_SYS:
@@ -207,7 +148,7 @@ def run_in_env(env):
                         print(M_numpy)
                         # print(M_numpy.__dict__)
                         logger.info("import numpy seccessfully")
-                        get_dpkg('rich')
+                        pgd.get_dpkg('rich')
                     except:
                         logger.error(" 不同 Python 版本的 Numpy 无法共享 ")
                         logger.error(" 不同 Python 版本的 Numpy 无法共享 ")
@@ -216,12 +157,12 @@ def run_in_env(env):
                     return env
             elif pick_env in ['N','n']:
                 logger.info('尝试安装多个扩展包到项目 [ 如果不存在缓存，将从网络下载并安装 ]')
-                get_dpkg('numpy')
-                get_dpkg('rich')
-                get_dpkg('Pillow')
+                pgd.get_dpkg('numpy')
+                pgd.get_dpkg('rich')
+                pgd.get_dpkg('Pillow')
                 return env
             else:
-                python = sys.executable.replace(check_conda()[1],pick_env)
+                python = sys.executable.replace(dpkg.check_conda()[1],pick_env)
                 # print(python)
                 os.system(CLS)
                 os.system("conda info -e")
@@ -254,7 +195,7 @@ def run_in_env(env):
                 os.system("conda deactivate")
                 os.system("deactivate")
                 os.system(CLS)
-                python = sys.executable.replace(check_conda()[1],pick_env)
+                python = sys.executable.replace(dpkg.check_conda()[1],pick_env)
                 change_env = file_path.replace('main','change_env')
                 try:
                     args = shlex.split(f"conda create -n {pick_env} python==3.9.5 -y")
@@ -270,7 +211,7 @@ def run_in_env(env):
                 #os.system(f"conda create -n {pick_env} python==3.9.5 -y")
                 # args = shlex.split(f"conda activate {pick_env}")
                 # result = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0)
-                logger.debug(check_conda()[0])
+                logger.debug(dpkg.check_conda()[0])
                 logger.debug(python)
                 logger.debug(file_path)
                 logger.debug(f"已创建的环境 : [ {pick_env} ]  请使用创建的环境重新运行\n\n")
@@ -284,16 +225,18 @@ try:
     from MMCQsc_dpkg import numpy as np
     from MMCQsc_dpkg import rich
     from MMCQsc_dpkg.PIL import Image as PImage
+    logger.info("旁加载缓存成功")
 except ImportError:
     try:
         np = __import__('numpy', globals(), locals(), [], 0)
         rich = __import__('rich', globals(), locals(), [], 0)
         PIL = __import__('PIL', globals(), locals(), [], 0)
+        logger.info("全局加载缓存成功")
     except:
         if os.name == 'posix':
             pick_env = 'noconda'
         else:
-            pick_env = check_conda()[1]
+            pick_env = dpkg.check_conda()[1]
         while pick_env:
             env_tmep = pick_env
             pick_env = run_in_env(pick_env)
@@ -305,7 +248,7 @@ except ImportError:
                 PY3_VNO += str(i)
         PY3_VNO = '.'.join(PY3_VNO)
         logger.warning("You are using Python {}".format(PY3_VNO))
-        if fun_version(PY3_VNO,"3.8.0") == -1:
+        if dpkg.py_version(PY3_VNO,"3.8.0") == -1:
             logger.critical("Required version : Python >= 3.8.0")
             with os.popen("conda --version") as conda_v:
                 if "conda" in conda_v.read():
@@ -337,5 +280,5 @@ except ImportError:
                     logger.debug(f"请在终端执行指令 conda activate {pick_env} 手动激活环境")
                     logger.warning("\n\n\t\t[ tip ] : 方向上键 ^ 可调出调出历史指令\n\n")
                     exit()
-        elif fun_version(PY3_VNO,"3.9.5") != 0:
+        elif dpkg.py_version(PY3_VNO,"3.9.5") != 0:
             logger.warning("Recommended version : Python == 3.9.5  However, it doesn't matter")

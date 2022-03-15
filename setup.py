@@ -88,7 +88,6 @@ if BASE_DIR not in sys.path:
 if DPKG_DIR not in sys.path:
     sys.path.append(DPKG_DIR)
 
-
 class Pgd:
     def __init__(self):
         self.url = 'https://pypi.douban.com/simple/'
@@ -107,11 +106,16 @@ dddd = 0
 pgd = Pgd()
 try:
     setuptools = __import__('setuptools', globals(), locals(), [], 0)
+    wheel = __import__('wheel', globals(), locals(), [], 0)
+    ''' pip list 里面如果没有 twine 请自行安装 '''
 except ImportError:
     try:
         import setuptools
+        import wheel
     except:
         repo = pgd.task(im="setuptools",re="setuptools")
+        dddd += repo
+        repo = pgd.task(im="wheel",re="wheel")
         dddd += repo
 try:
     setuptools_scm = __import__('setuptools_scm', globals(), locals(), [], 0)
@@ -164,7 +168,12 @@ class GVC(distutils.cmd.Command):
 
     def finalize_options(self):
         """接收到命令行传过来的值之后的处理， 也可以什么都不干."""
-        pass
+        # pass
+        global MY_V
+        # 无需手动定义版本号，尝试自动步进
+        if self.version == "0.0.0":
+            v_n = (int(MY_V[0]), int(MY_V[1]), int(MY_V[2]))
+            self.version = f'{v_n[0]}.{v_n[1]+1}.1'
 
     def run(self):
         """命令运行时的操作."""
