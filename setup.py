@@ -195,7 +195,7 @@ class GVC(distutils.cmd.Command):
             with open("src/MMCQsc/version.py") as f:
                 f.write(f'''__version__ = "{self.version2}"
 version = "{self.version2}"
-
+# 自动步进覆写
                         ''')
 
     def run(self):
