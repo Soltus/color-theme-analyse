@@ -294,7 +294,7 @@ class BuildPyCommand(setuptools.command.build_py.build_py):
     def run(self):
         import MMCQsc
         if "dev" in str(MMCQsc.version):
-            self.run_command('GVC')
+            self.run_command('python setup.py GVC --version=0.0.0')
         setuptools.command.build_py.build_py.run(self)
 
 
