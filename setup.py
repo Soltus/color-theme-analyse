@@ -182,7 +182,7 @@ class GVC(distutils.cmd.Command):
         self.write_version()
 
     def write_version(self):
-        it =  os.open("src/MMCQsc/__init__.py",os.O_RDWR|os.O_CREAT)
+        it = os.open("src/MMCQsc/__init__.py",os.O_RDWR|os.O_CREAT)
         '''
         os.lseek(fd, pos, how)
         将文件描述符 fd 的当前位置设置为 pos，位置的计算方式 how 如下：设置为 SEEK_SET 或 0 表示从文件开头计算，设置为 SEEK_CUR 或 1 表示从文件当前位置计算，设置为 SEEK_END 或 2 示文件尾计算。返回新指针位置，这个位置是从文件开头计算的，单位是字节。'''
@@ -197,7 +197,7 @@ version = "{self.version2}"
 # 自动步进覆写
                         '''
 
-            exec(f'''sleep(1);with open("{BASE_DIR}/MMCQsc/version.py") as f:\nf.write({command})''',globals(), locals())
+            exec(f'''sleep(1);it=os.open("{BASE_DIR}/MMCQsc/version.py",os.O_RDWR|os.O_CREAT);os.lseek(it,0,2);os.write(it,{command}.encode('utf8'))''',globals(), locals())
 
     def run(self):
         """命令运行时的操作."""
