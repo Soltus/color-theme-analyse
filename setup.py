@@ -172,6 +172,7 @@ class GVC(distutils.cmd.Command):
         # pass
         global MY_V
         # 无需手动定义版本号，尝试自动步进
+        ''' pyproject.toml 中规定了 setuptools_scm 自动生成项目版本号到 version.py ，会影响自动步进，这是已知缺陷 '''
         if self.version == "0.0.0":
             v_n = (int(MY_V[0]), int(MY_V[1]), int(MY_V[2]))
             self.version = f'{v_n[0]}.{v_n[1]+1}.0'
@@ -190,14 +191,8 @@ class GVC(distutils.cmd.Command):
         os.lseek(it,-6,1) # 往回移动
         fstr = f"{build_time}  ->  {self.version2}\n\n'''"
         os.write(it, fstr.encode('utf8'))
-        ''' pyproject.toml 中规定了 setuptools_scm 自动生成项目版本号到 version.py ，因为会影响自动步进，下面将 version.py 重写覆盖 '''
-        if self.version == "0.0.0":
-            self.vcommand = f'''__version__ = "{self.version2}"
-version = "{self.version2}"
-# 自动步进覆写
-                        '''
 
-            exec(f'''import os;it=os.open("{BASE_DIR}/MMCQsc/version.py",os.O_RDWR|os.O_CREAT);os.lseek(it,0,0);os.write(it,{self.vcommand}.encode('utf8'))''',globals(), locals())
+
 
     def run(self):
         """命令运行时的操作."""
@@ -292,9 +287,6 @@ class BuildPyCommand(setuptools.command.build_py.build_py):
     """python setup.py build_py"""
 
     def run(self):
-        from MMCQsc.version import version as _v_
-        if "dev" in str(_v_):
-            os.system('python setup.py GVC --version=0.0.0')
         setuptools.command.build_py.build_py.run(self)
 
 

@@ -26,13 +26,13 @@ def git_v_tag(v1,v2,c,t,q,cwd):
         args = shlex.split(command)
         repo = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0, universal_newlines=True, stdout=PIPE, cwd=cwd)
         repo.wait()
-    command = "git add ."
+    command = "git add ."    # 工作区 -> 暂存区
     if not q:
         print(command)
     args = shlex.split(command)
     repo = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0, universal_newlines=True, stdout=PIPE, cwd=cwd)
     repo.wait()
-    # 工作区 -> 暂存区
+
     if c:
         command = "git commit -a -m 'setup.py auto commit'"
         if not q:
