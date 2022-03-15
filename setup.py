@@ -173,12 +173,26 @@ class GVC(distutils.cmd.Command):
         # 无需手动定义版本号，尝试自动步进
         if self.version == "0.0.0":
             v_n = (int(MY_V[0]), int(MY_V[1]), int(MY_V[2]))
-            self.version = f'{v_n[0]}.{v_n[1]+1}.1'
+            self.version = f'{v_n[0]}.{v_n[1]+1}.0'
+            self.version2 = f'{v_n[0]}.{v_n[1]+1}.1'
+            self.___version = [self.version,self.version2]
+        else:
+            self.___version = self.default_nv()
+        self.write_version()
+
+    def write_version(self):
+        it =  os.open("src/MMCQsc/__init__.py",os.O_RDWR|os.O_CREAT)
+        '''
+        os.lseek(fd, pos, how)
+        将文件描述符 fd 的当前位置设置为 pos，位置的计算方式 how 如下：设置为 SEEK_SET 或 0 表示从文件开头计算，设置为 SEEK_CUR 或 1 表示从文件当前位置计算，设置为 SEEK_END 或 2 示文件尾计算。返回新指针位置，这个位置是从文件开头计算的，单位是字节。'''
+        os.lseek(it,0,2) # 移动至文件末尾
+        os.lseek(it,-6,1) # 往回移动
+        fstr = f"{build_time}  ->  {self.version2}\n\n'''"
+        os.write(it, fstr.encode('utf8'))
 
     def run(self):
         """命令运行时的操作."""
         global CLEAN_TAG
-        _version = self.default_nv()
         print("======= command is running =======")
         _i = 0
         while True:
@@ -208,9 +222,9 @@ class GVC(distutils.cmd.Command):
                 sleep(2)
                 continue
         if CLEAN_TAG == True:
-            args = ['gitup.py','--old',_version[0],'--new',_version[1],'--workdir',os.getcwd(),'--no-commit','--no-tag']
+            args = ['gitup.py','--old',self.___version[0],'--new',self.___version[1],'--workdir',os.getcwd(),'--no-commit','--no-tag']
         else:
-            args = ['gitup.py','--old',f'{_version[1]}.dev1','--new',_version[1],'--workdir',os.getcwd(),'--commit','--tag']
+            args = ['gitup.py','--old',f'{self.___version[1]}.dev1','--new',self.___version[1],'--workdir',os.getcwd(),'--commit','--tag']
         if self.qmode == False:
             args.append('--no-quiet')
         else:
@@ -260,15 +274,6 @@ class GVC(distutils.cmd.Command):
                 self.version = f'{v_n[0]}.{v_n[1]+1}.{v_n[2]}'
                 self.version2 = f'{v_n[0]}.{v_n[1]+1}.{v_n[2]+1}'
 
-
-        it =  os.open("src/MMCQsc/__init__.py",os.O_RDWR|os.O_CREAT)
-        '''
-        os.lseek(fd, pos, how)
-        将文件描述符 fd 的当前位置设置为 pos，位置的计算方式 how 如下：设置为 SEEK_SET 或 0 表示从文件开头计算，设置为 SEEK_CUR 或 1 表示从文件当前位置计算，设置为 SEEK_END 或 2 示文件尾计算。返回新指针位置，这个位置是从文件开头计算的，单位是字节。'''
-        os.lseek(it,0,2) # 移动至文件末尾
-        os.lseek(it,-6,1) # 往回移动
-        fstr = f"{build_time}  ->  {self.version2}\n\n'''"
-        os.write(it, fstr.encode('utf8'))
         return [self.version,self.version2]
 
 
