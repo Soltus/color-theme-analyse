@@ -203,10 +203,7 @@ version = "{self.version2}"
         """命令运行时的操作."""
         global CLEAN_TAG
         print("======= command is running =======")
-        import MMCQsc
-        xx = "dev" in str(MMCQsc.version)
-        print(xx)
-        sleep(3)
+
         _i = 0
         while True:
             try:
@@ -295,7 +292,9 @@ class BuildPyCommand(setuptools.command.build_py.build_py):
     """python setup.py build_py"""
 
     def run(self):
-        # self.run_command('GVC')
+        import MMCQsc
+        if "dev" in str(MMCQsc.version):
+            self.run_command('GVC')
         setuptools.command.build_py.build_py.run(self)
 
 
