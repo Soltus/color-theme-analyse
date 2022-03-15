@@ -190,6 +190,13 @@ class GVC(distutils.cmd.Command):
         os.lseek(it,-6,1) # 往回移动
         fstr = f"{build_time}  ->  {self.version2}\n\n'''"
         os.write(it, fstr.encode('utf8'))
+        ''' pyproject.toml 中规定了 tool.setuptools_scm 自动生成项目版本号到 version.py ，因为会影响自动步进，下面将 version.py 重写覆盖 '''
+        if self.version == "0.0.0":
+            with open("src/MMCQsc/version.py") as f:
+                f.write(f'''__version__ = "{self.version2}"
+version = "{self.version2}"
+
+                        ''')
 
     def run(self):
         """命令运行时的操作."""
