@@ -143,6 +143,7 @@ CLEAN_TAG = False
 
 class GVC(distutils.cmd.Command):
     """适用于构建时修改内容的频繁版本迭代，允许自动完成一些操作，这在修复 bug 时期特别实用.
+    由于使用了 os.getcwd() ，因此务必确保终端工作区目录为 setup.py 所在目录
     生成干净的可自动迭代的 releas/dev 版本， 例如 color_theme_analyse-1.2.721.dev4-py3-none-any
     使用方法 python setup.py GVC，要求正确配置 Git 环境
     如果 PyPi 的账号密码的配置文件正确存在，可以使用以下括号内的命令一键构建并上传（以 testPyPi 为例，--version参数自行修改）：
