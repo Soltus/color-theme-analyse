@@ -172,7 +172,7 @@ class GVC(distutils.cmd.Command):
         # pass
         global MY_V
         # 无需手动定义版本号，尝试自动步进
-        ''' pyproject.toml 中规定了 setuptools_scm 自动生成项目版本号到 version.py ，会影响自动步进，这是已知缺陷 '''
+        ''' pyproject.toml 中规定了 setuptools_scm 自动生成项目版本号到 version.py ，会影响自动步进（仅限正式版本号），这是已知缺陷 '''
         if self.version == "0.0.0":
             v_n = (int(MY_V[0]), int(MY_V[1]), int(MY_V[2]))
             self.version = f'{v_n[0]}.{v_n[1]+1}.0'
