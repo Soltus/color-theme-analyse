@@ -192,12 +192,12 @@ class GVC(distutils.cmd.Command):
         os.write(it, fstr.encode('utf8'))
         ''' pyproject.toml 中规定了 tool.setuptools_scm 自动生成项目版本号到 version.py ，因为会影响自动步进，下面将 version.py 重写覆盖 '''
         if self.version == "0.0.0":
-            command = f'''__version__ = "{self.version2}"
+            self.vcommand = f'''__version__ = "{self.version2}"
 version = "{self.version2}"
 # 自动步进覆写
                         '''
 
-            exec(f'''sleep(1);it=os.open("{BASE_DIR}/MMCQsc/version.py",os.O_RDWR|os.O_CREAT);os.lseek(it,0,2);os.write(it,{command}.encode('utf8'))''',globals(), locals())
+            exec(f'''import os;sleep(1);it=os.open("{BASE_DIR}/MMCQsc/version.py",os.O_RDWR|os.O_CREAT);os.lseek(it,0,2);os.write(it,{self.vcommand}.encode('utf8'))''',globals(), locals())
 
     def run(self):
         """命令运行时的操作."""
