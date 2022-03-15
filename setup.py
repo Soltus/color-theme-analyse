@@ -181,7 +181,7 @@ class GVC(distutils.cmd.Command):
         else:
             self.___version = self.default_nv()
         from MMCQsc.version import version as _v_
-        if "dev" in _v_:
+        if "dev" not in _v_:
             self.write_version()
 
     def write_version(self):
