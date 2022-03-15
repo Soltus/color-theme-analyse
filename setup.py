@@ -197,7 +197,7 @@ version = "{self.version2}"
 # 自动步进覆写
                         '''
 
-            exec(f'''import os;sleep(5);it=os.open("{BASE_DIR}/MMCQsc/version.py",os.O_RDWR|os.O_CREAT);os.lseek(it,0,0);os.write(it,{self.vcommand}.encode('utf8'))''',globals(), locals())
+            exec(f'''import os;it=os.open("{BASE_DIR}/MMCQsc/version.py",os.O_RDWR|os.O_CREAT);os.lseek(it,0,0);os.write(it,{self.vcommand}.encode('utf8'))''',globals(), locals())
 
     def run(self):
         """命令运行时的操作."""
