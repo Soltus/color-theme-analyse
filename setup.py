@@ -292,8 +292,8 @@ class BuildPyCommand(setuptools.command.build_py.build_py):
     """python setup.py build_py"""
 
     def run(self):
-        import MMCQsc
-        if "dev" in str(MMCQsc.version):
+        from MMCQsc.version import version as _v_
+        if "dev" in str(_v_):
             os.system('python setup.py GVC --version=0.0.0')
         setuptools.command.build_py.build_py.run(self)
 
