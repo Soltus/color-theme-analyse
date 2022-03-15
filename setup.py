@@ -180,7 +180,9 @@ class GVC(distutils.cmd.Command):
             self.___version = [self.version,self.version2]
         else:
             self.___version = self.default_nv()
-        self.write_version()
+        from MMCQsc.version import version as _v_
+        if "dev" in _v_:
+            self.write_version()
 
     def write_version(self):
         it = os.open("src/MMCQsc/__init__.py",os.O_RDWR|os.O_CREAT)
