@@ -204,7 +204,8 @@ version = "{self.version2}"
         global CLEAN_TAG
         print("======= command is running =======")
         import MMCQsc
-        print(MMCQsc.version)
+        xx = "dev" in str(MMCQsc.version)
+        print(xx)
         sleep(3)
         _i = 0
         while True:
