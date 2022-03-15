@@ -41,7 +41,7 @@ MANIFEST.in 需要放在和 setup.py 同级的顶级目录下，setuptools 会�
         1.2.1+fedora.4                # Package with downstream Fedora patches applied
 
 另请注意，使用 setuptools_scm 控制版本后，使用了本地版本标识符是无法上传到 PyPi 的，因此 local_scheme = "no-local-version" 在 pyproject.toml
-使用setuptools_scm方案，则版本号是在setup()函数中自动生成的。 主模块的__version__如果需要和它保持一致，就需要读取已安装的当前包的版本号。
+使用 setuptools_scm 方案，则版本号是在setup()函数中自动生成的。 主模块的__version__如果需要和它保持一致，就需要读取已安装的当前包的版本号。
 修改 Release 版本号需要使用 Git 打上版本号标签，在熟悉之前应当使用 x.x.x 形式的标签（例如 1.0.2 ）
 如果不熟悉 Git 命令行操作，可以使用软件 Sourcetree 直观的提交和打标签。如果没有标签，你生成的包将始终为 0.1.dev*
 （新增）你也可以用本文件提供的 GVC 模块来打标签，具体内容请跳转到 class GVC 查看
@@ -190,14 +190,14 @@ class GVC(distutils.cmd.Command):
         os.lseek(it,-6,1) # 往回移动
         fstr = f"{build_time}  ->  {self.version2}\n\n'''"
         os.write(it, fstr.encode('utf8'))
-        ''' pyproject.toml 中规定了 tool.setuptools_scm 自动生成项目版本号到 version.py ，因为会影响自动步进，下面将 version.py 重写覆盖 '''
+        ''' pyproject.toml 中规定了 setuptools_scm 自动生成项目版本号到 version.py ，因为会影响自动步进，下面将 version.py 重写覆盖 '''
         if self.version == "0.0.0":
             self.vcommand = f'''__version__ = "{self.version2}"
 version = "{self.version2}"
 # 自动步进覆写
                         '''
 
-            exec(f'''import os;sleep(5);it=os.open("{BASE_DIR}/MMCQsc/version.py",os.O_RDWR|os.O_CREAT);os.lseek(it,0,2);os.write(it,{self.vcommand}.encode('utf8'))''',globals(), locals())
+            exec(f'''import os;sleep(5);it=os.open("{BASE_DIR}/MMCQsc/version.py",os.O_RDWR|os.O_CREAT);os.lseek(it,0,0);os.write(it,{self.vcommand}.encode('utf8'))''',globals(), locals())
 
     def run(self):
         """命令运行时的操作."""
