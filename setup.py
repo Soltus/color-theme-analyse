@@ -203,6 +203,9 @@ version = "{self.version2}"
         """命令运行时的操作."""
         global CLEAN_TAG
         print("======= command is running =======")
+        import MMCQsc
+        print(MMCQsc.version)
+        sleep(3)
         _i = 0
         while True:
             try:
