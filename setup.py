@@ -181,8 +181,7 @@ class GVC(distutils.cmd.Command):
         else:
             self.___version = self.default_nv()
         from MMCQsc.version import version as _v_
-        if "dev" not in _v_:
-            self.write_version()
+        self.write_version() # 只需要注释掉这一行，就可以实现正式版本号的自动步进（因为受git控制的__init__.py没有变化）
 
     def write_version(self):
         it = os.open("src/MMCQsc/__init__.py",os.O_RDWR|os.O_CREAT)

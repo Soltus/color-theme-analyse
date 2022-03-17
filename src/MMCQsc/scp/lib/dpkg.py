@@ -4,8 +4,7 @@ import shlex
 import types
 from MMCQsc.scp.lib.logger import *
 logger = myLogging("gitee.com/soltus")
-BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../.."))
-DPKG_DIR = os.path.abspath(os.path.join(BASE_DIR, 'MMCQsc_dpkg'))
+
 if os.name == 'posix':
     CLS = 'clear'
     DIR_SPLIT = '/'
@@ -13,17 +12,21 @@ else:
     CLS = 'cls'
     DIR_SPLIT = '\\'
 
-def check_conda():
-    """
-    检测 Conda 环境并返回值
-    """
+def check_conda(dir=''):
+    '''
+    检测当前 Conda 环境并返回值，返回值是 conda_exec, conda_env
+    @param dir 默认为空，如果 conda 不在环境变量，请填写 conda 所在路径
+    '''
     if "\\envs\\" in sys.executable:
         conda_exec = os.path.abspath(os.path.join(os.path.dirname(sys.executable), "../..", "Script", "conda.exe"))
         conda_env = sys.executable.split("\\")[-2]
     else:
         conda_exec = os.path.abspath(os.path.join(os.path.dirname(sys.executable), "Script", "conda.exe"))
         conda_env = "base"
-    return conda_exec, conda_env
+    if os.path.exists(conda_exec):
+        return conda_exec, conda_env
+    else:
+        return '',''
 
 def py_version(v1,v2):
 # v1 == v2 return 0
@@ -46,9 +49,13 @@ def py_version(v1,v2):
             return -1
         c += 1
 
+
 class Pgd:
-    def __init__(self):
+    def __init__(self,root,dpkg):
+        '''root 填 BASE_DIR，dpkg 填 DPKG_DIR'''
         self.url = 'https://pypi.douban.com/simple/'
+        self.BASE_DIR = root
+        self.DPKG_DIR = dpkg
 
     def task(self,im,re):
         self.im = im
@@ -66,19 +73,19 @@ class Pgd:
         获取动态包
         """
         try:
-            PKG_D = DPKG_DIR
+            PKG_D = self.DPKG_DIR
             # python = sys.executable.replace(check_conda()[1],pick_env)
             # nexe = python.replace('\\','/')
             python = os.path.abspath(sys.executable).replace('\\','/')
             print(python)
-            args = shlex.split(f"{python} -m pip install {name} --isolated --python-version 3.9 --ignore-requires-python --force-reinstall -t {PKG_D} -i https://pypi.douban.com/simple --extra-index-url https://pypi.mirrors.ustc.edu.cn --compile --timeout 30 --exists-action b --only-binary :all:")
+            args = shlex.split(f"{python} -m pip install {name} --isolated --python-version 3.9 --ignore-requires-python --force-reinstall -t {PKG_D} -i https://pypi.douban.com/simple --extra-index-url https://mirrors.tencent.com/pypi/simple --compile --timeout 30 --exists-action b --only-binary :all:")
             result = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0)
             logger.debug(f"创建下载线程 PID: {result.pid}")
             logger.warning("\n\n\t\t[ tip ] : 快捷键 CTRL + C 强制结束当前任务，CTRL + PAUSE_BREAK 强制结束所有任务并退出 Python\n\n")
             result.wait()
             PKG_D = os.path.abspath(PKG_D)
             M_module = types.ModuleType(name)
-            M_module.__file__ = os.path.abspath(os.path.join(PKG_D, name, '__init__.py'))
+            M_module.__file__ = os.path.abspath(os.path.join(PKG_D, name, '__init__.py'))  # type: ignore
             M_module.__package__ = ''
             try:
                 exec(f"import importlib,sys;sys.modules['{name}']=M_module;import {name};importlib.reload({name});importlib.invalidate_caches();importlib.util.resolve_name('{name}', __spec__.parent)",globals(), locals())
@@ -92,3 +99,52 @@ class Pgd:
             if isinstance(e, KeyboardInterrupt):
                 logger.warning("用户中止了下载")
                 exit()
+
+    def up_python(self,av,bv,cv,dv,conda_env=None):
+        '''
+        @param av: 当前版本
+        @param bv: 建议版本
+        @param cv: 最低版本
+        @param dv: 目标版本
+        @param conda_env: 当前 conda 环境，没有则留空
+        '''
+        PY3_VNO = av
+        if conda_env is not None:
+            pick_env = ' -n ' + conda_env
+        else:
+            pick_env = ''
+        logger.warning("You are using Python {}".format(PY3_VNO))
+        if py_version(PY3_VNO,cv) == -1:
+            logger.critical(f"Required version : Python >= {cv}")
+            with os.popen("conda --version") as conda_v:
+                if "conda" in conda_v.read():
+                    logger.info("You are using Conda , Press key 'y' to upgrade your Python")
+                    logger.info(f"If you want to upgrade later by yourself , use command: conda install python=={dv}")
+                    logger.debug(f"Upgrade your Python to {dv} ?  [Y/*]")
+                isupdate = input("main.py:123 >>> ")
+            if isupdate not in ['Y','y']:
+                exit()
+            os.system(CLS)
+            logger.info("即将开始下载，这取决于你的网络")
+            try:
+                args = shlex.split(f"conda conda install python=={dv} -y{pick_env}")
+                result = Popen(args, bufsize=0, executable=r"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe", close_fds=False, shell=False, env=None, startupinfo=None, creationflags=0)
+                logger.debug(f"创建下载线程 PID: {result.pid}")
+                logger.warning("\n\n\t\t[ tip ] : 快捷键 CTRL + C 强制结束当前任务，CTRL + PAUSE_BREAK 强制结束所有任务并退出 Python\n\n")
+                result.wait()
+            except BaseException as e:
+                if isinstance(e, KeyboardInterrupt):
+                    logger.warning("用户中止了下载")
+                    logger.warning("当前窗口已完成使命，是时候和它告别了")
+                    result.kill()
+            finally:
+                if result.returncode:
+                    logger.error("下载失败，请手动升级 Python 后重试")
+                else:
+                    args = [sys.executable, sys.argv[0]]
+                    logger.debug(args)
+                    logger.debug(f"请在终端执行指令 conda activate {pick_env} 手动激活环境")
+                    logger.warning("\n\n\t\t[ tip ] : 方向上键 ^ 可调出调出历史指令\n\n")
+                    exit()
+        elif py_version(PY3_VNO,bv) != 0:
+            logger.warning(f"Recommended version : Python == {bv}  However, it doesn't matter")
