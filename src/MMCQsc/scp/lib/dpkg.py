@@ -283,7 +283,6 @@ class Pgd:
 
     def upgrade_module(self,name):
         python = self.executable
-        print(python)
         import traceback
         _path = os.path.abspath(os.path.join(__file__,"../..","scripts"))
         try:
@@ -295,10 +294,8 @@ class Pgd:
             raise e
         args = shlex.split(f"./upgrade.vbs")
         result = Popen(args, bufsize=0, executable=r"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe", close_fds=False, shell=True, env=None,cwd=_path, startupinfo=None, creationflags=0)
-        logger.debug(f"创建下载线程 PID: {result.pid}")
-        logger.warning("\n\n\t\t[ tip ] : 快捷键 CTRL + C 强制结束当前任务，CTRL + PAUSE_BREAK 强制结束所有任务并退出 Python\n\n")
+        logger.warning("\n\n\t\tpython\n\n")
         exit()
-        result.wait()
 
 
 from re import sub
