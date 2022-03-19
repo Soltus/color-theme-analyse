@@ -289,7 +289,7 @@ class Pgd:
         try:
             bat = os.path.abspath(os.path.join(_path,"upgrade.bat"))
             f = open(bat, 'w')
-            f.write(f"{python} -m pip install {name} --upgrade --trusted-host mirrors.tencent.com -i https://mirrors.tencent.com/pypi/simple --extra-index-url https://pypi.org/simple --timeout 30")
+            f.write(f"{python} -m pip install {name} --upgrade --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple --timeout 30")
         except Exception as e:
             traceback.print_exc()
             raise e
