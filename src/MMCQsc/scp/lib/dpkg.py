@@ -325,7 +325,7 @@ def check_update(nv,json_url,mirrors_url) -> bool:
     url = json_url
     r = requests.get(url)
     data = r.json()
-    print(f"{len(data['releases'])}个可用版本\n当前版本：{nv}")
+    # print(f"{len(data['releases'])}个可用版本\n当前版本：{nv}")
     v_l = []
     new = False
     for version, files in data['releases'].items():

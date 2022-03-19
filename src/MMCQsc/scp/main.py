@@ -24,9 +24,12 @@ import time
 import os,sys,shutil
 
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
+DPKG_DIR = os.path.abspath(os.path.join(BASE_DIR, 'MMCQsc_dpkg'))
 SRC_DIR = os.path.abspath(os.path.join(BASE_DIR, 'MMCQsc','src'))
 if BASE_DIR not in sys.path:
     sys.path.insert(1,BASE_DIR)
+if DPKG_DIR not in sys.path:
+    sys.path.append(DPKG_DIR)
 PY_DIR =  os.path.abspath(os.path.dirname(sys.executable))
 PYSPP = os.path.abspath(os.path.join(PY_DIR, 'site-packages.zip'))
 if PY_DIR not in sys.path:
@@ -45,7 +48,13 @@ import ctypes
 import struct
 from random import randint
 
+from importlib.metadata import version as Version, PackageNotFoundError
 
+try:
+    __version__ = Version("MMCQsc") # if installed
+except PackageNotFoundError:
+    # package is not installed
+    from MMCQsc.version import __version__, version
 
 def get_host_ip():
     """
@@ -87,6 +96,13 @@ def openhtml(myip,PORT):
         os.system(f'start http://{myip}:{PORT}')
 
 def mainFunc():
+    from MMCQsc.scp.lib import dpkg
+    pgd = dpkg.Pgd(BASE_DIR,DPKG_DIR)
+    new = dpkg.check_update(f"{__version__}","https://pypi.org/pypi/color-theme-analyse/json","https://mirrors.tencent.com/pypi/simple/color-theme-analyse/")
+    if new == True:
+        repo = input("\n\t\t是否更新到最新版？[y/n]\n")
+        if repo in ['Y','y']:
+            print('ok')
     try:
         shm = shared_memory.SharedMemory(
             name='main_run_share', create=True, size=4096)

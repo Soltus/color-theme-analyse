@@ -46,24 +46,10 @@ if BASE_DIR not in sys.path:
 if DPKG_DIR not in sys.path:
     sys.path.append(DPKG_DIR)
 
-from importlib.metadata import version as Version, PackageNotFoundError
 
-try:
-    __version__ = Version("MMCQsc") # if installed
-except PackageNotFoundError:
-    # package is not installed
-    from version import __version__, version
 
 if __name__ == '__main__':
-    SRC_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__),'src'))
     try:
-        from MMCQsc.scp.lib import dpkg
-        pgd = dpkg.Pgd(BASE_DIR,DPKG_DIR)
-        new = dpkg.check_update(f"{__version__}","https://pypi.org/pypi/color-theme-analyse/json","https://mirrors.tencent.com/pypi/simple/color-theme-analyse/")
-        if new == True:
-            repo = input("\n\t\t是否更新到最新版？[y/n]\n")
-            if repo in ['Y','y']:
-                print('ok')
         from MMCQsc.scp.executable_check import *
     except Exception as e:
         print(e)
