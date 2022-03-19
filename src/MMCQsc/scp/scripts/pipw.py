@@ -16,6 +16,6 @@ def uninstall_dev():
     os.system("pip uninstall setuptools_scm -y")
     os.system("pip uninstall setuptools_scm_git_archive -y")
 
-def uninstall_merge():
+def uninstallMerge():
     uninstall_base()
     uninstall_dev()
