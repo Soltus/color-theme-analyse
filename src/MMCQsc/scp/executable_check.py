@@ -116,9 +116,10 @@ def run_in_env(env):
                     try:
                         sys.modules['numpy'] = M_numpy
                         import importlib,numpy
+                        from importlib import util
                         importlib.reload(numpy)
                         importlib.invalidate_caches()
-                        importlib.util.resolve_name('numpy', __spec__.parent)
+                        util.resolve_name('numpy', __spec__.parent)
                         print(M_numpy)
                         # print(M_numpy.__dict__)
                         logger.info("import numpy seccessfully")
@@ -151,9 +152,10 @@ def run_in_env(env):
                 try:
                     sys.modules['numpy'] = M_numpy
                     import importlib,numpy
+                    from importlib import util
                     importlib.reload(numpy)
                     importlib.invalidate_caches()
-                    importlib.util.resolve_name('numpy', __spec__.parent)
+                    util.resolve_name('numpy', __spec__.parent)
                     # logger.info(M_numpy.__dict__)
                     logger.info('\n' + str(M_numpy))
                     logger.info("\n\n\timport numpy seccessfully\n\n")

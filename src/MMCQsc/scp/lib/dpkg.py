@@ -220,7 +220,7 @@ class Pgd:
             M_module.__file__ = os.path.abspath(os.path.join(PKG_D, name, '__init__.py'))  # type: ignore
             M_module.__package__ = ''
             try:
-                exec(f"import importlib,sys;sys.modules['{name}']=M_module;import {name};importlib.reload({name});importlib.invalidate_caches();importlib.util.resolve_name('{name}', __spec__.parent)",globals(), locals())
+                exec(f"import importlib,sys;from importlib import util;sys.modules['{name}']=M_module;import {name};importlib.reload({name});importlib.invalidate_caches();util.resolve_name('{name}', __spec__.parent)",globals(), locals())
                 # logger.info(M_module.__dict__)
                 logger.info('\n' + str(M_module))
                 logger.info(f"\n\n\timport {name} seccessfully\n\n")
