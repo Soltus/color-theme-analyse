@@ -357,10 +357,10 @@ setuptools.setup(
     # MMCQsc.scp.main:mainFunc 只需要知道 mainFunc 是 MMCQsc/scp/main.py 里的一个函数
     entry_points={'console_scripts':[
         'RunMMCQsc = MMCQsc.scp.main:mainFunc',
-        'MMCQscPure = MMCQsc.scp.main:uninstallMerge',
-        'MMCQscR1 = MMCQsc.scp.main:reinstallBase',
-        'MMCQscR2 = MMCQsc.scp.main:reinstallDev',
-        'MMCQscR = MMCQsc.scp.main:reinstallMerge']},
+        'MMCQscPure = MMCQsc.scp.scripts.pipw:uninstallMerge',
+        'MMCQscR1 = MMCQsc.scp.scripts.pipw:reinstallBase',
+        'MMCQscR2 = MMCQsc.scp.scripts.pipw:reinstallDev',
+        'MMCQscR = MMCQsc.scp.scripts.pipw:reinstallMerge']},
     # 手动添加脚本。虽然 scripts 关键字用于指向预先制作好的脚本进行安装，建议使用实现跨平台兼容性的方法 console_scripts 入口点(entry_points)
     scripts=['src/MMCQsc.cmd'],
     license="MIT",
