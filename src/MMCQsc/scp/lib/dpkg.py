@@ -289,12 +289,12 @@ class Pgd:
         try:
             bat = os.path.abspath(os.path.join(_path,"upgrade.bat"))
             f = open(bat, 'w')
-            f.write(f"{python} -m pip install {name} --upgrade -i https://mirrors.tencent.com/pypi/simple --extra-index-url https://pypi.org/simple --timeout 30")
+            f.write(f"{python} -m pip install {name} --upgrade --trusted-host mirrors.tencent.com -i https://mirrors.tencent.com/pypi/simple --extra-index-url https://pypi.org/simple --timeout 30")
         except Exception as e:
             traceback.print_exc()
             raise e
         args = shlex.split(f"./upgrade.vbs")
-        result = Popen(args, bufsize=0, executable=r"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe", close_fds=False, shell=False, env=None,cwd=_path, startupinfo=None, creationflags=0)
+        result = Popen(args, bufsize=0, executable=r"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe", close_fds=False, shell=True, env=None,cwd=_path, startupinfo=None, creationflags=0)
         logger.debug(f"创建下载线程 PID: {result.pid}")
         logger.warning("\n\n\t\t[ tip ] : 快捷键 CTRL + C 强制结束当前任务，CTRL + PAUSE_BREAK 强制结束所有任务并退出 Python\n\n")
         exit()
