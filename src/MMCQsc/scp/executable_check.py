@@ -22,7 +22,7 @@ import os,sys
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
 DPKG_DIR = os.path.abspath(os.path.join(BASE_DIR, 'MMCQsc_dpkg'))
 if BASE_DIR not in sys.path:
-    sys.path.append(BASE_DIR)
+    sys.path.insert(1,BASE_DIR)
 if DPKG_DIR not in sys.path:
     sys.path.append(DPKG_DIR)
 from MMCQsc.scp.lib.error_sc import *
@@ -73,6 +73,7 @@ def run_in_env(env):
         PY3_VNO += str(i)
     PY3_VNO = '.'.join(PY3_VNO)
     # os.system(CLS)
+
     logger.info("开始检测 Conda 环境")
     if env is None:
         logger.info('尝试安装多个扩展包到项目 [ 如果不存在缓存，将从网络下载并安装 ]')

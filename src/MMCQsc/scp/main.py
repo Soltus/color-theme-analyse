@@ -26,7 +26,7 @@ import os,sys,shutil
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
 SRC_DIR = os.path.abspath(os.path.join(BASE_DIR, 'MMCQsc','src'))
 if BASE_DIR not in sys.path:
-    sys.path.append(BASE_DIR)
+    sys.path.insert(1,BASE_DIR)
 PY_DIR =  os.path.abspath(os.path.dirname(sys.executable))
 PYSPP = os.path.abspath(os.path.join(PY_DIR, 'site-packages.zip'))
 if PY_DIR not in sys.path:
@@ -114,8 +114,8 @@ def mainFunc():
 
             if response != None:  # 有传入才处理
                 img = os.path.dirname(response)
-                print('开始检查')
-                from MMCQsc.scp import executable_check
+                # print('开始检查')
+                # from MMCQsc.scp import executable_check
                 buf[1] = len(img)
                 for i in range(2, 10, 1):
                     buf[i] = 0
@@ -161,7 +161,8 @@ def mainFunc():
             finally:
                 shm.close()
     shm.unlink()
-    sys.exit(102)
+    return 0
+    # sys.exit(102)
 
 
 if __name__ == '__main__':

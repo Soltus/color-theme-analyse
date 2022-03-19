@@ -23,11 +23,11 @@
 '''
 import os,sys
 import json
-BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../..", ".."))
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../.."))
 SRC_DIR = os.path.abspath(os.path.join(BASE_DIR, 'MMCQsc','src'))
 DPKG_DIR = os.path.abspath(os.path.join(BASE_DIR, 'MMCQsc_dpkg'))
 if BASE_DIR not in sys.path:
-    sys.path.append(BASE_DIR)
+    sys.path.insert(1,BASE_DIR)
 if DPKG_DIR not in sys.path:
     sys.path.append(DPKG_DIR)
 from MMCQsc.scp.lib.logger import *
@@ -35,6 +35,7 @@ logger = myLogging("gitee.com/soltus")
 # 全局变量
 try:
     profile = json.load(open(os.path.abspath(os.path.join(BASE_DIR,'MMCQsc','scp','scripts','profile.json')), 'r+'))
+    logger.info('./profile.json 配置文件加载成功')
     themes = profile['themes']
     size_rate = profile['size_rate']
     ignore_size = profile['ignore_size']
@@ -70,10 +71,9 @@ else:
     DIR_SPLIT = '\\'
 
 from MMCQsc.scp.lib import dpkg
+pgd = dpkg.Pgd(BASE_DIR,DPKG_DIR)
+
 dddd = 0
-pgd = dpkg.Pgd()
-
-
 
 try:
     logger.info("全局加载 Numpy 模块")

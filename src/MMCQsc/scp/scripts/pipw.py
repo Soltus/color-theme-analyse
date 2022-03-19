@@ -1,5 +1,4 @@
-import os,sys,shlex
-from subprocess import Popen
+import os
 from MMCQsc.version import version
 my_v = version
 

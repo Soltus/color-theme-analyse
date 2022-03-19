@@ -1,7 +1,3 @@
-import os,sys
-BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-if BASE_DIR not in sys.path:
-    sys.path.append(BASE_DIR)
 
 '''prog - 程序的名称（默认：sys.argv[0]）
 
@@ -41,17 +37,39 @@ parser.add_argument('--path',default=None, help='选择交给 %(prog)s 处理的
 
 args = parser.parse_args()
 
+import os,sys
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+SRC_DIR = os.path.abspath(os.path.join(BASE_DIR, 'MMCQsc','src'))
+DPKG_DIR = os.path.abspath(os.path.join(BASE_DIR, 'MMCQsc_dpkg'))
+if BASE_DIR not in sys.path:
+    sys.path.insert(1,BASE_DIR)
+if DPKG_DIR not in sys.path:
+    sys.path.append(DPKG_DIR)
+
+from importlib.metadata import version as Version, PackageNotFoundError
+
+try:
+    __version__ = Version("MMCQsc") # if installed
+except PackageNotFoundError:
+    # package is not installed
+    from version import __version__, version
 
 if __name__ == '__main__':
     SRC_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__),'src'))
     try:
-        from MMCQsc.scp import executable_check
-    except:
-        exit()
+        from MMCQsc.scp.lib import dpkg
+        pgd = dpkg.Pgd(BASE_DIR,DPKG_DIR)
+        new = dpkg.check_update(f"{__version__}","https://pypi.org/pypi/color-theme-analyse/json","https://mirrors.tencent.com/pypi/simple/color-theme-analyse/")
+        if new == True:
+            repo = input("\n\t\t是否更新到最新版？[y/n]\n")
+            if repo in ['Y','y']:
+                print('ok')
+        from MMCQsc.scp.executable_check import *
+    except Exception as e:
+        print(e)
     else:
         from MMCQsc.scp import main
         try:
             result = main.mainFunc()
-        finally:
-            if result is not None:
-                exit()
+        except Exception as e:
+            print(e)

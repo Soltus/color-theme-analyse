@@ -27,9 +27,9 @@ def get_disk():
 
 def search_files(disk=[],mode=0,debug=False):
     '''
-    @param disk: ['D:\\','E:\\'] 将制定扫描盘符，默认扫描全部盘符
-    @param mode: 0表示找到结果后立即停止（仅对文件查找生效），1表示贪婪模式
-    @param debug: True将开启控制台输出
+    :param disk: ['D:\\','E:\\'] 将制定扫描盘符，默认扫描全部盘符
+    :param mode: 0表示找到结果后立即停止（仅对文件查找生效），1表示贪婪模式
+    :param debug: True将开启控制台输出
     '''
     values = []
     if disk == []:
@@ -164,8 +164,8 @@ def py_version(v1,v2):
 # v1 > v2 return 1
 # v1 < v2 return -1
 
-    l_1 = v1.split('.')
-    l_2 = v2.split('.')
+    l_1 = v1.split('.')[0:3]
+    l_2 = v2.split('.')[0:3]
     c = 0
     while True:
         if c == len(l_1) and c == len(l_2):
@@ -280,3 +280,67 @@ class Pgd:
                     exit()
         elif py_version(PY3_VNO,bv) != 0:
             logger.warning(f"Recommended version : Python == {bv}  However, it doesn't matter")
+
+
+from re import sub
+import requests
+from html.parser import HTMLParser
+from urllib import parse
+
+class MyHP(HTMLParser):
+    def __init__(self,v,tcurl):
+        HTMLParser.__init__(self)
+        self.__text = []
+        self.__v = v
+        self.__url = 'null'
+        self.TCURL = tcurl
+
+    def handle_data(self,data):
+        text = data.strip()
+        if len(text) > 0:
+            text = sub('[ \t\r\n]+', ' ', text)
+            self.__text.append(text + ' ')
+
+    def handle_starttag(self, tag, attrs):
+        if tag == 'p':
+            self.__text.append('\n\n')
+        elif tag == 'br':
+            self.__text.append('\n')
+        elif tag == 'a':
+            if self.__v in attrs[0][1]:
+                self.__url = parse.urljoin(self.TCURL,attrs[0][1])
+
+    def handle_startendtag(self, tag, attrs):
+        if tag == 'br':
+            self.__text.append('\n\n')
+
+    def text(self):
+        return ''.join(self.__text).strip()
+
+    def get_url(self):
+        return self.__url
+
+def check_update(nv,json_url,mirrors_url) -> bool:
+    TCURL = mirrors_url
+    url = json_url
+    r = requests.get(url)
+    data = r.json()
+    print(f"{len(data['releases'])}个可用版本\n当前版本：{nv}")
+    v_l = []
+    new = False
+    for version, files in data['releases'].items():
+        for f in files:
+            if f.get('packagetype') in ['bdist_wheel'] and f.get('requires_python'):
+                v_l.append(version)
+
+                if py_version(version,nv) == 1:
+                    new =True
+                    r = requests.get(TCURL)
+                    parser = MyHP(version,TCURL)
+                    parser.feed(bytes.decode(r.content))
+                    # print(parser.text()) # 等效于 r.text
+                    mirrors_url = parser.get_url()
+                    r.close()
+                    del parser
+                    print(f"\n- 新版 {version} 现已可用！Python版本要求{f['requires_python']} 镜像下载地址：{mirrors_url}")
+    return new

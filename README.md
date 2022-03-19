@@ -6,7 +6,7 @@
 
 `pip install color-theme-analyse --no-deps -i https://pypi.org.simple`
 
-如果你使用的是校园网，可以使用腾讯镜像下载本项目（俺也不知道为啥腾讯镜像连这都收录）
+如果你使用的是校园网，可以使用腾讯镜像下载本项目
 
 `pip install color-theme-analyse[base] -i https://mirrors.tencent.com/pypi/simple`
 
@@ -35,6 +35,8 @@
 [Pypi](https://pypi.org/project/color-theme-analyse/ "https://pypi.org/project/color-theme-analyse/")（官方仓库）
 
 [libraries.io](https://libraries.io/pypi/color-theme-analyse)（同步官方仓库）
+
+腾讯镜像可用直接下载所有源文件[Links for color-theme-analyse (tencent.com)](https://mirrors.tencent.com/pypi/simple/color-theme-analyse/)
 
 默认分支应为 `embed`
 
