@@ -47,10 +47,9 @@ if DPKG_DIR not in sys.path:
     sys.path.append(DPKG_DIR)
 
 
-
-if __name__ == '__main__':
+def MainFunc():
     try:
-        from MMCQsc.scp.executable_check import *
+        from MMCQsc.scp import executable_check
     except Exception as e:
         print(e)
     else:
@@ -59,3 +58,6 @@ if __name__ == '__main__':
             result = main.mainFunc()
         except Exception as e:
             print(e)
+
+if __name__ == '__main__':
+    MainFunc()
