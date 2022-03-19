@@ -20,8 +20,7 @@ def reinstallMerge():
     python = os.path.abspath(sys.executable).replace('\\','/')
     args = shlex.split(f"{python} -m pip install color-theme-analyse[merge] --force-reinstall -i https://mirrors.tencent.com/pypi/simple --extra-index-url https://mirrors.tencent.com/pypi/simple --compile --timeout 30 --exists-action b --only-binary :all:")
     result = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0)
-    exit(100)
-    # result.wait()
+    result.wait()
     # os.system("pip install color-theme-analyse[merge] -i https://mirrors.tencent.com/pypi/simple --force-reinstall")
 
 def uninstall_base():
