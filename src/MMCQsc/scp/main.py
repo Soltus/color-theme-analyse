@@ -100,9 +100,9 @@ def mainFunc():
     pgd = dpkg.Pgd(BASE_DIR,DPKG_DIR)
     new = dpkg.check_update(f"{__version__}","https://pypi.org/pypi/color-theme-analyse/json","https://mirrors.tencent.com/pypi/simple/color-theme-analyse/")
     if new == True:
-        repo = input("\n\t\t是否更新到最新版？[y/n]\n")
+        repo = input("\n\t\t是否更新到最新版？[y/n]\t")
         if repo in ['Y','y']:
-            print('ok')
+            pgd.upgrade_module('color-theme-analyse')
     try:
         shm = shared_memory.SharedMemory(
             name='main_run_share', create=True, size=4096)

@@ -281,6 +281,14 @@ class Pgd:
         elif py_version(PY3_VNO,bv) != 0:
             logger.warning(f"Recommended version : Python == {bv}  However, it doesn't matter")
 
+    def upgrade_module(self,name):
+        python = self.executable
+        print(python)
+        args = shlex.split(f"{python} -m pip install {name} --upgrade -i https://mirrors.tencent.com/pypi/simple --extra-index-url https://pypi.org/simple --timeout 30")
+        result = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0)
+        logger.debug(f"创建下载线程 PID: {result.pid}")
+        logger.warning("\n\n\t\t[ tip ] : 快捷键 CTRL + C 强制结束当前任务，CTRL + PAUSE_BREAK 强制结束所有任务并退出 Python\n\n")
+        result.wait()
 
 from re import sub
 import requests
