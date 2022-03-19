@@ -355,7 +355,7 @@ setuptools.setup(
     # console_scripts 是 Python 定义的，可以理解为生成控制台程序脚本
     # RunMMCQsc 为文件名，表示生成 RunMMCQsc.exe 文件，pip install 后该文件就躺在 python.exe 所在文件夹的 Scripts 子文件夹里面
     # MMCQsc.scp.main:mainFunc 只需要知道 mainFunc 是 MMCQsc/scp/main.py 里的一个函数
-    entry_points={'console_scripts':['RunMMCQsc = MMCQsc.scp.main:mainFunc']},
+    entry_points={'console_scripts':['RunMMCQsc = MMCQsc.scp.main:mainFunc','MMCQscPure = MMCQsc.scp.scripts.pipw:unintall_merge']},
     # 手动添加脚本。虽然 scripts 关键字用于指向预先制作好的脚本进行安装，建议使用实现跨平台兼容性的方法 console_scripts 入口点(entry_points)
     scripts=['src/MMCQsc.cmd'],
     license="MIT",

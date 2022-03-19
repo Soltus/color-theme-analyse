@@ -9,7 +9,6 @@
 '''
 # ---------------------------------
 # 创建于    2021-7-20
-# 更新于    2021-7-20 02:08:57
 # ---------------------------------
 # Need help ?  => 694357845@qq.com
 # ---------------------------------
@@ -19,7 +18,7 @@
 
 ################################################################
 import os,sys
-import json
+
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
 DPKG_DIR = os.path.abspath(os.path.join(BASE_DIR, 'MMCQsc_dpkg'))
 if BASE_DIR not in sys.path:
@@ -75,43 +74,18 @@ def run_in_env(env):
     PY3_VNO = '.'.join(PY3_VNO)
     # os.system(CLS)
     logger.info("开始检测 Conda 环境")
-    if env == 'noconda':
+    if env is None:
         logger.info('尝试安装多个扩展包到项目 [ 如果不存在缓存，将从网络下载并安装 ]')
         pgd.get_dpkg('numpy')
         pgd.get_dpkg('rich')
         pgd.get_dpkg('Pillow')
         return env
     else:
-        with os.popen("conda info --json") as CONDA_SYS:
-            try:
-                CONDA_JSON = json.loads(CONDA_SYS.read())
-                _conda_location = CONDA_JSON["conda_location"]
-                _conda_exe = CONDA_JSON["env_vars"]["CONDA_EXE"]
-                _env_list = CONDA_JSON["envs"]
-                _env_v = {}
-            except Exception:
-                logger.error('无法正确检测到 Conda 环境')
-                logger.warning("如果你已经安装了 Conda ，请确保正确配置环境变量并完成 Conda init 初始化终端")
-                return None
-            for e in _env_list:
-                with os.popen("{}\\python.exe --version".format(e)) as repo:
-                    _env_path = e.strip()
-                    _env = '{}'.format(e).split('\\')[-1]
-                    if '{}'.format(e).split('\\')[-2] == 'envs':
-                        _env = '{}'.format(e).split('\\')[-1]
-                    else:
-                        _env = 'base'
-                    _env_v[_env] = {}
-                    _env_v[_env]['version'] = repo.read().strip()
-                    _env_v[_env]['path'] = _env_path
-                    if '3.9.' in _env_v[_env]['version']:
-                        print('\n\t' + _env + '\t' + _env_v[_env]['version'] + '\t' + _env_path)
-            print('\n\n')
-            logger.info("已列出所有兼容的 Conda 环境")
+        _env_v = dpkg.list_conda_env(py=['3.9'],conda_exec='conda')
 
-            _env_pyp = os.path.abspath(os.path.join(_env_v[env]['path'],'Lib','site-packages'))
-            if _env_pyp is not None:
-                logger.debug("\n\n\n\t\t正在使用的 Python 解释器版本 {}\n\t\t正在使用的 Python 解释器路径 {}\n\n\n\t\t使用 Conda 环境 {} ({}) 导入 Numpy 并继续 (y) ？\n\n\t\t或者不导入 Conda 基础包并继续 (n) ？\n\t\t[ 如果项目路径不存在 Numpy ，将从网络下载并安装 ]\n\n\t\t也可以输入其他任意字符，选择其他 Conda 环境导入 Numpy (*)\n\n\t\tProccess ?  [Y/n/*]".format(PY3_VNO,sys.executable,env, _env_v[env]['version']))
+        _env_pyp = os.path.abspath(os.path.join(_env_v[env]['path'],'Lib','site-packages'))
+        if _env_pyp is not None:
+            logger.debug("\n\n\n\t\t正在使用的 Python 解释器版本 {}\n\t\t正在使用的 Python 解释器路径 {}\n\n\n\t\t使用 Conda 环境 {} ({}) 导入 Numpy 并继续 (y) ？\n\n\t\t或者不导入 Conda 基础包并继续 (n) ？\n\t\t[ 如果项目路径不存在 Numpy ，将从网络下载并安装 ]\n\n\t\t也可以输入其他任意字符，选择其他 Conda 环境导入 Numpy (*)\n\n\t\tProccess ?  [Y/n/*]".format(PY3_VNO,sys.executable,env, _env_v[env]['version']))
         while True:
             try:
                 pick_env = input("\n\nmain.py:93 >>> ")
