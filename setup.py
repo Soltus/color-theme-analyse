@@ -359,7 +359,7 @@ setuptools.setup(
     # MMCQsc.scp.main:mainFunc 只需要知道 mainFunc 是 MMCQsc/scp/main.py 里的一个函数
     entry_points={'console_scripts':[
         'RunMMCQsc = MMCQsc.scp.main:mainFunc',
-        'DoMMCQsc = MMCQsc.color_theme_analyse',
+        'DoMMCQsc = MMCQsc.color_theme_analyse:__main__',
         'MMCQscPure = MMCQsc.scp.scripts.pipw:uninstallMerge',
         'MMCQscR1 = MMCQsc.scp.scripts.pipw:reinstallBase',
         'MMCQscR2 = MMCQsc.scp.scripts.pipw:reinstallDev',
