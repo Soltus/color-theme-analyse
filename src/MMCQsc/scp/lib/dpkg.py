@@ -352,7 +352,7 @@ def check_update(nv,json_url,mirrors_url) -> bool:
             if f.get('packagetype') in ['bdist_wheel'] and f.get('requires_python'):
                 v_l.append(version)
 
-                if py_version(version,nv) == 1:
+                if py_version(version,nv) == 1 and 'dev' not in version:
                     new =True
                     r = requests.get(TCURL)
                     parser = MyHP(version,TCURL)
