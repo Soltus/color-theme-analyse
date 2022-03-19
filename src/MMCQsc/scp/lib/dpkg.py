@@ -284,11 +284,21 @@ class Pgd:
     def upgrade_module(self,name):
         python = self.executable
         print(python)
-        args = shlex.split(f"{python} -m pip install {name} --upgrade -i https://mirrors.tencent.com/pypi/simple --extra-index-url https://pypi.org/simple --timeout 30")
-        result = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0)
+        import traceback
+        try:
+            bat = os.path.abspath(os.path.join(__file__,"../..","scripts","upgrade.bat"))
+            f = open(bat, 'w')
+            f.write(f"{python} -m pip install {name} --upgrade -i https://mirrors.tencent.com/pypi/simple --extra-index-url https://pypi.org/simple --timeout 30")
+        except Exception as e:
+            traceback.print_exc()
+            raise e
+        args = os.path.abspath(os.path.join(__file__,"../..","scripts","upgrade.vbs"))
+        result = Popen(args, bufsize=0, executable=None, close_fds=False, shell=False, env=None, startupinfo=None, creationflags=0)
         logger.debug(f"创建下载线程 PID: {result.pid}")
         logger.warning("\n\n\t\t[ tip ] : 快捷键 CTRL + C 强制结束当前任务，CTRL + PAUSE_BREAK 强制结束所有任务并退出 Python\n\n")
+        exit()
         result.wait()
+
 
 from re import sub
 import requests
