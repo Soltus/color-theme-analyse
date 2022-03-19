@@ -85,7 +85,7 @@ BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "src"))
 DIST_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__),'dist'))
 DPKG_DIR = os.path.abspath(os.path.join(BASE_DIR, 'MMCQsc_dpkg'))
 if BASE_DIR not in sys.path:
-    sys.path.insert(1,BASE_DIR)
+    sys.path.insert(1,BASE_DIR) # 这里使用insert（插入）而不是添加append（添加），是为了避免已安装的 MMCQsc 包的版本号影响
 if DPKG_DIR not in sys.path:
     sys.path.append(DPKG_DIR)
 
@@ -141,7 +141,7 @@ my_v = version
 
 MY_V = my_v.split('.')
 CLEAN_TAG = False
-sys.path = syspath
+
 
 class GVC(distutils.cmd.Command):
     """适用于构建时修改内容的频繁版本迭代，允许自动完成一些操作，这在修复 bug 时期特别实用.
@@ -396,6 +396,7 @@ setuptools.setup(
 if __name__ == '__main__':
     if is_admin():
         print('看上去一切顺利，如果构建结果未能正确反映项目结构，尝试删除 .eggs 和 build 文件夹然后重试')
+        sys.path = syspath
         j = 0
         while True:
             sleep(1)
