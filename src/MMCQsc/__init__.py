@@ -1,12 +1,4 @@
 
-from importlib.metadata import version as Version, PackageNotFoundError
-
-try:
-    __version__ = Version("MMCQsc") # if installed
-except PackageNotFoundError:
-    # package is not installed
-    print("当前无已安装的 [MMCQsc]")
-
 __doc__ = f'''
 
 ___________  build history  ____________
@@ -55,6 +47,7 @@ ___________  build history  ____________
 中国标准时间 2022-03-19 22:44:33  ->  1.5.1
 中国标准时间 2022-03-19 23:23:15  ->  1.61.1
 中国标准时间 2022-03-19 23:26:18  ->  1.62.1
-中国标准时间 2022-03-19 23:30:58  ->  1.63.1中国标准时间 2022-03-20 02:39:16  ->  1.64.1
+中国标准时间 2022-03-19 23:30:58  ->  1.63.1
+中国标准时间 2022-03-20 02:39:16  ->  1.64.1中国标准时间 2022-03-20 02:45:39  ->  1.65.1
 
 '''
