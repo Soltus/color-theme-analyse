@@ -60,7 +60,7 @@ def reinstallMerge():
         raise e
     # command = os.path.abspath(os.path.join(_path,"reinstallMerge.vbs"))
     args = shlex.split("cmd PowerShell -noprofile ./reinstallMerge.vbs")
-    result = Popen(args, bufsize=0, close_fds=False, shell=False, env=os.environ,cwd=_path, startupinfo=None, creationflags=0)
+    result = Popen(args, bufsize=0, close_fds=False, shell=False, env=None,cwd=_path, startupinfo=None, creationflags=0)
     exit()
     os.system(f"pip install color-theme-analyse[merge]=={my_v} -i https://mirrors.tencent.com/pypi/simple --force-reinstall --user")
 
