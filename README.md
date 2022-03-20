@@ -18,7 +18,19 @@
 
 等效于 `pip install color-theme-analyse[merge] -i https://mirrors.tencent.com/pypi/simple`
 
-**安装后使用终端命令RunMMCQsc运行（仅同步PyPi分支）**
+**安装后使用终端命令`MMCQsc`运行**
+
+支持以下终端命令（Linux平台需要注意大小写）：
+
+```bash
+MMCQsc
+RunMMCQsc
+DoMMCQsc
+MMCQscPure
+MMCQscR
+MMCQscR1
+MMCQscR2
+```
 
 ---
 
@@ -38,7 +50,7 @@
 
 腾讯镜像可用直接下载所有源文件[Links for color-theme-analyse (tencent.com)](https://mirrors.tencent.com/pypi/simple/color-theme-analyse/)
 
-默认分支应为 `embed`
+当前默认分支为 `dev2022`
 
 `master，pypi` 分支已停止维护
 
@@ -88,9 +100,9 @@ Bug 反馈和 Issues 提交可以在 Bitbucket 或者 Gitee，**在 Gitee 会得
 
 `python setup.py bdist_wheel`
 
-调试请运行src/MMCQsc/scp/main.py
+调试请运行 color_theme_analyse.py
 
-这是为 Windows 平台开发的，无法在 Linux 中完美运行
+这是为 Windows 平台专门开发的，无法在 Linux 中获得完美体验，同时可能存在部分兼容问题
 
 ### Feature
 
