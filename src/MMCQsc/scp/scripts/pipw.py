@@ -10,7 +10,7 @@ def inti():
     my_v = version
     python = os.path.abspath(sys.executable).replace('\\','/')
     _path = os.path.abspath(os.path.dirname(__file__))
-    os.environ["COMSPEC"] = r'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe'
+    # os.environ["COMSPEC"] = r'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe'
 
 def reinstallBase():
     '''
@@ -59,7 +59,7 @@ def reinstallMerge():
         traceback.print_exc()
         raise e
     # command = os.path.abspath(os.path.join(_path,"reinstallMerge.vbs"))
-    args = shlex.split("PowerShell -noprofile ./reinstallMerge.vbs")
+    args = shlex.split("cmd PowerShell -noprofile ./reinstallMerge.vbs")
     result = Popen(args, bufsize=0, close_fds=False, shell=False, env=os.environ,cwd=_path, startupinfo=None, creationflags=0)
     exit()
     os.system(f"pip install color-theme-analyse[merge]=={my_v} -i https://mirrors.tencent.com/pypi/simple --force-reinstall --user")
