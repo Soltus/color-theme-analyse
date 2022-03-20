@@ -19,8 +19,8 @@ def reinstallBase():
     inti()
     if os.name == 'posix':
         args = shlex.split(f"pip3 install color-theme-analyse[base]=={my_v} --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple --timeout 30 && exit")
-        p2 = Popen(args, bufsize=-1, close_fds=False, shell=False, env=None,cwd=_path, startupinfo=None, creationflags=0)
-        exit()
+        with Popen(args, bufsize=-1, close_fds=False, shell=False, env=None,cwd=_path, startupinfo=None, creationflags=0) as p:
+            exit()
     try:
         bat = os.path.abspath(os.path.join(_path,"reinstallBase.bat"))
         f = open(bat, 'w')
@@ -38,9 +38,9 @@ def reinstallDev():
     '''
     inti()
     if os.name == 'posix':
-        args = shlex.split(f"pip3 install color-theme-analyse[dev]=={my_v} --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple --timeout 30 && exit")
-        p2 = Popen(args, bufsize=-1, close_fds=False, shell=False, env=None,cwd=_path, startupinfo=None, creationflags=0)
-        exit()
+        args = shlex.split(f"pip3 install color-theme-analyse[dev]=={my_v} --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple --timeout 30")
+        with Popen(args, bufsize=-1, close_fds=False, shell=False, env=None,cwd=_path, startupinfo=None, creationflags=0) as p:
+            exit()
     try:
         bat = os.path.abspath(os.path.join(_path,"reinstallDev.bat"))
         f = open(bat, 'w')
@@ -59,8 +59,8 @@ def reinstallMerge():
     inti()
     if os.name == 'posix':
         args = shlex.split(f"pip3 install color-theme-analyse[merge]=={my_v} --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple --timeout 30 && exit")
-        p2 = Popen(args, bufsize=-1, close_fds=False, shell=False, env=None,cwd=_path, startupinfo=None, creationflags=0)
-        exit()
+        with Popen(args, bufsize=-1, close_fds=False, shell=False, env=None,cwd=_path, startupinfo=None, creationflags=0) as p:
+            exit()
     try:
         bat = os.path.abspath(os.path.join(_path,"reinstallMerge.ps1")).replace('\\','/')
         exec = os.path.dirname(python)

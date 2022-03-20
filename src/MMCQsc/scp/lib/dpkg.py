@@ -302,7 +302,7 @@ class Pgd:
         logger.warning(f"\n\n\t\t{python}\n\n")
         import traceback
         try:
-            args = shlex.split(f"pip3 install {name} --upgrade --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple --timeout 30 && exit")
+            args = shlex.split(f"pip3 install {name} --upgrade --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple --timeout 30")
             result = Popen(args, bufsize=0, close_fds=False, shell=True, env=None,cwd=None, startupinfo=None, creationflags=0)
         except Exception as e:
             traceback.print_exc()
