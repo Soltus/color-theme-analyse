@@ -44,7 +44,7 @@ if os.name == 'posix':
         shutil.rmtree(O_DLL)
         shutil.move(D_DLL, O_DLL)
     if os.path.exists(O_SRC) == False:
-        shutil.mobe(D_SRC, O_SRC)
+        shutil.move(D_SRC, O_SRC)
     elif os.path.exists(D_SRC):
         shutil.rmtree(O_SRC)
         shutil.move(D_SRC, O_SRC)

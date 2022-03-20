@@ -102,7 +102,10 @@ def mainFunc():
     if new == True:
         repo = input("\n\t\t是否更新到最新版？[y/n]\t")
         if repo in ['Y','y']:
-            pgd.upgrade_module('color-theme-analyse')
+            if os.name == 'posix':
+                pgd.upgrade_module_linux('color-theme-analyse')
+            else:
+                pgd.upgrade_module_win('color-theme-analyse')
     try:
         shm = shared_memory.SharedMemory(
             name='main_run_share', create=True, size=4096)

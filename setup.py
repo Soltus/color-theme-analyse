@@ -360,6 +360,7 @@ setuptools.setup(
     entry_points={'console_scripts':[
         'RunMMCQsc = MMCQsc.scp.main:mainFunc',
         'DoMMCQsc = MMCQsc.color_theme_analyse:MainFunc',
+        'MMCQsc = MMCQsc.color_theme_analyse:Menu',
         'MMCQscPure = MMCQsc.scp.scripts.pipw:uninstallMerge',
         'MMCQscR1 = MMCQsc.scp.scripts.pipw:reinstallBase',
         'MMCQscR2 = MMCQsc.scp.scripts.pipw:reinstallDev',

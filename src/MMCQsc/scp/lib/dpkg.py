@@ -281,8 +281,9 @@ class Pgd:
         elif py_version(PY3_VNO,bv) != 0:
             logger.warning(f"Recommended version : Python == {bv}  However, it doesn't matter")
 
-    def upgrade_module(self,name):
+    def upgrade_module_win(self,name):
         python = self.executable
+        logger.warning(f"\n\n\t\t{python}\n\n")
         import traceback
         _path = os.path.abspath(os.path.join(__file__,"../..","scripts"))
         try:
@@ -294,9 +295,19 @@ class Pgd:
             raise e
         args = shlex.split(f"./upgrade.vbs")
         result = Popen(args, bufsize=0, executable=r"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe", close_fds=False, shell=True, env=None,cwd=_path, startupinfo=None, creationflags=0)
-        logger.warning("\n\n\t\tpython\n\n")
         exit()
 
+    def upgrade_module_linux(self,name):
+        python = self.executable
+        logger.warning(f"\n\n\t\t{python}\n\n")
+        import traceback
+        try:
+            args = shlex.split(f"pip3 install {name} --upgrade --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple --timeout 30")
+            result = Popen(args, bufsize=0, executable=r"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe", close_fds=False, shell=True, env=None,cwd=None, startupinfo=None, creationflags=0)
+        except Exception as e:
+            traceback.print_exc()
+            raise e
+        exit()
 
 from re import sub
 import requests

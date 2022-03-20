@@ -46,6 +46,24 @@ if BASE_DIR not in sys.path:
 if DPKG_DIR not in sys.path:
     sys.path.append(DPKG_DIR)
 
+def Menu():
+    menu = '''
+欢迎使用 MMCQsc
+---------------
+(1) 运行主程序
+(2) 清理依赖包
+(3) 重装依赖包
+---------------
+请输入对应数字：'''
+    repo = input(menu)
+    if repo == '1':
+        MainFunc()
+    elif repo == '2':
+        from MMCQsc.scp.scripts import pipw
+        pipw.uninstallMerge()
+    elif repo == '3':
+        from MMCQsc.scp.scripts import pipw
+        pipw.reinstallMerge()
 
 def MainFunc():
     try:
@@ -60,4 +78,4 @@ def MainFunc():
             print(e)
 
 if __name__ == '__main__':
-    MainFunc()
+    Menu()
