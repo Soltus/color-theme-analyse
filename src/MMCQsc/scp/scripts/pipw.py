@@ -18,7 +18,7 @@ def reinstallBase():
     '''
     inti()
     if os.name == 'posix':
-        args = shlex.split(f"pip3 install color-theme-analyse[base]=={my_v} --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple --timeout 30 && exit")
+        args = shlex.split(f"pip3 install color-theme-analyse[base]=={my_v} --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple --timeout 30")
         with Popen(args, bufsize=-1, close_fds=False, shell=False, env=None,cwd=_path, startupinfo=None, creationflags=0) as p:
             exit()
     try:
@@ -58,7 +58,7 @@ def reinstallMerge():
     '''
     inti()
     if os.name == 'posix':
-        args = shlex.split(f"pip3 install color-theme-analyse[merge]=={my_v} --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple --timeout 30 && exit")
+        args = shlex.split(f"pip3 install color-theme-analyse[merge]=={my_v} --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple --timeout 30")
         with Popen(args, bufsize=-1, close_fds=False, shell=False, env=None,cwd=_path, startupinfo=None, creationflags=0) as p:
             exit()
     try:
