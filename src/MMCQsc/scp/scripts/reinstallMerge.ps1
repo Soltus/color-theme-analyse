@@ -1,0 +1,3 @@
+$vbs = New-Object -ComObject WScript.Shell;$repo=$vbs.popup("当前进程绑定的 Pyhton 路径位于 C:/Program Files/Python39/python.exe
+请确认与项目的宿主 Python 一致。
+重装依赖包可能会导致不可控的影响，请慎重。",$null,"是否重装所有额外依赖包？",1);if($repo -eq 1){cd "C:/Program Files/Python39";.\python -m pip install color-theme-analyse[merge]==1.92.1 --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple --timeout 30;clear;"Any key to exit." ;[Console]::Readkey() | Out-Null ;Exit ;}else{exit;}

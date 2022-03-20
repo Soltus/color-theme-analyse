@@ -52,15 +52,45 @@ def reinstallMerge():
     '''
     inti()
     try:
-        bat = os.path.abspath(os.path.join(_path,"reinstallMerge.bat"))
+        bat = os.path.abspath(os.path.join(_path,"reinstallMerge.ps1")).replace('\\','/')
+        exec = os.path.dirname(python)
+        args = shlex.split(r"PowerShell -noprofile Set-ExecutionPolicy AllSigned;clear;exit")
+        p0 = Popen(args, bufsize=0, close_fds=False, shell=False, env=None,cwd=_path, startupinfo=None, creationflags=0)
+        p0.wait()
+        # args = shlex.split(f"PowerShell -noprofile Remove-item {bat};cls;exit")
+        # p1 = Popen(args, bufsize=0, close_fds=False, shell=False, env=None,cwd=_path, startupinfo=None, creationflags=0)
+        # p1.wait()
         f = open(bat, 'w')
-        f.write(f"{python} -m pip install color-theme-analyse[merge]=={my_v} --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple --timeout 30")
+        f.write(f'$vbs = New-Object -ComObject WScript.Shell;$repo=$vbs.popup("当前进程绑定的 Pyhton 路径位于 {python}\n请确认与项目的宿主 Python 一致。\n重装依赖包可能会导致不可控的影响，请慎重。",$null,"是否重装所有额外依赖包？",1);\
+if($repo -eq 1){{cd "{exec}";.\\python -m pip install color-theme-analyse[merge]=={my_v} --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple --timeout 30;clear;"Any key to exit." ;[Console]::Readkey() | Out-Null ;Exit ;}}else{{exit;}}')
+
+        '''
+Const wshOKDialg = 0
+Const wshOKCancelDialog = 1
+Const wshAbortRetryIgnoreDialog = 2
+Const wshYesNoCancelDialog = 3
+Const wshYesNoDialog = 4
+Const wshRetryCancelDialog = 5
+Const wshStopMark = 16
+Const wshQuestionMark = 32
+Const wshExclamationMark = 48
+Const wshInformationMark = 64
+---------------------
+Const wshOK = 1
+Const wshCancel = 2
+Const wshAbort = 3
+Const wshRetry = 4
+Const wshIngore = 5
+Const wshYes = 6
+Const wshNo = 7
+Const wshDefault = -1
+        '''
     except Exception as e:
         traceback.print_exc()
         raise e
     # command = os.path.abspath(os.path.join(_path,"reinstallMerge.vbs"))
-    args = shlex.split("cmd PowerShell -noprofile ./reinstallMerge.vbs")
-    result = Popen(args, bufsize=0, close_fds=False, shell=False, env=None,cwd=_path, startupinfo=None, creationflags=0)
+    args = shlex.split(f"PowerShell -noprofile {bat}")
+    p2 = Popen(args, bufsize=-1, close_fds=False, shell=False, env=None,cwd=_path, startupinfo=None, creationflags=0)
     exit()
     os.system(f"pip install color-theme-analyse[merge]=={my_v} -i https://mirrors.tencent.com/pypi/simple --force-reinstall --user")
 
