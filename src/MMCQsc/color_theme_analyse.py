@@ -53,6 +53,7 @@ def Menu():
 (1) 运行主程序
 (2) 清理依赖包
 (3) 重装依赖包
+Any other key to exit.
 ---------------
 请输入对应数字：'''
     repo = input(menu)
@@ -64,6 +65,8 @@ def Menu():
     elif repo == '3':
         from MMCQsc.scp.scripts import pipw
         pipw.reinstallMerge()
+    else:
+        exit(111)
 
 def MainFunc():
     try:

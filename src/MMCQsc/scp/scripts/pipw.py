@@ -62,7 +62,7 @@ def reinstallMerge():
         # p1.wait()
         f = open(bat, 'w')
         f.write(f'$vbs = New-Object -ComObject WScript.Shell;$repo=$vbs.popup("当前进程绑定的 Pyhton 路径位于 {python}\n请确认与项目的宿主 Python 一致。\n重装依赖包可能会导致不可控的影响，请慎重。",$null,"是否重装所有额外依赖包？",1);\
-if($repo -eq 1){{cd "{exec}";.\\python -m pip install color-theme-analyse[merge]=={my_v} --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple --timeout 30;clear;"Any key to exit." ;[Console]::Readkey() | Out-Null ;Exit ;}}else{{exit;}}')
+if($repo -eq 1){{cd "{exec}";.\\python -m pip install color-theme-analyse[merge]=={my_v} --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple --timeout 30;clear;"Press Enter to exit.\n按回车键退出" ;[Console]::Readkey() | Out-Null ;Exit ;}}else{{exit;}}')
 
         '''
 Const wshOKDialg = 0
