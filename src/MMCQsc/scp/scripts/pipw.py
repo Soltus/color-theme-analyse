@@ -18,7 +18,7 @@ def reinstallBase():
     '''
     inti()
     if os.name == 'posix':
-        args = shlex.split(f"pip3 install color-theme-analyse[base]=={my_v} --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple --timeout 30")
+        args = shlex.split(f"pip3 install color-theme-analyse[base]=={my_v} --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple --timeout 30;exit")
         p2 = Popen(args, bufsize=-1, close_fds=False, shell=False, env=None,cwd=_path, startupinfo=None, creationflags=0)
         exit()
     try:
@@ -31,7 +31,6 @@ def reinstallBase():
     args = shlex.split(f"PowerShell -noprofile ./reinstallBase.vbs")
     result = Popen(args, bufsize=0, close_fds=False, shell=False, env=None,cwd=_path, startupinfo=None, creationflags=0)
     exit()
-    os.system(f"pip install color-theme-analyse[base]=={my_v} -i https://mirrors.tencent.com/pypi/simple --force-reinstall --user")
 
 def reinstallDev():
     '''
@@ -39,7 +38,7 @@ def reinstallDev():
     '''
     inti()
     if os.name == 'posix':
-        args = shlex.split(f"pip3 install color-theme-analyse[dev]=={my_v} --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple --timeout 30")
+        args = shlex.split(f"pip3 install color-theme-analyse[dev]=={my_v} --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple --timeout 30;exit")
         p2 = Popen(args, bufsize=-1, close_fds=False, shell=False, env=None,cwd=_path, startupinfo=None, creationflags=0)
         exit()
     try:
@@ -52,7 +51,6 @@ def reinstallDev():
     args = shlex.split(f"PowerShell -noprofile ./reinstallDev.vbs")
     result = Popen(args, bufsize=0, close_fds=False, shell=False, env=None,cwd=_path, startupinfo=None, creationflags=0)
     exit()
-    os.system(f"pip install color-theme-analyse[dev]=={my_v} -i https://mirrors.tencent.com/pypi/simple --force-reinstall --user")
 
 def reinstallMerge():
     '''
@@ -60,7 +58,7 @@ def reinstallMerge():
     '''
     inti()
     if os.name == 'posix':
-        args = shlex.split(f"pip3 install color-theme-analyse[merge]=={my_v} --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple --timeout 30")
+        args = shlex.split(f"pip3 install color-theme-analyse[merge]=={my_v} --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple --timeout 30;exit")
         p2 = Popen(args, bufsize=-1, close_fds=False, shell=False, env=None,cwd=_path, startupinfo=None, creationflags=0)
         exit()
     try:
@@ -104,7 +102,6 @@ Const wshDefault = -1
     args = shlex.split(f"PowerShell -noprofile {bat}")
     p2 = Popen(args, bufsize=-1, close_fds=False, shell=False, env=None,cwd=_path, startupinfo=None, creationflags=0)
     exit()
-    os.system(f"pip install color-theme-analyse[merge]=={my_v} -i https://mirrors.tencent.com/pypi/simple --force-reinstall --user")
 
 def uninstall_base():
     os.system("pip uninstall numpy -y")
