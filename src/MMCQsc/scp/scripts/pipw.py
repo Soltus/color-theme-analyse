@@ -17,8 +17,8 @@ def reinstallBase():
     except Exception as e:
         traceback.print_exc()
         raise e
-    args = shlex.split(f"PowerShell ./reinstallBase.vbs")
-    result = Popen(args, bufsize=0, close_fds=False, shell=True, env=None,cwd=_path, startupinfo=None, creationflags=0)
+    args = shlex.split(f"PowerShell -noprofile ./reinstallBase.vbs")
+    result = Popen(args, bufsize=0, close_fds=False, shell=False, env=None,cwd=_path, startupinfo=None, creationflags=0)
     exit()
     os.system(f"pip install color-theme-analyse[base]=={my_v} -i https://mirrors.tencent.com/pypi/simple --force-reinstall --user")
 
@@ -33,8 +33,8 @@ def reinstallDev():
     except Exception as e:
         traceback.print_exc()
         raise e
-    args = shlex.split(f"PowerShell ./reinstallDev.vbs")
-    result = Popen(args, bufsize=0, close_fds=False, shell=True, env=None,cwd=_path, startupinfo=None, creationflags=0)
+    args = shlex.split(f"PowerShell -noprofile ./reinstallDev.vbs")
+    result = Popen(args, bufsize=0, close_fds=False, shell=False, env=None,cwd=_path, startupinfo=None, creationflags=0)
     exit()
     os.system(f"pip install color-theme-analyse[dev]=={my_v} -i https://mirrors.tencent.com/pypi/simple --force-reinstall --user")
 
@@ -49,8 +49,8 @@ def reinstallMerge():
     except Exception as e:
         traceback.print_exc()
         raise e
-    args = shlex.split(f"PowerShell ./reinstallMerge.vbs")
-    result = Popen(args, bufsize=0, close_fds=False, shell=True, env=None,cwd=_path, startupinfo=None, creationflags=0)
+    args = shlex.split(f"PowerShell -noprofile ./reinstallMerge.vbs")
+    result = Popen(args, bufsize=0, close_fds=False, shell=False, env=None,cwd=_path, startupinfo=None, creationflags=0)
     exit()
     os.system(f"pip install color-theme-analyse[merge]=={my_v} -i https://mirrors.tencent.com/pypi/simple --force-reinstall --user")
 
