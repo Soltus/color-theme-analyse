@@ -2,14 +2,20 @@ import os,sys
 import traceback
 import shlex
 from subprocess import Popen
-from MMCQsc.version import version
-my_v = version
-python = os.path.abspath(sys.executable).replace('\\','/')
-_path = os.path.abspath(os.path.dirname(__file__))
+def inti():
+    from MMCQsc.version import version
+    global my_v
+    global python
+    global _path
+    my_v = version
+    python = os.path.abspath(sys.executable).replace('\\','/')
+    _path = os.path.abspath(os.path.dirname(__file__))
+
 def reinstallBase():
     '''
     仅用于调试
     '''
+    inti()
     try:
         bat = os.path.abspath(os.path.join(_path,"reinstallBase.bat"))
         f = open(bat, 'w')
@@ -26,6 +32,7 @@ def reinstallDev():
     '''
     仅用于调试
     '''
+    inti()
     try:
         bat = os.path.abspath(os.path.join(_path,"reinstallDev.bat"))
         f = open(bat, 'w')
@@ -42,6 +49,9 @@ def reinstallMerge():
     '''
     仅用于调试
     '''
+    inti()
+    python = os.path.abspath(sys.executable).replace('\\','/')
+    _path = os.path.abspath(os.path.dirname(__file__))
     try:
         bat = os.path.abspath(os.path.join(_path,"reinstallMerge.bat"))
         f = open(bat, 'w')
@@ -49,10 +59,11 @@ def reinstallMerge():
     except Exception as e:
         traceback.print_exc()
         raise e
-    args = shlex.split(f"PowerShell -noprofile ./reinstallMerge.vbs")
+    # command = os.path.abspath(os.path.join(_path,"reinstallMerge.vbs"))
+    args = shlex.split("PowerShell -noprofile ./reinstallMerge.vbs")
     # os.environ["COMSPEC"] = r'%SystemRoot%\system32\cmd.exe'
     os.environ["COMSPEC"] = r'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe'
-    result = Popen(args, bufsize=0, close_fds=False, shell=True, env=os.environ, cwd=_path, startupinfo=None, creationflags=0)
+    result = Popen(args, bufsize=0, close_fds=False, shell=True, env=os.environ,cwd=_path, startupinfo=None, creationflags=0)
     exit()
     os.system(f"pip install color-theme-analyse[merge]=={my_v} -i https://mirrors.tencent.com/pypi/simple --force-reinstall --user")
 
