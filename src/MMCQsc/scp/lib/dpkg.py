@@ -293,8 +293,8 @@ class Pgd:
         except Exception as e:
             traceback.print_exc()
             raise e
-        args = shlex.split(f"./upgrade.vbs")
-        result = Popen(args, bufsize=0, executable=r"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe", close_fds=False, shell=True, env=None,cwd=_path, startupinfo=None, creationflags=0)
+        args = shlex.split(f"PowerShell ./upgrade.vbs")
+        result = Popen(args, bufsize=0, close_fds=False, shell=True, env=None,cwd=_path, startupinfo=None, creationflags=0)
         exit()
 
     def upgrade_module_linux(self,name):
@@ -303,7 +303,7 @@ class Pgd:
         import traceback
         try:
             args = shlex.split(f"pip3 install {name} --upgrade --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple --timeout 30")
-            result = Popen(args, bufsize=0, executable=r"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe", close_fds=False, shell=True, env=None,cwd=None, startupinfo=None, creationflags=0)
+            result = Popen(args, bufsize=0, close_fds=False, shell=True, env=None,cwd=None, startupinfo=None, creationflags=0)
         except Exception as e:
             traceback.print_exc()
             raise e
