@@ -63,8 +63,17 @@ Any other key to exit.
         from MMCQsc.scp.scripts import pipw
         pipw.uninstallMerge()
     elif repo == '3':
+        while True:
+            _path = input("\n请绑定 Python.exe 的绝对路径，留空则默认绑定到当前的 launcher\n>>> ")
+            if _path == '':
+                break
+            elif os.path.isfile(_path) and os.path.basename(_path) == 'python.exe':
+                break
+            else:
+                print('\n无效路径\n')
+
         from MMCQsc.scp.scripts import pipw
-        pipw.reinstallMerge()
+        pipw.reinstallMerge(_path)
     else:
         exit(111)
 

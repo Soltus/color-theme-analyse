@@ -2,23 +2,28 @@ import os,sys
 import traceback
 import shlex
 from subprocess import Popen
-def inti():
+def inti(exec=''):
     from MMCQsc.version import version
     global my_v
     global python
     global pyS
     global _path
     my_v = version
-    python = os.path.abspath(sys.executable).replace('\\','/')
-    pyS = os.path.abspath(os.path.join(os.path.dirname(python),'Scripts')).replace('\\','/')
     _path = os.path.abspath(os.path.dirname(__file__))
+    if exec == '':
+        python = os.path.abspath(sys.executable).replace('\\','/')
+        pyS = os.path.abspath(os.path.join(os.path.dirname(python),'Scripts')).replace('\\','/')
+    else:
+        python = os.path.abspath(exec).replace('\\','/')
+        pyS = os.path.abspath(os.path.join(os.path.dirname(python),'Scripts')).replace('\\','/')
 
-def reinstallBase():
+
+def reinstallBase(exec=''):
     '''
     仅用于调试
     '''
-    uninstall_base()
-    inti()
+    uninstall_base(exec)
+    inti(exec)
     if os.name == 'posix':
         args = shlex.split(f"pip3 install color-theme-analyse[base]=={my_v} --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple  --timeout 30 --ignore-installed urllib3")
         with Popen(args, bufsize=-1, close_fds=False, shell=False, env=None,cwd=_path, startupinfo=None, creationflags=0) as p:
@@ -34,12 +39,12 @@ def reinstallBase():
     result = Popen(args, bufsize=0, close_fds=False, shell=False, env=None,cwd=_path, startupinfo=None, creationflags=0)
     exit()
 
-def reinstallDev():
+def reinstallDev(exec=''):
     '''
     仅用于调试
     '''
-    uninstall_dev()
-    inti()
+    uninstall_dev(exec)
+    inti(exec)
     if os.name == 'posix':
         args = shlex.split(f"pip3 install color-theme-analyse[dev]=={my_v} --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple  --timeout 30 --ignore-installed urllib3")
         with Popen(args, bufsize=-1, close_fds=False, shell=False, env=None,cwd=_path, startupinfo=None, creationflags=0) as p:
@@ -55,12 +60,12 @@ def reinstallDev():
     result = Popen(args, bufsize=0, close_fds=False, shell=False, env=None,cwd=_path, startupinfo=None, creationflags=0)
     exit()
 
-def reinstallMerge():
+def reinstallMerge(exec=''):
     '''
     仅用于调试
     '''
-    uninstallMerge()
-    inti()
+    uninstallMerge(exec)
+    inti(exec)
     # urllib3 可能会导致安装失败，因此忽略
     if os.name == 'posix':
         args = shlex.split(f"pip3 install color-theme-analyse[merge]=={my_v} --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple  --timeout 30 --ignore-installed urllib3")
@@ -78,6 +83,8 @@ answer=MsgBox("当前进程绑定的 Pyhton 路径位于 {python}" & vbCrLf & "�
 if  answer = vbOK then
     shell.ShellExecute "powershell",command,"","",1
 End if
+set fso = createobject("scripting.filesystemobject")
+f = fso.deletefile(wscript.scriptname)
 ''')
 
     except Exception as e:
@@ -88,8 +95,8 @@ End if
     p2 = Popen(args, bufsize=-1, close_fds=False, shell=False, env=None,cwd=_path, startupinfo=None, creationflags=0)
     exit()
 
-def uninstall_base():
-    inti()
+def uninstall_base(exec=''):
+    inti(exec)
     _list = ['numpy','pillow','rich']
     for i in _list:
         if os.name == 'posix':
@@ -102,8 +109,8 @@ def uninstall_base():
             result.wait()
         # os.system(f"{python.replace('\\','/')} -m pip uninstall {i} -y")
 
-def uninstall_dev():
-    inti()
+def uninstall_dev(exec=''):
+    inti(exec)
     _list = ['wheel','twine','auto-py-to-exe','setuptools','setuptools_scm','setuptools_scm_git_archive']
     for i in _list:
         if os.name == 'posix':
@@ -115,9 +122,9 @@ def uninstall_dev():
             result = Popen(args, bufsize=0, close_fds=False, shell=False, env=None,cwd=pyS, startupinfo=None, creationflags=0)
             result.wait()
 
-def uninstallMerge():
+def uninstallMerge(exec=''):
     '''
     仅用于调试
     '''
-    uninstall_base()
-    uninstall_dev()
+    uninstall_base(exec)
+    uninstall_dev(exec)
