@@ -78,10 +78,10 @@ def reinstallMerge(exec=''):
         f = open(bat, 'w',encoding='utf16')
         f.write(f'''cwd = CreateObject("Scripting.FileSystemObject").GetFile(Wscript.ScriptFullName).ParentFolder.Path
 Set shell = CreateObject("Shell.Application")
-command = "cd '{exec}';.\\python -m pip install color-theme-analyse[merge]=={my_v} --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple --timeout 30;'';'';'Press Enter to exit.';'';'回车键退出';[Console]::Readkey() | Out-Null ;Exit"
+command = "cd '{pyS}';try{{'';'';$vv = Read-Host '需要绑定 color-theme-analyse 版本号（当前的默认值为 {my_v}），请输入';if($vv -eq ''){{$vv = '{my_v}'}};.\\pip install color-theme-analyse[merge]==$vv --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple --timeout 30}}catch{{Write-Warning $_}}finally{{'';'';'Press Enter to exit.';'';'回车键退出';[Console]::Readkey() | Out-Null ;Exit}}"
 answer=MsgBox("当前进程绑定的 Pyhton 路径位于 {python}" & vbCrLf & "请确认与项目的宿主 Python 一致。" & vbCrLf & "重装依赖包可能会导致不可控的影响，请慎重。",65,"是否重装所有额外依赖包？")
 if  answer = vbOK then
-    shell.ShellExecute "powershell",command,"","",1
+    Call shell.ShellExecute("powershell",command,"","",1)
 End if
 set fso = createobject("scripting.filesystemobject")
 f = fso.deletefile(wscript.scriptname)

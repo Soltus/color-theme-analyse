@@ -350,8 +350,7 @@ class MyHP(HTMLParser):
 
 def check_update(nv,json_url,mirrors_url) -> bool:
     TCURL = mirrors_url
-    url = json_url
-    r = requests.get(url)
+    r = requests.get(json_url)
     data = r.json()
     # print(f"{len(data['releases'])}个可用版本\n当前版本：{nv}")
     v_l = []
@@ -367,8 +366,15 @@ def check_update(nv,json_url,mirrors_url) -> bool:
                     parser = MyHP(version,TCURL)
                     parser.feed(bytes.decode(r.content))
                     # print(parser.text()) # 等效于 r.text
-                    mirrors_url = parser.get_url()
+                    _url2 = parser.get_url()
+                    _url1 = f.get('url')
                     r.close()
                     del parser
-                    print(f"\n- 新版 {version} 现已可用！Python版本要求{f['requires_python']} 镜像下载地址：{mirrors_url}")
+                    print(f"\n- 新版 {version} 现已可用！Python版本要求{f['requires_python']} - {f.get('upload_time')}\n官方下载地址：{_url1}\n镜像下载地址：{_url2}")
     return new
+
+def check_extra_require(json_url) -> dict:
+    r = requests.get(json_url)
+    data = r.json()
+    _dict = {}
+    for version, files in data['releases'].items():
