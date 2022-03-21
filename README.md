@@ -4,7 +4,7 @@
 
 如果你设置了全局镜像（多数镜像不会收录本项目），请使用以下的命令从官方仓库安装：
 
-`pip install color-theme-analyse --no-deps -i https://pypi.org.simple`
+`pip install color-theme-analyse --no-deps -i https://pypi.org/simple`
 
 如果你使用的是校园网，可以使用腾讯镜像下载本项目
 
@@ -18,7 +18,7 @@
 
 等效于 `pip install color-theme-analyse[merge] -i https://mirrors.tencent.com/pypi/simple`
 
-**安装后使用终端命令`MMCQsc`运行**
+**安装后使用终端命令 `MMCQsc`运行**
 
 支持以下终端命令（Linux平台需要注意大小写）：
 

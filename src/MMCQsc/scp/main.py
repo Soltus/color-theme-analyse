@@ -166,12 +166,12 @@ def mainFunc():
                 shutil.rmtree(os.path.join(SRC_DIR, 'finish'))
                 shutil.rmtree(os.path.join(SRC_DIR, 'compress'))
                 logger.info('成功删除不重要的自动生成文件')
-                logger.warning("\n\n\t\t[ tip ] : 如需在当前窗口返回 Shell 环境，使用 CTRL + PAUSE_BREAK 强制结束所有任务并退出 Python\n\n")
+                logger.warning("\n\n\t\t[ tip ] : 如果当前窗口未正确返回 Shell 环境，使用 CTRL + PAUSE_BREAK 强制结束所有任务并退出 Python\n\n")
             except Exception as e:
                 if isinstance(e,FileNotFoundError):
                     logger.warning('未检测到自动生成文件')
-                else:
-                    logger.error(e)
+                if isinstance(e,KeyboardInterrupt):
+                    exit(133)
                 try:
                     result in locals()
                     logger.warning('未能删除自动生成文件')
