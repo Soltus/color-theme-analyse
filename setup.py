@@ -384,8 +384,8 @@ setuptools.setup(
     # extras_require 需要一个 dict ，其中按（自定义的）功能名称进行分组，每组一个 list
     extras_require={
         'base':['numpy>=1.21','pillow>=8.3','rich>=0.1',],
-        'dev':['wheel','twine','pyinstaller>=4.3; platform_system == "Windows"','setuptools','setuptools_scm','setuptools_scm_git_archive'],
-        'merge':['numpy>=1.21','pillow>=8.3','rich>=0.1','wheel','twine','pyinstaller>=4.3; platform_system == "Windows"','setuptools','setuptools_scm','setuptools_scm_git_archive'],
+        'dev':['wheel','twine','auto-py-to-exe>=2.16.0; platform_system == "Windows"','setuptools','setuptools_scm','setuptools_scm_git_archive'],
+        'merge':['numpy>=1.21','pillow>=8.3','rich>=0.1','wheel','twine','auto-py-to-exe>=4.3; platform_system == "Windows"','setuptools','setuptools_scm','setuptools_scm_git_archive'],
     },
     # dependency_links 已被弃用，因此使用 testPyPi 测试时，一些依赖项会无法下载（ https://test-files.pythonhosted.org 上没有），需要提前安装好依赖，然后 pip 后面加参数 --no-deps 无依赖下载
     dependency_links=[

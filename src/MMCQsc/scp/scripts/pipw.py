@@ -6,16 +6,18 @@ def inti():
     from MMCQsc.version import version
     global my_v
     global python
+    global pyS
     global _path
     my_v = version
     python = os.path.abspath(sys.executable).replace('\\','/')
+    pyS = os.path.abspath(os.path.join(os.path.dirname(python),'Scripts')).replace('\\','/')
     _path = os.path.abspath(os.path.dirname(__file__))
-    # os.environ["COMSPEC"] = r'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe'
 
 def reinstallBase():
     '''
     仅用于调试
     '''
+    uninstall_base()
     inti()
     if os.name == 'posix':
         args = shlex.split(f"pip3 install color-theme-analyse[base]=={my_v} --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple  --timeout 30 --ignore-installed urllib3")
@@ -36,6 +38,7 @@ def reinstallDev():
     '''
     仅用于调试
     '''
+    uninstall_dev()
     inti()
     if os.name == 'posix':
         args = shlex.split(f"pip3 install color-theme-analyse[dev]=={my_v} --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple  --timeout 30 --ignore-installed urllib3")
@@ -56,6 +59,7 @@ def reinstallMerge():
     '''
     仅用于调试
     '''
+    uninstallMerge()
     inti()
     # urllib3 可能会导致安装失败，因此忽略
     if os.name == 'posix':
@@ -79,23 +83,37 @@ End if
     except Exception as e:
         traceback.print_exc()
         raise e
-    # command = os.path.abspath(os.path.join(_path,"reinstallMerge.vbs"))
+
     args = shlex.split(f"PowerShell -noprofile ./reinstallMerge.vbs")
     p2 = Popen(args, bufsize=-1, close_fds=False, shell=False, env=None,cwd=_path, startupinfo=None, creationflags=0)
     exit()
 
 def uninstall_base():
-    os.system("pip uninstall numpy -y")
-    os.system("pip uninstall pillow -y")
-    os.system("pip uninstall rich -y")
+    inti()
+    _list = ['numpy','pillow','rich']
+    for i in _list:
+        if os.name == 'posix':
+            args = shlex.split(f"pip3 uninstall {i} -y")
+            result = Popen(args, bufsize=0, close_fds=False, shell=False, env=None,cwd=pyS, startupinfo=None, creationflags=0)
+            result.wait()
+        else:
+            args = shlex.split(f"PowerShell -noprofile ./pip uninstall {i} -y")
+            result = Popen(args, bufsize=0, close_fds=False, shell=False, env=None,cwd=pyS, startupinfo=None, creationflags=0)
+            result.wait()
+        # os.system(f"{python.replace('\\','/')} -m pip uninstall {i} -y")
 
 def uninstall_dev():
-    os.system("pip uninstall wheel -y")
-    os.system("pip uninstall twine -y")
-    os.system("pip uninstall pyinstaller -y")
-    os.system("pip uninstall setuptools -y")
-    os.system("pip uninstall setuptools_scm -y")
-    os.system("pip uninstall setuptools_scm_git_archive -y")
+    inti()
+    _list = ['wheel','twine','auto-py-to-exe','setuptools','setuptools_scm','setuptools_scm_git_archive']
+    for i in _list:
+        if os.name == 'posix':
+            args = shlex.split(f"pip3 uninstall {i} -y")
+            result = Popen(args, bufsize=0, close_fds=False, shell=False, env=None,cwd=pyS, startupinfo=None, creationflags=0)
+            result.wait()
+        else:
+            args = shlex.split(f"PowerShell -noprofile ./pip uninstall {i} -y")
+            result = Popen(args, bufsize=0, close_fds=False, shell=False, env=None,cwd=pyS, startupinfo=None, creationflags=0)
+            result.wait()
 
 def uninstallMerge():
     '''
