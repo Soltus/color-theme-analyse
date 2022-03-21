@@ -63,44 +63,24 @@ def reinstallMerge():
         with Popen(args, bufsize=-1, close_fds=False, shell=False, env=None,cwd=_path, startupinfo=None, creationflags=0) as p:
             exit()
     try:
-        bat = os.path.abspath(os.path.join(_path,"reinstallMerge.ps1")).replace('\\','/')
+        bat = os.path.abspath(os.path.join(_path,"reinstallMerge.vbs")).replace('\\','/')
         exec = os.path.dirname(python)
-        args = shlex.split(r"PowerShell -noprofile Set-ExecutionPolicy AllSigned;clear;exit")
-        p0 = Popen(args, bufsize=0, close_fds=False, shell=False, env=None,cwd=_path, startupinfo=None, creationflags=0)
-        p0.wait()
-        # args = shlex.split(f"PowerShell -noprofile Remove-item {bat};cls;exit")
-        # p1 = Popen(args, bufsize=0, close_fds=False, shell=False, env=None,cwd=_path, startupinfo=None, creationflags=0)
-        # p1.wait()
-        f = open(bat, 'w')
-        f.write(f'$vbs = New-Object -ComObject WScript.Shell;$repo=$vbs.popup("当前进程绑定的 Pyhton 路径位于 {python}\n请确认与项目的宿主 Python 一致。\n重装依赖包可能会导致不可控的影响，请慎重。",$null,"是否重装所有额外依赖包？",1);\
-if($repo -eq 1){{cd "{exec}";.\\python -m pip install color-theme-analyse[merge]=={my_v} --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple  --timeout 30 --ignore-installed urllib3;clear;"Press Enter to exit.\n按回车键退出" ;[Console]::Readkey() | Out-Null ;Exit ;}}else{{exit;}}')
 
-        '''
-Const wshOKDialg = 0
-Const wshOKCancelDialog = 1
-Const wshAbortRetryIgnoreDialog = 2
-Const wshYesNoCancelDialog = 3
-Const wshYesNoDialog = 4
-Const wshRetryCancelDialog = 5
-Const wshStopMark = 16
-Const wshQuestionMark = 32
-Const wshExclamationMark = 48
-Const wshInformationMark = 64
----------------------
-Const wshOK = 1
-Const wshCancel = 2
-Const wshAbort = 3
-Const wshRetry = 4
-Const wshIngore = 5
-Const wshYes = 6
-Const wshNo = 7
-Const wshDefault = -1
-        '''
+        f = open(bat, 'w',encoding='utf16')
+        f.write(f'''cwd = CreateObject("Scripting.FileSystemObject").GetFile(Wscript.ScriptFullName).ParentFolder.Path
+Set shell = CreateObject("Shell.Application")
+command = "cd '{exec}';.\\python -m pip install color-theme-analyse[merge]=={my_v} --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple --timeout 30;'';'';'Press Enter to exit.';'';'回车键退出';[Console]::Readkey() | Out-Null ;Exit"
+answer=MsgBox("当前进程绑定的 Pyhton 路径位于 {python}" & vbCrLf & "请确认与项目的宿主 Python 一致。" & vbCrLf & "重装依赖包可能会导致不可控的影响，请慎重。",65,"是否重装所有额外依赖包？")
+if  answer = vbOK then
+    shell.ShellExecute "powershell",command,"","",1
+End if
+''')
+
     except Exception as e:
         traceback.print_exc()
         raise e
     # command = os.path.abspath(os.path.join(_path,"reinstallMerge.vbs"))
-    args = shlex.split(f"PowerShell -noprofile {bat}")
+    args = shlex.split(f"PowerShell -noprofile ./reinstallMerge.vbs")
     p2 = Popen(args, bufsize=-1, close_fds=False, shell=False, env=None,cwd=_path, startupinfo=None, creationflags=0)
     exit()
 
