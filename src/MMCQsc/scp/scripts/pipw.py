@@ -25,13 +25,13 @@ def reinstallBase(exec=''):
     uninstall_base(exec)
     inti(exec)
     if os.name == 'posix':
-        args = shlex.split(f"pip3 install color-theme-analyse[base]=={my_v} --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple  --timeout 30 --ignore-installed urllib3")
+        args = shlex.split(f"pip3 install color-theme-analyse[base]=={my_v} --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple  --timeout 30 --ignore-installed")
         with Popen(args, bufsize=-1, close_fds=False, shell=False, env=None,cwd=_path, startupinfo=None, creationflags=0) as p:
             exit()
     try:
         bat = os.path.abspath(os.path.join(_path,"reinstallBase.bat"))
         f = open(bat, 'w')
-        f.write(f"{python} -m pip install color-theme-analyse[base]=={my_v} --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple  --timeout 30 --ignore-installed urllib3")
+        f.write(f"{python} -m pip install color-theme-analyse[base]=={my_v} --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple  --timeout 30 --ignore-installed")
     except Exception as e:
         traceback.print_exc()
         raise e
@@ -43,16 +43,16 @@ def reinstallDev(exec=''):
     '''
     仅用于调试
     '''
-    # uninstall_dev(exec)
+    uninstall_dev(exec)
     inti(exec)
     if os.name == 'posix':
-        args = shlex.split(f"pip3 install color-theme-analyse[dev]=={my_v} --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple  --timeout 30 --ignore-installed urllib3")
+        args = shlex.split(f"pip3 install color-theme-analyse[dev]=={my_v} --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple  --timeout 30 --ignore-installed")
         with Popen(args, bufsize=-1, close_fds=False, shell=False, env=None,cwd=_path, startupinfo=None, creationflags=0) as p:
             exit()
     try:
         bat = os.path.abspath(os.path.join(_path,"reinstallDev.bat"))
         f = open(bat, 'w')
-        f.write(f"{python} -m pip install color-theme-analyse[dev]=={my_v} --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple  --timeout 30 --ignore-installed urllib3")
+        f.write(f"{python} -m pip install color-theme-analyse[dev]=={my_v} --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple  --timeout 30 --ignore-installed")
     except Exception as e:
         traceback.print_exc()
         raise e
@@ -64,11 +64,11 @@ def reinstallMerge(exec=''):
     '''
     仅用于调试
     '''
-    # uninstallMerge(exec)
+    uninstallMerge(exec)
     inti(exec)
-    # urllib3 可能会导致安装失败，因此忽略
+    # urllib3 cffi 可能会导致安装失败
     if os.name == 'posix':
-        args = shlex.split(f"pip3 install color-theme-analyse[merge]=={my_v} --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple  --timeout 30 --ignore-installed urllib3")
+        args = shlex.split(f"pip3 install color-theme-analyse[merge]=={my_v} --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple  --timeout 30 --ignore-installed")
         with Popen(args, bufsize=-1, close_fds=False, shell=False, env=None,cwd=_path, startupinfo=None, creationflags=0) as p:
             exit()
     try:
@@ -78,7 +78,7 @@ def reinstallMerge(exec=''):
         f = open(bat, 'w',encoding='utf16')
         f.write(f'''cwd = CreateObject("Scripting.FileSystemObject").GetFile(Wscript.ScriptFullName).ParentFolder.Path
 Set shell = CreateObject("Shell.Application")
-command = "cd '{pyS}';try{{'';'';$vv = Read-Host '需要绑定 color-theme-analyse 版本号（当前的默认值为 {my_v}），请输入';if($vv -eq ''){{$vv = '{my_v}'}};.\\pip install color-theme-analyse[merge]==$vv --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple --timeout 30}}catch{{Write-Warning $_}}finally{{'';'';'Press Enter to exit.';'';'回车键退出';[Console]::Readkey() | Out-Null ;Exit}}"
+command = "cd '{pyS}';try{{'';'';$vv = Read-Host '需要绑定 color-theme-analyse 版本号（当前的默认值为 {my_v}），请输入';if($vv -eq ''){{$vv = '{my_v}'}};.\\pip install color-theme-analyse[merge]==$vv --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple --timeout 30 --ignore-installed}}catch{{Write-Warning $_}}finally{{'';'';'Press Enter to exit.';'';'回车键退出';[Console]::Readkey() | Out-Null ;Exit}}"
 answer=MsgBox("当前进程绑定的 Pyhton 路径位于 {python}" & vbCrLf & "请确认与项目的宿主 Python 一致。" & vbCrLf & "重装依赖包可能会导致不可控的影响，请慎重。",65,"是否重装所有额外依赖包？")
 if  answer = vbOK then
     Call shell.ShellExecute("powershell",command,"","",1)
@@ -111,7 +111,7 @@ def uninstall_base(exec=''):
 
 def uninstall_dev(exec=''):
     inti(exec)
-    _list = ['wheel','twine','auto-py-to-exe','setuptools','setuptools_scm','setuptools_scm_git_archive']
+    _list = ['wheel','twine','setuptools','setuptools_scm','setuptools_scm_git_archive','Eel','auto-py-to-exe']
     for i in _list:
         if os.name == 'posix':
             args = shlex.split(f"pip3 uninstall {i} -y")
