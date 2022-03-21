@@ -1,1 +1,0 @@
-$vbs = New-Object -ComObject WScript.Shell;$vbs.popup("Popup from PowerShell",$null,"PowerShell in Practice",0);exit
