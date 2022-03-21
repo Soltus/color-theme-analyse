@@ -18,13 +18,13 @@ def reinstallBase():
     '''
     inti()
     if os.name == 'posix':
-        args = shlex.split(f"pip3 install color-theme-analyse[base]=={my_v} --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple --timeout 30")
+        args = shlex.split(f"pip3 install color-theme-analyse[base]=={my_v} --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple  --timeout 30 --ignore-installed urllib3")
         with Popen(args, bufsize=-1, close_fds=False, shell=False, env=None,cwd=_path, startupinfo=None, creationflags=0) as p:
             exit()
     try:
         bat = os.path.abspath(os.path.join(_path,"reinstallBase.bat"))
         f = open(bat, 'w')
-        f.write(f"{python} -m pip install color-theme-analyse[base]=={my_v} --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple --timeout 30")
+        f.write(f"{python} -m pip install color-theme-analyse[base]=={my_v} --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple  --timeout 30 --ignore-installed urllib3")
     except Exception as e:
         traceback.print_exc()
         raise e
@@ -38,13 +38,13 @@ def reinstallDev():
     '''
     inti()
     if os.name == 'posix':
-        args = shlex.split(f"pip3 install color-theme-analyse[dev]=={my_v} --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple --timeout 30")
+        args = shlex.split(f"pip3 install color-theme-analyse[dev]=={my_v} --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple  --timeout 30 --ignore-installed urllib3")
         with Popen(args, bufsize=-1, close_fds=False, shell=False, env=None,cwd=_path, startupinfo=None, creationflags=0) as p:
             exit()
     try:
         bat = os.path.abspath(os.path.join(_path,"reinstallDev.bat"))
         f = open(bat, 'w')
-        f.write(f"{python} -m pip install color-theme-analyse[dev]=={my_v} --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple --timeout 30")
+        f.write(f"{python} -m pip install color-theme-analyse[dev]=={my_v} --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple  --timeout 30 --ignore-installed urllib3")
     except Exception as e:
         traceback.print_exc()
         raise e
@@ -57,8 +57,9 @@ def reinstallMerge():
     仅用于调试
     '''
     inti()
+    # urllib3 可能会导致安装失败，因此忽略
     if os.name == 'posix':
-        args = shlex.split(f"pip3 install color-theme-analyse[merge]=={my_v} --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple --timeout 30")
+        args = shlex.split(f"pip3 install color-theme-analyse[merge]=={my_v} --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple  --timeout 30 --ignore-installed urllib3")
         with Popen(args, bufsize=-1, close_fds=False, shell=False, env=None,cwd=_path, startupinfo=None, creationflags=0) as p:
             exit()
     try:
@@ -72,7 +73,7 @@ def reinstallMerge():
         # p1.wait()
         f = open(bat, 'w')
         f.write(f'$vbs = New-Object -ComObject WScript.Shell;$repo=$vbs.popup("当前进程绑定的 Pyhton 路径位于 {python}\n请确认与项目的宿主 Python 一致。\n重装依赖包可能会导致不可控的影响，请慎重。",$null,"是否重装所有额外依赖包？",1);\
-if($repo -eq 1){{cd "{exec}";.\\python -m pip install color-theme-analyse[merge]=={my_v} --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple --timeout 30;clear;"Press Enter to exit.\n按回车键退出" ;[Console]::Readkey() | Out-Null ;Exit ;}}else{{exit;}}')
+if($repo -eq 1){{cd "{exec}";.\\python -m pip install color-theme-analyse[merge]=={my_v} --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple  --timeout 30 --ignore-installed urllib3;clear;"Press Enter to exit.\n按回车键退出" ;[Console]::Readkey() | Out-Null ;Exit ;}}else{{exit;}}')
 
         '''
 Const wshOKDialg = 0
