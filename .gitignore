@@ -65,3 +65,4 @@ Thumbs.db
 /src/MMCQsc/scp/lib/bin
 python-3_9_6-embed-win32/
 src/.vs/
+/src/MMCQsc/scp/scripts/reinstallMerge.vbs
