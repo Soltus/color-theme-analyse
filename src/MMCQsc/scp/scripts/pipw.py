@@ -43,7 +43,7 @@ def reinstallDev(exec=''):
     '''
     仅用于调试
     '''
-    uninstall_dev(exec)
+    # uninstall_dev(exec)
     inti(exec)
     if os.name == 'posix':
         args = shlex.split(f"pip3 install color-theme-analyse[dev]=={my_v} --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple  --timeout 30 --ignore-installed urllib3")
@@ -64,7 +64,7 @@ def reinstallMerge(exec=''):
     '''
     仅用于调试
     '''
-    uninstallMerge(exec)
+    # uninstallMerge(exec)
     inti(exec)
     # urllib3 可能会导致安装失败，因此忽略
     if os.name == 'posix':
