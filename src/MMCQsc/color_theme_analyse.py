@@ -9,12 +9,17 @@ if DPKG_DIR not in sys.path:
     sys.path.append(DPKG_DIR)
 
 def Menu(choice:int=0):
+    if os.name == 'posix':
+        os.system('clear')
+    else:
+        os.system('cls')
     menu = '''
 欢迎使用 MMCQsc
 ---------------
 (1) 运行主程序
 (2) 清理依赖包
-(3) 重装依赖包
+(3) 重装依赖包（差异模式）
+(4) 重装依赖包（强力模式）
 Any other key to exit.
 ---------------
 请输入对应数字：'''
@@ -38,6 +43,17 @@ Any other key to exit.
                 print('\n无效路径\n')
         from MMCQsc.scp.scripts import pipw
         pipw.reinstallMerge(_path)
+    elif repo == '4':
+        while True:
+            _path = input("\n请绑定 Python.exe 的绝对路径，留空则默认绑定到当前的 launcher\n>>> ")
+            if _path == '':
+                break
+            elif os.path.isfile(_path) and os.path.basename(_path) == 'python.exe':
+                break
+            else:
+                print('\n无效路径\n')
+        from MMCQsc.scp.scripts import pipw
+        pipw.reinstallMerge(_path,full=True)
     else:
         raise ValueError('无效参数')
         exit(111)
