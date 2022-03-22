@@ -5,10 +5,12 @@ from subprocess import Popen
 def inti(exec=''):
     from MMCQsc.version import version
     global my_v
+    global _index_url
     global python
     global pyS
     global _path
     my_v = version
+    _index_url = '--trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple'
     _path = os.path.abspath(os.path.dirname(__file__))
     if exec == '':
         python = os.path.abspath(sys.executable).replace('\\','/')
@@ -35,19 +37,19 @@ def reinstallBase(exec=''):
     uninstall_base(exec)
     inti(exec)
     if os.name == 'posix':
-        args = shlex.split(f"pip3 install color-theme-analyse[base]=={my_v} --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple  --timeout 30 --ignore-installed")
+        args = shlex.split(f"pip3 install color-theme-analyse[base]=={my_v} --force-reinstall {_index_url}  --timeout 30")
         with Popen(args, bufsize=-1, close_fds=False, shell=False, env=None,cwd=_path, startupinfo=None, creationflags=0) as p:
             exit()
     try:
         bat = os.path.abspath(os.path.join(_path,"reinstallBase.bat"))
         f = open(bat, 'w')
-        f.write(f"{python} -m pip install color-theme-analyse[base]=={my_v} --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple  --timeout 30 --ignore-installed")
+        f.write(f"{python} -m pip install color-theme-analyse[base]=={my_v} --force-reinstall {_index_url}  --timeout 30")
     except Exception as e:
         traceback.print_exc()
         raise e
     args = shlex.split(f"PowerShell -noprofile ./reinstallBase.vbs")
-    result = Popen(args, bufsize=0, close_fds=False, shell=False, env=None,cwd=_path, startupinfo=None, creationflags=0)
-    exit()
+    with Popen(args, bufsize=0, close_fds=False, shell=False, env=None,cwd=_path, startupinfo=None, creationflags=0):
+        exit()
 
 def reinstallDev(exec=''):
     '''
@@ -56,39 +58,47 @@ def reinstallDev(exec=''):
     uninstall_dev(exec)
     inti(exec)
     if os.name == 'posix':
-        args = shlex.split(f"pip3 install color-theme-analyse[dev]=={my_v} --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple  --timeout 30 --ignore-installed")
+        args = shlex.split(f"pip3 install color-theme-analyse[dev]=={my_v} --force-reinstall {_index_url}  --timeout 30")
         with Popen(args, bufsize=-1, close_fds=False, shell=False, env=None,cwd=_path, startupinfo=None, creationflags=0) as p:
             exit()
     try:
         bat = os.path.abspath(os.path.join(_path,"reinstallDev.bat"))
         f = open(bat, 'w')
-        f.write(f"{python} -m pip install color-theme-analyse[dev]=={my_v} --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple  --timeout 30 --ignore-installed")
+        f.write(f"{python} -m pip install color-theme-analyse[dev]=={my_v} --force-reinstall {_index_url}  --timeout 30")
     except Exception as e:
         traceback.print_exc()
         raise e
     args = shlex.split(f"PowerShell -noprofile ./reinstallDev.vbs")
-    result = Popen(args, bufsize=0, close_fds=False, shell=False, env=None,cwd=_path, startupinfo=None, creationflags=0)
-    exit()
+    with Popen(args, bufsize=0, close_fds=False, shell=False, env=None,cwd=_path, startupinfo=None, creationflags=0):
+        exit()
 
 def reinstallMerge(exec=''):
     '''
     仅用于调试
     '''
-    uninstallMerge(exec)
     inti(exec)
-    # urllib3 cffi 可能会导致安装失败
+    _cwd = os.path.dirname(python)
     if os.name == 'posix':
-        args = shlex.split(f"pip3 install color-theme-analyse[merge]=={my_v} --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple  --timeout 30 --ignore-installed")
+        args = shlex.split(f"pip3 install color-theme-analyse[merge]=={my_v} --force-reinstall {_index_url}  --timeout 30 --ignore-installed")
         with Popen(args, bufsize=-1, close_fds=False, shell=False, env=None,cwd=_path, startupinfo=None, creationflags=0) as p:
             exit()
+    with os.popen(f"cd '{_cwd}';.\\python -m pip freeze") as p:
+        _r0 = p.read()
+    uninstallMerge(exec)
+    with os.popen(f"cd '{_cwd}';.\\python -m pip freeze") as p:
+        _r1 = p.read()
+    diff_list = list(set(_r0.split('\n')) - set(_r1.split('\n')))
+    fr_path = os.path.abspath(os.path.join(_cwd,"r_color_theme_analyse.txt"))
+    fr = open(fr_path,"w",encoding='utf16')
+    fr.write('\n'.join(diff_list))
+    fr.close()
+    # urllib3 cffi 可能会导致安装失败
     try:
         bat = os.path.abspath(os.path.join(_path,"reinstallMerge.vbs")).replace('\\','/')
-        _cwd = os.path.dirname(python)
-
         f = open(bat, 'w',encoding='utf16')
         f.write(f'''cwd = CreateObject("Scripting.FileSystemObject").GetFile(Wscript.ScriptFullName).ParentFolder.Path
 Set shell = CreateObject("Shell.Application")
-command = "cd '{_cwd}';try{{'';'';$vv = Read-Host '需要绑定 color-theme-analyse 版本号（当前的默认值为 {my_v}），请输入';if($vv -eq ''){{$vv = '{my_v}'}};.\\python -m pip install setuptools --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple;.\\python -m pip install color-theme-analyse[merge]==$vv --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple --timeout 30}}catch{{Write-Warning $_}}finally{{'';.\\python -m pip list;'';'';'Press Enter to exit.';'';'回车键退出';[Console]::Readkey() | Out-Null ;Exit}}"
+command = "cd '{_cwd}';try{{'';'';$vv = Read-Host '需要绑定 color-theme-analyse 版本号（当前的默认值为 {my_v}），请输入';if($vv -eq ''){{$vv = '{my_v}'}};.\\python -m pip install setuptools {_index_url};.\\python -m pip install -r {fr_path} {_index_url} --timeout 30;.\\python -m pip install color-theme-analyse==$vv --force-reinstall {_index_url} --timeout 30}}catch{{Write-Warning $_}}finally{{Remove-Item '{fr_path}';'';.\\python -m pip list;'';'';'Press Enter to exit.';'';'回车键退出';[Console]::Readkey() | Out-Null ;Exit}}"
 answer=MsgBox("当前进程绑定的 Pyhton 路径位于 {python}" & vbCrLf & "请确认与项目的宿主 Python 一致。（请不要绑定 Pycharm 的虚拟环境）" & vbCrLf & "重装依赖包可能会导致不可控的影响，请慎重。",65,"是否重装所有额外依赖包？")
 if  answer = vbOK then
     Call shell.ShellExecute("powershell",command,"","",3)
@@ -102,8 +112,8 @@ f = fso.deletefile(wscript.scriptname)
         raise e
 
     args = shlex.split(f"PowerShell -noprofile ./reinstallMerge.vbs")
-    p2 = Popen(args, bufsize=-1, close_fds=False, shell=False, env=None,cwd=_path, startupinfo=None, creationflags=0)
-    exit()
+    with Popen(args, bufsize=-1, close_fds=False, shell=False, env=None,cwd=_path, startupinfo=None, creationflags=0):
+        exit()
 
 def uninstall_base(exec=''):
     inti(exec)
