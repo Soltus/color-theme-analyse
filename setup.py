@@ -329,8 +329,10 @@ setuptools.setup(
         "Intended Audience :: Developers",
         "Programming Language :: JavaScript",
         "Programming Language :: Python :: 3",
+        'Programming Language :: Python :: 3.9',
         "License :: OSI Approved :: MIT License",
         "Operating System :: Microsoft :: Windows :: Windows 10",
+        'Operating System :: POSIX :: Linux',
         "Natural Language :: Chinese (Simplified)",
         "Natural Language :: English",
         "Topic :: Multimedia :: Graphics"
@@ -361,11 +363,11 @@ setuptools.setup(
         'RunMMCQsc = MMCQsc.scp.main:mainFunc',
         'DoMMCQsc = MMCQsc.color_theme_analyse:MainFunc',
         'MMCQsc = MMCQsc.color_theme_analyse:Menu',
-        'MMCQscPure = MMCQsc.scp.scripts.pipw:uninstallMerge',
-        'MMCQscR1 = MMCQsc.scp.scripts.pipw:reinstallBase',
-        'MMCQscR2 = MMCQsc.scp.scripts.pipw:reinstallDev',
+        'MMCQscM = MMCQsc.__main__:run',
+        'MMCQ-sc = MMCQsc.exe.__main__:run',
+        'MMCQscP = MMCQsc.scp.scripts.pipw:uninstallMerge',
         'MMCQscR = MMCQsc.scp.scripts.pipw:reinstallMerge']},
-    # 手动添加脚本。虽然 scripts 关键字用于指向预先制作好的脚本进行安装，建议使用实现跨平台兼容性的方法 console_scripts 入口点(entry_points)
+    # 手动添加脚本。虽然 scripts 关键字用于指向预先制作好的脚本进行安装，建议使用实现跨平台兼容性的方法 console_scripts 入口点(entry_points) 替代
     scripts=['src/MMCQsc.cmd'],
     license="MIT",
     platforms=['Windows'],

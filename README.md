@@ -1,3 +1,10 @@
+<p align="center">
+    <a href="https://pypi.org/project/color-theme-analyse/"><img src="https://img.shields.io/pypi/v/color-theme-analyse.svg" alt="PyPI Version"></a>
+    <a href="https://pypi.org/project/color-theme-analyse/"><img src="https://img.shields.io/pypi/pyversions/color-theme-analyse.svg" alt="PyPI Supported Versions"></a>
+    <a href="https://pypi.org/project/color-theme-analyse/"><img src="https://img.shields.io/pypi/l/color-theme-analyse.svg" alt="License"></a>
+    <a href="https://pepy.tech/project/color-theme-analyse"><img src="https://static.pepy.tech/badge/color-theme-analyse/month" alt="Downloads Per Month"></a>
+    <a href="https://pyinstaller.readthedocs.io/en/stable/requirements.html"><img src="https://img.shields.io/badge/platform-windows%20%7C%20linux-lightgrey" alt="Supported Platforms"></a>
+
 项目依赖比较简单，可以使用无依赖安装：
 
 `pip install color-theme-analyse --no-deps`
@@ -82,7 +89,7 @@ Bug 反馈和 Issues 提交可以在 Bitbucket 或者 Gitee，**在 Gitee 会得
 
 建议的版本 Python == 3.9.5
 
-`from multiprocessing import shared_memory required for Python >= 3.8`
+>from multiprocessing import shared_memory required for Python >= 3.8
 
 要求的操作系统 Windows >= 1909  ( Win 10 / 11 )
 
