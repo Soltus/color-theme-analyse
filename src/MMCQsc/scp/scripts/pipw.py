@@ -17,11 +17,12 @@ def inti(exec=''):
         python = os.path.abspath(exec).replace('\\','/')
         pyS = os.path.abspath(os.path.join(os.path.dirname(python),'Scripts')).replace('\\','/')
     _pip = os.path.abspath(os.path.join(pyS,'pip.exe'))
-    __pip = os.path.exists(os.path.abspath(os.path.join(os.path.dirname(python),'pip.exe')))
+    __pip = os.path.abspath(os.path.join(os.path.dirname(python),'pip.exe'))
     if os.path.exists(_pip):
         print(_pip)
     elif os.path.exists(__pip):
         print(__pip)
+        pyS = os.path.dirname(python) # Maybe Pycharm V env
     else:
         raise
 
@@ -113,7 +114,7 @@ def uninstall_base(exec=''):
             result = Popen(args, bufsize=0, close_fds=False, shell=False, env=None,cwd=pyS, startupinfo=None, creationflags=0)
             result.wait()
         else:
-            args = shlex.split(f"PowerShell -noprofile ./pip uninstall {i} -y")
+            args = shlex.split(f"PowerShell -noprofile {python} -m pip uninstall {i} -y")
             result = Popen(args, bufsize=0, close_fds=False, shell=False, env=None,cwd=pyS, startupinfo=None, creationflags=0)
             result.wait()
         # os.system(f"{python.replace('\\','/')} -m pip uninstall {i} -y")
@@ -127,7 +128,7 @@ def uninstall_dev(exec=''):
             result = Popen(args, bufsize=0, close_fds=False, shell=False, env=None,cwd=pyS, startupinfo=None, creationflags=0)
             result.wait()
         else:
-            args = shlex.split(f"PowerShell -noprofile ./pip uninstall {i} -y")
+            args = shlex.split(f"PowerShell -noprofile {python} -m pip uninstall {i} -y")
             result = Popen(args, bufsize=0, close_fds=False, shell=False, env=None,cwd=pyS, startupinfo=None, creationflags=0)
             result.wait()
 

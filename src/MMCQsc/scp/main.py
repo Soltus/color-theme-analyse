@@ -177,10 +177,9 @@ def mainFunc():
                     logger.warning('未能删除自动生成文件')
                 except Exception as e:
                     pass
-            finally:
-                shm.close()
-    shm.unlink()
-    return 0
+            shm.close()
+            shm.unlink()
+            return 0
     # sys.exit(102)
 
 
@@ -192,4 +191,4 @@ if __name__ == '__main__':
     except BaseException as e:
         if isinstance(e, KeyboardInterrupt):
             logger.warning("{}\n\t\t用户强制退出".format(__file__))
-            sys.exit(103)
+            exit(103)

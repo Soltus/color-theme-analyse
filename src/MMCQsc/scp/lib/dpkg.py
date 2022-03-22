@@ -372,9 +372,3 @@ def check_update(nv,json_url,mirrors_url) -> bool:
                     del parser
                     print(f"\n- 新版 {version} 现已可用！Python版本要求{f['requires_python']} - {f.get('upload_time')}\n官方下载地址：{_url1}\n镜像下载地址：{_url2}")
     return new
-
-def check_extra_require(json_url) -> dict:
-    r = requests.get(json_url)
-    data = r.json()
-    _dict = {}
-    for version, files in data['releases'].items():
