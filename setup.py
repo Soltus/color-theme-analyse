@@ -364,7 +364,7 @@ setuptools.setup(
         'DoMMCQsc = MMCQsc.color_theme_analyse:MainFunc',
         'MMCQsc = MMCQsc.color_theme_analyse:Menu',
         'MMCQscM = MMCQsc.__main__:run',
-        'MMCQ-sc = MMCQsc.exe.__main__:run',
+        'MMCQ-sc = MMCQsc.__main__:run',
         'MMCQscP = MMCQsc.scp.scripts.pipw:uninstallMerge',
         'MMCQscR = MMCQsc.scp.scripts.pipw:reinstallMerge']},
     # 手动添加脚本。虽然 scripts 关键字用于指向预先制作好的脚本进行安装，建议使用实现跨平台兼容性的方法 console_scripts 入口点(entry_points) 替代
