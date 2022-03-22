@@ -16,6 +16,15 @@ def inti(exec=''):
     else:
         python = os.path.abspath(exec).replace('\\','/')
         pyS = os.path.abspath(os.path.join(os.path.dirname(python),'Scripts')).replace('\\','/')
+    _pip = os.path.abspath(os.path.join(pyS,'pip.exe'))
+    __pip = os.path.exists(os.path.abspath(os.path.join(os.path.dirname(python),'pip.exe')))
+    if os.path.exists(_pip):
+        print(_pip)
+    elif os.path.exists(__pip):
+        print(__pip)
+    else:
+        raise
+
 
 
 def reinstallBase(exec=''):
@@ -73,19 +82,19 @@ def reinstallMerge(exec=''):
             exit()
     try:
         bat = os.path.abspath(os.path.join(_path,"reinstallMerge.vbs")).replace('\\','/')
-        exec = os.path.dirname(python)
+        _cwd = os.path.dirname(python)
 
         f = open(bat, 'w',encoding='utf16')
         f.write(f'''cwd = CreateObject("Scripting.FileSystemObject").GetFile(Wscript.ScriptFullName).ParentFolder.Path
 Set shell = CreateObject("Shell.Application")
-command = "cd '{pyS}';try{{'';'';$vv = Read-Host '需要绑定 color-theme-analyse 版本号（当前的默认值为 {my_v}），请输入';if($vv -eq ''){{$vv = '{my_v}'}};.\\pip install color-theme-analyse[merge]==$vv --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple --timeout 30 --ignore-installed}}catch{{Write-Warning $_}}finally{{'';'';'Press Enter to exit.';'';'回车键退出';[Console]::Readkey() | Out-Null ;Exit}}"
-answer=MsgBox("当前进程绑定的 Pyhton 路径位于 {python}" & vbCrLf & "请确认与项目的宿主 Python 一致。" & vbCrLf & "重装依赖包可能会导致不可控的影响，请慎重。",65,"是否重装所有额外依赖包？")
+command = "cd '{_cwd}';try{{'';'';$vv = Read-Host '需要绑定 color-theme-analyse 版本号（当前的默认值为 {my_v}），请输入';if($vv -eq ''){{$vv = '{my_v}'}};.\\python -m pip install setuptools --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple;.\\python -m pip install color-theme-analyse[merge]==$vv --force-reinstall --trusted-host mirrors.tencent.com -i https://pypi.org/simple --extra-index-url https://mirrors.tencent.com/pypi/simple --timeout 30}}catch{{Write-Warning $_}}finally{{'';.\\python -m pip list;'';'';'Press Enter to exit.';'';'回车键退出';[Console]::Readkey() | Out-Null ;Exit}}"
+answer=MsgBox("当前进程绑定的 Pyhton 路径位于 {python}" & vbCrLf & "请确认与项目的宿主 Python 一致。（请不要绑定 Pycharm 的虚拟环境）" & vbCrLf & "重装依赖包可能会导致不可控的影响，请慎重。",65,"是否重装所有额外依赖包？")
 if  answer = vbOK then
-    Call shell.ShellExecute("powershell",command,"","",1)
+    Call shell.ShellExecute("powershell",command,"","",3)
 End if
 set fso = createobject("scripting.filesystemobject")
 f = fso.deletefile(wscript.scriptname)
-''')
+''')  # setuptools 对一些包的安装是必须的，因此首先安装她
 
     except Exception as e:
         traceback.print_exc()
