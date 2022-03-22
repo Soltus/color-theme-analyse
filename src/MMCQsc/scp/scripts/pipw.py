@@ -28,10 +28,12 @@ def inti(exec=''):
     _pip = os.path.abspath(os.path.join(pyS,'pip.exe'))
     __pip = os.path.abspath(os.path.join(os.path.dirname(python),'pip.exe'))
     if os.path.exists(_pip):
-        print(_pip)
+        pass
     elif os.path.exists(__pip):
         print(__pip)
         pyS = os.path.dirname(python) # Maybe Pycharm V env
+    elif os.name == 'posix':
+        pyS = os.path.dirname(python)
     else:
         raise
 
