@@ -47,7 +47,8 @@ def run():
         "--choice",
         type=int,
         default=0,
-        help="print the version - will not run the ui"
+        nargs='?',
+        help="选择命令"
     )
     args = parser.parse_args()
     _start.Menu(choice=args.choice)

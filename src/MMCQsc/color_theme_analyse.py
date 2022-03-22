@@ -8,7 +8,7 @@ if BASE_DIR not in sys.path:
 if DPKG_DIR not in sys.path:
     sys.path.append(DPKG_DIR)
 
-def Menu(choice=int):
+def Menu(choice:int=0):
     menu = '''
 欢迎使用 MMCQsc
 ---------------
