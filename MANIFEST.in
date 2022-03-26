@@ -20,6 +20,7 @@ global-exclude *.pyc
 global-exclude *.log
 
 recursive-exclude .vscode *
+recursive-exclude src/.vs *
 recursive-exclude .git *
 recursive-exclude .history *
 recursive-exclude src/MMCQsc/src/compress *
