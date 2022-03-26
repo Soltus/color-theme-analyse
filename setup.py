@@ -299,6 +299,29 @@ class BuildPyCommand(setuptools.command.build_py.build_py):
     def run(self):
         setuptools.command.build_py.build_py.run(self)
 
+import setuptools.command.bdist_egg
+class BdistWheelCommand(setuptools.command.bdist_egg.bdist_egg):
+    """接管 python setup.py build_py"""
+
+    def run(self):
+        setuptools.command.bdist_egg.bdist_egg.run(self)
+        if is_admin():
+            print('看上去一切顺利，如果构建结果未能正确反映项目结构，尝试删除 .eggs 和 build 文件夹然后重试')
+            j = 0
+            while True:
+                sleep(1)
+                j += 1
+                if os.path.exists(DIST_DIR):
+                    dd = DIST_DIR.replace('\\', '/')
+                    args = shlex.split(f"start {dd}") # 打开 dist 文件夹
+                    s = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True)
+                    s.wait()
+                    break
+                if j >= 6:
+                    break
+        else:
+            ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, __file__, None, 1)
+
 import setuptools.command.sdist
 class SdistCommand(setuptools.command.sdist.sdist):
     """接管 python setup.py sdist"""
@@ -306,6 +329,22 @@ class SdistCommand(setuptools.command.sdist.sdist):
     def run(self):
         try:
             setuptools.command.sdist.sdist.run(self)
+            if is_admin():
+                print('看上去一切顺利，如果构建结果未能正确反映项目结构，尝试删除 .eggs 和 build 文件夹然后重试')
+                j = 0
+                while True:
+                    sleep(1)
+                    j += 1
+                    if os.path.exists(DIST_DIR):
+                        dd = DIST_DIR.replace('\\', '/')
+                        args = shlex.split(f"start {dd}") # 打开 dist 文件夹
+                        s = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True)
+                        s.wait()
+                        break
+                    if j >= 6:
+                        break
+            else:
+                ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, __file__, None, 1)
         except ModuleNotFoundError as e:
             raise ModuleNotFoundError("猜测：six 模块损坏\n建议：使用与 sdist 命令绑定的Python执行 pip install six --force-reinstall 后重试")
 
@@ -412,20 +451,20 @@ setuptools.setup(
 )
 
 
-if __name__ == '__main__':
-    if is_admin():
-        print('看上去一切顺利，如果构建结果未能正确反映项目结构，尝试删除 .eggs 和 build 文件夹然后重试')
-        j = 0
-        while True:
-            sleep(1)
-            j += 1
-            if os.path.exists(DIST_DIR):
-                dd = DIST_DIR.replace('\\', '/')
-                args = shlex.split(f"start {dd}") # 打开 dist 文件夹
-                s = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True)
-                s.wait()
-                break
-            if j >= 6:
-                break
-    else:
-        ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, __file__, None, 1)
+# if __name__ == '__main__':
+#     if is_admin():
+#         print('看上去一切顺利，如果构建结果未能正确反映项目结构，尝试删除 .eggs 和 build 文件夹然后重试')
+#         j = 0
+#         while True:
+#             sleep(1)
+#             j += 1
+#             if os.path.exists(DIST_DIR):
+#                 dd = DIST_DIR.replace('\\', '/')
+#                 args = shlex.split(f"start {dd}") # 打开 dist 文件夹
+#                 s = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True)
+#                 s.wait()
+#                 break
+#             if j >= 6:
+#                 break
+#     else:
+#         ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, __file__, None, 1)
