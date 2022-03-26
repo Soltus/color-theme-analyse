@@ -434,7 +434,7 @@ setuptools.setup(
         "Topic :: Multimedia :: Graphics"
     ],
     package_dir={'':'src'},
-    packages=setuptools.find_packages('src'),
+    packages=setuptools.find_packages('src',exclude=['commonmark','PIL','pygments','rich']),
     namespace_packages=[],
     exclude_package_data={},
     package_data={
