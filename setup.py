@@ -313,8 +313,12 @@ class BdistWheelCommand(_bdist_wheel):
 
     def finalize_options(self):
         _bdist_wheel.finalize_options(self)
-        # self.root_is_pure = False
-    def __exit__(self):
+        # self.root_is_pure = False # 构建仅适用于当前平台的包
+        '''
+        要指定构建的平台，可以使用命令行参数，例如：[ python setup.py bdist_wheel --plat-name=win-amd64 ] [ python setup.py bdist_wheel --plat-name=manylinux1_x86_64 ]
+        '''
+    def run(self):
+        _bdist_wheel.run(self)
         if is_admin():
             print('看上去一切顺利，如果构建结果未能正确反映项目结构，尝试删除 .eggs 和 build 文件夹然后重试')
             j = 0
