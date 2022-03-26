@@ -434,7 +434,7 @@ setuptools.setup(
         "Topic :: Multimedia :: Graphics"
     ],
     package_dir={'':'src'},
-    packages=setuptools.find_packages('src',exclude=['MMCQsc_dpkg.*'],include=['MMCQsc']),
+    packages=setuptools.find_packages('src',include=['MMCQsc']),
     namespace_packages=[],
     exclude_package_data={},
     package_data={
