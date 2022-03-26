@@ -301,10 +301,18 @@ class BuildPyCommand(setuptools.command.build_py.build_py):
 
 import setuptools.command.bdist_egg
 class BdistEggCommand(setuptools.command.bdist_egg.bdist_egg):
-    """接管 python setup.py build_py"""
+    """接管 python setup.py bdist_egg"""
 
     def run(self):
+        print(self.plat_name)
         setuptools.command.bdist_egg.bdist_egg.run(self)
+
+from wheel.bdist_wheel import bdist_wheel as _bdist_wheel
+class bdist_wheel(_bdist_wheel):
+    """接管 python setup.py bdist_wheel"""
+
+    def run(self):
+        _bdist_wheel.finalize_options(self)
         if is_admin():
             print('看上去一切顺利，如果构建结果未能正确反映项目结构，尝试删除 .eggs 和 build 文件夹然后重试')
             j = 0
