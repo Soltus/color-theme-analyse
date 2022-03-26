@@ -6,7 +6,7 @@ DPKG_DIR = os.path.abspath(os.path.join(BASE_DIR, 'MMCQsc_dpkg'))
 if BASE_DIR not in sys.path:
     sys.path.insert(1,BASE_DIR)
 if DPKG_DIR not in sys.path:
-    sys.path.append(DPKG_DIR)
+    sys.path.insert(1,DPKG_DIR)
 
 def Menu(choice:int=0):
     if os.name == 'posix':
@@ -20,6 +20,7 @@ def Menu(choice:int=0):
 (2) 清理依赖包
 (3) 重装依赖包（差异模式）
 (4) 重装依赖包（强力模式）
+(5) 修复 MMCQsc_dpkg
 Any other key to exit.
 ---------------
 请输入对应数字：'''
@@ -54,6 +55,8 @@ Any other key to exit.
                 print('\n无效路径\n')
         from MMCQsc.scp.scripts import pipw
         pipw.reinstallMerge(_path,full=True)
+    elif repo == '5':
+         pass
     else:
         raise ValueError('无效参数')
         exit(111)

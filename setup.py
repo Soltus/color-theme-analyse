@@ -74,7 +74,7 @@ DPKG_DIR = os.path.abspath(os.path.join(BASE_DIR, 'MMCQsc_dpkg'))
 if BASE_DIR not in sys.path:
     sys.path.insert(1,BASE_DIR) # 这里使用insert（插入）而不是添加append（添加），是为了避免已安装的 MMCQsc 包的版本号影响
 if DPKG_DIR not in sys.path:
-    sys.path.append(DPKG_DIR)
+    sys.path.insert(1,DPKG_DIR)
 from MMCQsc.version import version
 my_v = version
 sys.path = syspath # 还原

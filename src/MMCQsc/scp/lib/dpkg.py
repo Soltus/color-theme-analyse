@@ -4,6 +4,7 @@ import json
 from subprocess import Popen
 import shlex
 import types
+import ctypes
 from MMCQsc.scp.lib.logger import *
 logger = myLogging("gitee.com/soltus")
 
@@ -182,21 +183,30 @@ def py_version(v1,v2):
 
 
 class Pgd:
-    def __init__(self,root,dpkg):
+    def __init__(self,root:str,dpkg:str):
         '''root 填 BASE_DIR，dpkg 填 DPKG_DIR'''
         self.url = 'https://pypi.douban.com/simple/'
         self.BASE_DIR = os.path.abspath(root)
         self.DPKG_DIR = os.path.abspath(dpkg)
         self.executable = os.path.abspath(sys.executable).replace('\\','/')
 
-    def task(self,im,re):
+    def is_admin(self):
+        try:
+            return ctypes.windll.shell32.IsUserAnAdmin()
+        except:
+            return False
+
+    def task(self,im,re,yes=False):
         self.im = im
         self.re = re
-        _cwd = os.path.dirname(self.executable)
-        repo = input('\n\n Unable to import package [{}] from \n\t{} , \n\n Do you want to download ? \n\n\t\tProccess ? [Y/n]\t'.format(self.im, sys.path))
+        _cwd = os.path.abspath(os.path.dirname(self.executable))
+        if yes:
+            repo = 'y'
+        else:
+            repo = input('\n\n Unable to import package [{}] from \n\t{} , \n\n Do you want to download ? \n\n\t\tProccess ? [Y/n]\t'.format(self.im, sys.path))
         if repo in ['Y','y']:
-            os.system(CLS)
-            os.system("cd {};./python -m pip install {} -i {}".format(_cwd, self.re, self.url))
+            # os.system(CLS)
+            os.system(f"powershell cd '{_cwd}';./python -m pip install {self.re} -i {self.url}")
             return 1
         return 0
 
@@ -204,17 +214,24 @@ class Pgd:
         """
         获取动态包
         """
+        if self.is_admin():
+            pass
+        else:
+            ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, __file__, None, 1)
         try:
-            PKG_D = self.DPKG_DIR
-            # python = sys.executable.replace(check_conda()[1],pick_env)
-            # nexe = python.replace('\\','/')
+            PKG_D = self.DPKG_DIR.replace('\\','/')
+            if self.DPKG_DIR not in sys.path:
+                sys.path.insert(1,self.DPKG_DIR)
             python = self.executable
-            print(python)
+            # command = f'\"powershell \\\"pip install {name} --upgrade --force-reinstall -t {PKG_D} -i https://pypi.douban.com/simple --extra-index-url https://mirrors.tencent.com/pypi/simple --compile --timeout 30 --exists-action b --only-binary :all:\\\"\"'
+            # args = shlex.split(f'''powershell runas /trustlevel:0x40000''')
+            # args.append(command)
             args = shlex.split(f"{python} -m pip install {name} --isolated --force-reinstall -t {PKG_D} -i https://pypi.douban.com/simple --extra-index-url https://mirrors.tencent.com/pypi/simple --compile --timeout 30 --exists-action b --only-binary :all:")
-            result = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0)
+            result = Popen(args, bufsize=0, executable=None, close_fds=False, shell=False, env=None, startupinfo=None, creationflags=0)
             logger.debug(f"创建下载线程 PID: {result.pid}")
             logger.warning("\n\n\t\t[ tip ] : 快捷键 CTRL + C 强制结束当前任务，CTRL + PAUSE_BREAK 强制结束所有任务并退出 Python\n\n")
             result.wait()
+            return 1
 
             M_module = types.ModuleType(name)
             M_module.__file__ = os.path.abspath(os.path.join(PKG_D, name, '__init__.py'))  # type: ignore

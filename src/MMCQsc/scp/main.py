@@ -29,7 +29,7 @@ SRC_DIR = os.path.abspath(os.path.join(BASE_DIR, 'MMCQsc','src'))
 if BASE_DIR not in sys.path:
     sys.path.insert(1,BASE_DIR)
 if DPKG_DIR not in sys.path:
-    sys.path.append(DPKG_DIR)
+    sys.path.insert(1,DPKG_DIR)
 PY_DIR =  os.path.abspath(os.path.dirname(sys.executable))
 PYSPP = os.path.abspath(os.path.join(PY_DIR, 'site-packages.zip'))
 if PY_DIR not in sys.path:

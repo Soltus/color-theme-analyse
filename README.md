@@ -9,9 +9,16 @@
 
 `pip install color-theme-analyse --no-deps`
 
-如果你设置了全局镜像（多数镜像不会收录本项目），请使用以下的命令从官方仓库安装：
+如果你设置的全局镜像未收录本项目，请使用以下的命令从官方仓库安装或者手动指定镜像：
 
 `pip install color-theme-analyse --no-deps -i https://pypi.org/simple`
+
+以下镜像收录了本项目：
+
+* [https://pypi.tuna.tsinghua.edu.cn/simple](https://pypi.tuna.tsinghua.edu.cn/simple)
+* [http://pypi.douban.com/simple](http://pypi.douban.com/simple)
+* [https://mirrors.tencent.com/pypi/simple](https://mirrors.tencent.com/pypi/simple)
+* [http://mirrors.aliyun.com/pypi/simple/](http://mirrors.aliyun.com/pypi/simple/)
 
 如果你使用的是校园网，可以使用腾讯镜像下载本项目
 
@@ -89,7 +96,7 @@ Bug 反馈和 Issues 提交可以在 Bitbucket 或者 Gitee，**在 Gitee 会得
 
 建议的版本 Python == 3.9.5
 
->from multiprocessing import shared_memory required for Python >= 3.8
+> from multiprocessing import shared_memory required for Python >= 3.8
 
 要求的操作系统 Windows >= 1909  ( Win 10 / 11 )
 

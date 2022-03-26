@@ -29,7 +29,7 @@ DPKG_DIR = os.path.abspath(os.path.join(BASE_DIR, 'MMCQsc_dpkg'))
 if BASE_DIR not in sys.path:
     sys.path.insert(1,BASE_DIR)
 if DPKG_DIR not in sys.path:
-    sys.path.append(DPKG_DIR)
+    sys.path.insert(1,DPKG_DIR)
 from MMCQsc.scp.lib.logger import *
 logger = myLogging("gitee.com/soltus")
 # 全局变量
@@ -76,15 +76,15 @@ pgd = dpkg.Pgd(BASE_DIR,DPKG_DIR)
 dddd = 0
 
 try:
-    logger.info("全局加载 Numpy 模块")
-    np = __import__('numpy', globals(), locals(), [], 0)
+    logger.info("旁加载 Numpy 模块")
+    from MMCQsc_dpkg import numpy as np
 except ImportError:
     try:
-        logger.debug("旁加载 Numpy 模块")
-        from MMCQsc_dpkg import numpy as np
+        logger.debug("全局加载 Numpy 模块")
+        np = __import__('numpy', globals(), locals(), [], 0)
     except:
         # repo = pgd.task(im="numpy",re="numpy")
-        repo = pgd.get_dpkg("numpy")
+        repo = pgd.task(im="numpy",re="numpy",yes=True) # numpy 暂时无法使用 pgd.get_dpkg 安装到 dpkg 目录
         dddd += repo
 try:
     logger.info("旁加载 Pillow 模块")
