@@ -175,10 +175,15 @@ class GVC(distutils.cmd.Command):
         global MY_V
         # 无需手动定义版本号，尝试自动步进
         ''' pyproject.toml 中规定了 setuptools_scm 自动生成项目版本号到 version.py ，会影响自动步进（仅限正式版本号），这是已知缺陷 '''
-        if self.version == "0.0.0":
+        if self.version == "0.0":
             v_n = (int(MY_V[0]), int(MY_V[1]), int(MY_V[2]))
             self.version = f'{v_n[0]}.{v_n[1]+1}.0'
             self.version2 = f'{v_n[0]}.{v_n[1]+1}.1'
+            self.___version = [self.version,self.version2]
+        elif self.version == "0.0.0":
+            v_n = (int(MY_V[0]), int(MY_V[1]), int(MY_V[2]))
+            self.version = f'{v_n[0]}.{v_n[1]}.{v_n[2]+1}'
+            self.version2 = f'{v_n[0]}.{v_n[1]+1}.{v_n[2]+2}'
             self.___version = [self.version,self.version2]
         else:
             self.___version = self.default_nv()
@@ -385,8 +390,8 @@ setuptools.setup(
     # 下载时可以使用 pip install color-theme-analyse[base,dev] 的命令安装额外的依赖组base和dev
     # extras_require 需要一个 dict ，其中按（自定义的）功能名称进行分组，每组一个 list
     extras_require={
-        'base':['numpy>=1.21','pillow>=8.3','rich>=0.1',],
-        'dev':['wheel','twine','setuptools','setuptools_scm','setuptools_scm_git_archive','Eel','auto-py-to-exe>=2.16.0; platform_system == "Windows"'],
+        'base':['numpy>=1.21','pillow>=8.3','rich>=0.1','Eel',],
+        'dev':['wheel','twine','setuptools','setuptools_scm','setuptools_scm_git_archive','auto-py-to-exe>=2.16.0; platform_system == "Windows"'],
         'merge':['numpy>=1.21','pillow>=8.3','rich>=0.1','wheel','twine','setuptools','setuptools_scm','setuptools_scm_git_archive','Eel','auto-py-to-exe>=2.16.0; platform_system == "Windows"'],
     },
     # dependency_links 已被弃用，因此使用 testPyPi 测试时，一些依赖项会无法下载（ https://test-files.pythonhosted.org 上没有），需要提前安装好依赖，然后 pip 后面加参数 --no-deps 无依赖下载

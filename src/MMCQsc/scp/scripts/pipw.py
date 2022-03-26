@@ -2,8 +2,8 @@ import os,sys
 import traceback
 import shlex
 from subprocess import Popen
-base_list = ['numpy','pillow','rich']
-dev_list = ['wheel','twine','setuptools','setuptools_scm','setuptools_scm_git_archive','Eel','auto-py-to-exe']
+base_list = ['numpy','pillow','rich','Eel']
+dev_list = ['wheel','twine','setuptools','setuptools_scm','setuptools_scm_git_archive','auto-py-to-exe']
 merge_list = base_list + dev_list
 
 def inti(exec=''):
