@@ -308,7 +308,7 @@ class BdistEggCommand(setuptools.command.bdist_egg.bdist_egg):
         setuptools.command.bdist_egg.bdist_egg.run(self)
 
 from wheel.bdist_wheel import bdist_wheel as _bdist_wheel
-class bdist_wheel(_bdist_wheel):
+class BdistWheelCommand(_bdist_wheel):
     """接管 python setup.py bdist_wheel"""
 
     def run(self):
@@ -368,7 +368,7 @@ print('开始执行，若长时间无响应，请检查是否有误\n')
 
 setuptools.setup(
     name="color-theme-analyse", # 在 PyPI 上搜索的项目名称
-    cmdclass={'GVC': GVC,'build_py': BuildPyCommand,'sdist': SdistCommand,'bdist_egg': BdistEggCommand}, # ---> 直接运行/调试本文件而不附加合适的参数时，这里报错是正常情况！请跳转到本文件的头部查看合适的指令 <---
+    cmdclass={'GVC': GVC,'build_py': BuildPyCommand,'sdist': SdistCommand,'bdist_egg': BdistEggCommand,'bdist_wheel': BdistWheelCommand}, # ---> 直接运行/调试本文件而不附加合适的参数时，这里报错是正常情况！请跳转到本文件的头部查看合适的指令 <---
     setup_requires=[], # 指定运行 setup.py 文件本身所依赖的包 , 国内由于众所周知的原因会假死，因此留空即可
     use_scm_version=True, # .gitignore 应与 setup.py 在同一文件夹 更多信息参考 https://pypi.org/project/setuptools-scm/
     # version='1.1.1', # 默认的手动指定版本
