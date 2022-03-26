@@ -313,6 +313,8 @@ class BdistWheelCommand(_bdist_wheel):
 
     def finalize_options(self):
         _bdist_wheel.finalize_options(self)
+        self.root_is_pure = False
+    def __exit__(self):
         if is_admin():
             print('看上去一切顺利，如果构建结果未能正确反映项目结构，尝试删除 .eggs 和 build 文件夹然后重试')
             j = 0
