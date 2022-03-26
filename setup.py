@@ -293,13 +293,17 @@ class GVC(distutils.cmd.Command):
 
 
 import setuptools.command.build_py
+import setuptools.command.bdist_egg
+import setuptools.command.sdist
+from wheel.bdist_wheel import bdist_wheel as _bdist_wheel
+
 class BuildPyCommand(setuptools.command.build_py.build_py):
     """接管 python setup.py build_py"""
 
     def run(self):
         setuptools.command.build_py.build_py.run(self)
 
-import setuptools.command.bdist_egg
+
 class BdistEggCommand(setuptools.command.bdist_egg.bdist_egg):
     """接管 python setup.py bdist_egg"""
 
@@ -307,7 +311,7 @@ class BdistEggCommand(setuptools.command.bdist_egg.bdist_egg):
         print(self.plat_name)
         setuptools.command.bdist_egg.bdist_egg.run(self)
 
-from wheel.bdist_wheel import bdist_wheel as _bdist_wheel
+
 class BdistWheelCommand(_bdist_wheel):
     """接管 python setup.py bdist_wheel"""
 
@@ -335,7 +339,7 @@ class BdistWheelCommand(_bdist_wheel):
                     break
 
 
-import setuptools.command.sdist
+
 class SdistCommand(setuptools.command.sdist.sdist):
     """接管 python setup.py sdist"""
 
@@ -360,7 +364,33 @@ class SdistCommand(setuptools.command.sdist.sdist):
         except ModuleNotFoundError as e:
             raise ModuleNotFoundError("猜测：six 模块损坏\n建议：使用与 sdist 命令绑定的Python执行 pip install six --force-reinstall 后重试")
 
+class SBdist(setuptools.command.sdist.sdist, _bdist_wheel):
+    ''' 同时接管 sdist 和 bdist_wheel ，确保生产的包版本号一致'''
+    def run(self):
+        _bdist_wheel.run(self)
+        try:
+            setuptools.command.sdist.sdist.run(self)
+        except ModuleNotFoundError as e:
+            raise ModuleNotFoundError("猜测：six 模块损坏\n建议：使用与 sdist 命令绑定的Python执行 pip install six --force-reinstall 后重试")
+        print('\n\n看上去一切顺利，如果构建结果未能正确反映项目结构，尝试删除 .eggs 和 build 文件夹然后重试\n')
+        j = 0
+        while True:
+            sleep(1)
+            j += 1
+            if os.path.exists(DIST_DIR):
+                dd = DIST_DIR.replace('\\', '/')
+                args = shlex.split(f"start {dd}") # 打开 dist 文件夹
+                s = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True)
+                s.wait()
+                break
+            if j >= 9:
+                    break
 
+    def finalize_options(self):
+        _bdist_wheel.finalize_options(self)
+    def initialize_options(self):
+        _bdist_wheel.initialize_options(self)
+        setuptools.command.sdist.sdist.initialize_options(self)
 
 # 读取许可证
 with open("README.md", "r", encoding="utf-8") as fh:
@@ -372,7 +402,7 @@ print('开始执行，若长时间无响应，请检查是否有误\n')
 
 setuptools.setup(
     name="color-theme-analyse", # 在 PyPI 上搜索的项目名称
-    cmdclass={'GVC': GVC,'build_py': BuildPyCommand,'sdist': SdistCommand,'bdist_egg': BdistEggCommand,'bdist_wheel': BdistWheelCommand}, # ---> 直接运行/调试本文件而不附加合适的参数时，这里报错是正常情况！请跳转到本文件的头部查看合适的指令 <---
+    cmdclass={'GVC': GVC,'build_py': BuildPyCommand,'sdist': SdistCommand,'bdist_egg': BdistEggCommand,'bdist_wheel': BdistWheelCommand,'sbdist': SBdist}, # ---> 直接运行/调试本文件而不附加合适的参数时，这里报错是正常情况！请跳转到本文件的头部查看合适的指令 <---
     setup_requires=[], # 指定运行 setup.py 文件本身所依赖的包 , 国内由于众所周知的原因会假死，因此留空即可
     use_scm_version=True, # .gitignore 应与 setup.py 在同一文件夹 更多信息参考 https://pypi.org/project/setuptools-scm/
     # version='1.1.1', # 默认的手动指定版本
