@@ -196,7 +196,7 @@ class Pgd:
         repo = input('\n\n Unable to import package [{}] from \n\t{} , \n\n Do you want to download ? \n\n\t\tProccess ? [Y/n]\t'.format(self.im, sys.path))
         if repo in ['Y','y']:
             os.system(CLS)
-            os.system("cd {};./Scripts/pip.exe install {} -i {}".format(_cwd, self.re, self.url))
+            os.system("cd {};./python -m pip install {} -i {}".format(_cwd, self.re, self.url))
             return 1
         return 0
 
@@ -210,7 +210,7 @@ class Pgd:
             # nexe = python.replace('\\','/')
             python = self.executable
             print(python)
-            args = shlex.split(f"{python} -m pip install {name} --isolated --python-version 3.9 --ignore-requires-python --force-reinstall -t {PKG_D} -i https://pypi.douban.com/simple --extra-index-url https://mirrors.tencent.com/pypi/simple --compile --timeout 30 --exists-action b --only-binary :all:")
+            args = shlex.split(f"{python} -m pip install {name} --isolated --force-reinstall -t {PKG_D} -i https://pypi.douban.com/simple --extra-index-url https://mirrors.tencent.com/pypi/simple --compile --timeout 30 --exists-action b --only-binary :all:")
             result = Popen(args, bufsize=0, executable=None, close_fds=False, shell=True, env=None, startupinfo=None, creationflags=0)
             logger.debug(f"创建下载线程 PID: {result.pid}")
             logger.warning("\n\n\t\t[ tip ] : 快捷键 CTRL + C 强制结束当前任务，CTRL + PAUSE_BREAK 强制结束所有任务并退出 Python\n\n")
@@ -224,13 +224,16 @@ class Pgd:
                 # logger.info(M_module.__dict__)
                 logger.info('\n' + str(M_module))
                 logger.info(f"\n\n\timport {name} seccessfully\n\n")
+                return 1
             except Exception as e:
                 logger.error(e)
-                logger.error(f"从项目导入 {name} 失败 ")
+                logger.error(f"旁加载 {name} 失败 ")
+                return 0
         except BaseException as e:
             if isinstance(e, KeyboardInterrupt):
                 logger.warning("用户中止了下载")
-                exit()
+                return 0
+        return 0
 
     def up_python(self,av,bv,cv,dv,conda_env=None):
         '''

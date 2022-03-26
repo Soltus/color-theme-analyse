@@ -83,7 +83,8 @@ except ImportError:
         logger.debug("旁加载 Numpy 模块")
         from MMCQsc_dpkg import numpy as np
     except:
-        repo = pgd.task(im="numpy",re="numpy")
+        # repo = pgd.task(im="numpy",re="numpy")
+        repo = pgd.get_dpkg("numpy")
         dddd += repo
 try:
     logger.info("旁加载 Pillow 模块")
@@ -94,7 +95,8 @@ except ImportError:
         PIL = __import__('PIL', globals(), locals(), [], 0)
         from PIL import Image as PImage
     except:
-        repo = pgd.task(im="PIL",re="Pillow")
+        # repo = pgd.task(im="PIL",re="Pillow")
+        repo = pgd.get_dpkg("Pillow")
         dddd += repo
 try:
     logger.info("全局加载 Rich 模块")
@@ -113,7 +115,8 @@ except ImportError:
         from MMCQsc_dpkg.rich.progress import (BarColumn,Progress,) # 实例化进度条，由于采用多进程+多线程，只能当分隔符使用
     except Exception as e:
         logger.error(e)
-        repo = pgd.task(im="rich",re="rich")
+        # repo = pgd.task(im="rich",re="rich")
+        repo = pgd.get_dpkg("rich")
         dddd += repo
 '''
 embed 版本：Pillow 更换为嵌入版本，Numpy, rich 改为动态引用，弃用 OpenCV-Python
