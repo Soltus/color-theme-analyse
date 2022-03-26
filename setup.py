@@ -311,7 +311,7 @@ from wheel.bdist_wheel import bdist_wheel as _bdist_wheel
 class BdistWheelCommand(_bdist_wheel):
     """接管 python setup.py bdist_wheel"""
 
-    def run(self):
+    def finalize_options(self):
         _bdist_wheel.finalize_options(self)
         if is_admin():
             print('看上去一切顺利，如果构建结果未能正确反映项目结构，尝试删除 .eggs 和 build 文件夹然后重试')
