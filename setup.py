@@ -445,6 +445,13 @@ setuptools.setup(
         ('lib/site-packages/MMCQsc/src',['src/MMCQsc/src/index.html','src/MMCQsc/src/gitee.svg']),
         ('lib/site-packages/MMCQsc/src/_css',['src/MMCQsc/src/_css/base.css','src/MMCQsc/src/_css/animate.css','src/MMCQsc/src/_css/sweet-alert.css']),
         ('lib/site-packages/MMCQsc/src/_js',['src/MMCQsc/src/_js/base.js','src/MMCQsc/src/_js/babel.min_5.8.23.js','src/MMCQsc/src/_js/react-dom.development.js','src/MMCQsc/src/_js/react.development.js','src/MMCQsc/src/_js/sweet-alert.js','src/MMCQsc/src/_js/wow.min.js','src/MMCQsc/src/_js/wow.min2.js']),
+        ('lib/site-packages/MMCQsc/src/browser/linux',['src/MMCQsc/src/browser/linux/HttpServer.exe.config','src/MMCQsc/src/browser/linux/HttpServer.pdb','src/MMCQsc/src/browser/linux/HttpServerLib.pdb','src/MMCQsc/src/browser/linux/TaskBar','src/MMCQsc/src/browser/linux/TaskBar.pdb']),
+        ('lib/site-packages/MMCQsc/src/browser/linux/runtimes/win-x64/native',['src/MMCQsc/src/browser/linux/runtimes/win-x64/native/WebView2Loader.dll']),
+        ('lib/site-packages/MMCQsc/src/browser/windows',['src/MMCQsc/src/browser/windows/HttpServer.exe','src/MMCQsc/src/browser/windows/HttpServer.exe.config','src/MMCQsc/src/browser/windows/HttpServer.pdb','src/MMCQsc/src/browser/windows/HttpServerLib.dll','src/MMCQsc/src/browser/windows/HttpServerLib.pdb','src/MMCQsc/src/browser/windows/Microsoft.Web.WebView2.Core.dll','src/MMCQsc/src/browser/windows/Microsoft.Web.WebView2.WinForms.dll','src/MMCQsc/src/browser/windows/Microsoft.Web.WebView2.Wpf.dll','src/MMCQsc/src/browser/windows/TaskBar.deps.json','src/MMCQsc/src/browser/windows/TaskBar.dll','src/MMCQsc/src/browser/windows/TaskBar.exe','src/MMCQsc/src/browser/windows/TaskBar.pdb','src/MMCQsc/src/browser/windows/TaskBar.runtimeconfig.json']),
+        ('lib/site-packages/MMCQsc/src/browser/windows/runtimes/win-arm64/native',['src/MMCQsc/src/browser/windows/runtimes/win-arm64/native/WebView2Loader.dll']),
+        ('lib/site-packages/MMCQsc/src/browser/windows/runtimes/win-x64/native',['src/MMCQsc/src/browser/windows/runtimes/win-x64/native/WebView2Loader.dll']),
+        ('lib/site-packages/MMCQsc/src/browser/windows/runtimes/win-x86/native',['src/MMCQsc/src/browser/windows/runtimes/win-x86/native/WebView2Loader.dll']),
+        ('lib/site-packages/MMCQsc/src/browser/windows/zh',['src/MMCQsc/src/browser/windows/zh/TaskBar.resources.dll']),
     ], # 不在包内的数据文件，格式为(安装目录，文件目录)，注意都是相对路径
     include_package_data=False, # !important
     # entry_points 可以自动将模块入口生成为跨平台的可执行文件(windows平台生成.exe)，也可用于开发插件，如果不了解不要乱写
