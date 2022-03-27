@@ -62,19 +62,19 @@ MMCQscR2
 
 ### 项目地址
 
-[Bitbucket](https://bitbucket.org/hi-windom/colorthemeanalyse/ "默认仓库")（最快更新）
-
-[Gitee](https://gitee.com/hi-windom/color-theme-analyse "主要同步仓库")（建议下载）
+[Gitee](https://gitee.com/hi-windom/color-theme-analyse "主要同步仓库")
 
 [Github](https://github.com/Soltus/color-theme-analyse)（偶尔同步）
 
 [GitLab](https://gitlab.com/liaoshanyi/ColorThemeAnalyse)（偶尔同步）
 
+[GitCode](https://gitcode.net/Soltus/color-theme-analyse)（从Gitee同步）
+
 [Pypi](https://pypi.org/project/color-theme-analyse/ "https://pypi.org/project/color-theme-analyse/")（官方仓库）
 
 [libraries.io](https://libraries.io/pypi/color-theme-analyse)（同步官方仓库）
 
-腾讯镜像可用直接下载所有源文件[Links for color-theme-analyse (tencent.com)](https://mirrors.tencent.com/pypi/simple/color-theme-analyse/)
+下载所有源文件 -> [Links for color-theme-analyse (tencent.com)](https://mirrors.tencent.com/pypi/simple/color-theme-analyse/)
 
 当前默认分支为 `dev2022`
 
@@ -82,7 +82,7 @@ MMCQscR2
 
 源仓库在 Bitbucket，因此会首先得到同步
 
-Bug 反馈和 Issues 提交可以在 Bitbucket 或者 Gitee，**在 Gitee 会得到最快反馈**
+Bug 反馈和 Issues 提交在Gitee或Github，**在 Gitee 会得到最快反馈**
 
 请勿在 Github 或 GitLab 提交 Issues ，它们只是同步仓库，不会处理任何提交的 Issues
 
