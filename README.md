@@ -2,8 +2,20 @@
     <a href="https://pypi.org/project/color-theme-analyse/"><img src="https://img.shields.io/pypi/v/color-theme-analyse.svg" alt="PyPI Version"></a>
     <a href="https://pypi.org/project/color-theme-analyse/"><img src="https://img.shields.io/pypi/pyversions/color-theme-analyse.svg" alt="PyPI Supported Versions"></a>
     <a href="https://pypi.org/project/color-theme-analyse/"><img src="https://img.shields.io/pypi/l/color-theme-analyse.svg" alt="License"></a>
+    <a href="https://pypi.org/project/color-theme-analyse/"><img src="https://img.shields.io/badge/Internal%20code-SCSD--PY001-ff69b4"></a>
+    <a href="https://pypi.org/project/color-theme-analyse/"><img alt="PyPI - Downloads" src="https://img.shields.io/pypi/dm/color-theme-analyse?label=pypi%20downloads"></a>
+    <a href="https://pepy.tech/project/color-theme-analyse"><img src="https://static.pepy.tech/badge/color-theme-analyse" alt="Downloads"></a>
     <a href="https://pepy.tech/project/color-theme-analyse"><img src="https://static.pepy.tech/badge/color-theme-analyse/month" alt="Downloads Per Month"></a>
     <a href="https://pyinstaller.readthedocs.io/en/stable/requirements.html"><img src="https://img.shields.io/badge/platform-windows%20%7C%20linux-lightgrey" alt="Supported Platforms"></a>
+    <a href="https://pypi.org/project/color-theme-analyse/"><img alt="PyPI - Implementation" src="https://img.shields.io/pypi/implementation/color-theme-analyse"></a>
+    <a href="https://pypi.org/project/color-theme-analyse/"><img alt="PyPI - Wheel" src="https://img.shields.io/pypi/wheel/color-theme-analyse"></a>
+    <a href="https://bitbucket.org/hi-windom/colorthemeanalyse/addon/pipelines/home#!/results/page/1"><img alt="Bitbucket Pipelines" src="https://img.shields.io/bitbucket/pipelines/hi-windom/colorthemeanalyse/dev2022"></a>
+    <a href="https://github.com/Soltus/color-theme-analyse"><img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/soltus/color-theme-analyse?label=GitHub%20last%20commit"></a>
+    <a href="https://github.com/Soltus/color-theme-analyse"><img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/y/soltus/color-theme-analyse?label=GitHub%20commit%20activity"></a>
+    <a href="https://github.com/Soltus/color-theme-analyse"><img alt="GitHub code size in bytes" src="https://img.shields.io/github/languages/code-size/soltus/color-theme-analyse?label=GitHub%20code%20size"></a>
+    <a href="https://github.com/Soltus/color-theme-analyse"><img alt="GitHub language count" src="https://img.shields.io/github/languages/count/soltus/color-theme-analyse"></a>
+    <a href="tencent://AddContact/?fromId=45&fromSubId=1&subcmd=all&uin=694357845&website=www.oicqzone.com"><img src="https://img.shields.io/badge/QQ-694357845-orange"</a>
+</p>
 
 项目依赖比较简单，可以使用无依赖安装：
 
