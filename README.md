@@ -14,7 +14,7 @@
     <a href="https://github.com/Soltus/color-theme-analyse"><img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/y/soltus/color-theme-analyse?label=GitHub%20commit%20activity"></a>
     <a href="https://github.com/Soltus/color-theme-analyse"><img alt="GitHub code size in bytes" src="https://img.shields.io/github/languages/code-size/soltus/color-theme-analyse?label=GitHub%20code%20size"></a>
     <a href="https://github.com/Soltus/color-theme-analyse"><img alt="GitHub language count" src="https://img.shields.io/github/languages/count/soltus/color-theme-analyse"></a>
-    <a href="tencent://AddContact/?fromId=45&fromSubId=1&subcmd=all&uin=694357845&website=www.oicqzone.com"><img src="https://img.shields.io/badge/QQ-694357845-orange"</a>
+    <a href="tencent://AddContact/?fromId=45&fromSubId=1&subcmd=all&uin=694357845&website=www.oicqzone.com"><img src="https://img.shields.io/badge/QQ-694357845-orange"></a>
 </p>
 
 项目依赖比较简单，可以使用无依赖安装：
