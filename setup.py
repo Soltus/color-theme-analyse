@@ -408,7 +408,7 @@ setuptools.setup(
     # version='1.1.1', # 默认的手动指定版本
     author="Soltus",
     author_email="694357845@qq.com",
-    description="SCSD-PY001 info: This is a simple demo of pictures color theme batch analysis use MMCQ with Python",
+    description="Covers most scenarios as much as possible, demonstrates how to build a Python pypi project, and is also useful for analyzing image color themes",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://gitee.com/hi-windom/color-theme-analyse",

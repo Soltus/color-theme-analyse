@@ -1,4 +1,4 @@
 theme: jekyll-theme-architect
 name: color-theme-analyse
-description: "SCSD-PY001 info: This is a simple demo of pictures color theme batch analysis use MMCQ with Python"
+description: "Covers most scenarios as much as possible, demonstrates how to build a Python pypi project, and is also useful for analyzing image color themes"
 show_downloads: true
