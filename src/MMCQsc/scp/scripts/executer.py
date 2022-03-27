@@ -307,7 +307,7 @@ def domain(img) -> int:
             progress.stop()
             os.system(CLS)
             redo = input(
-                '\n\n\n注意：检测到遗留的 {} 个任务未处理，是否先继续未完成的任务？\n\n  __ 输入 y 继续遗留任务，输入 n 放弃遗留任务，任意其他键退出 __\n'.format(redoma))
+                f'\n\n\n注意：检测到遗留的 {redoma} 个任务未处理，是否先继续未完成的任务？\n\n  __ 输入 y 继续遗留任务，输入 n 放弃遗留任务，任意其他键退出 __\n')
             if redo in ['y', 'Y']:
                 procompress(os.listdir(temp), temp)
                 shutil.rmtree(temp)
@@ -334,8 +334,7 @@ def domain(img) -> int:
             progress.update(task_id, advance=ptv)
             console.print(f'{origin_list}', justify='full', highlight=True)
             if ptv > 1019:
-                console.rule(title='demo限制单次最多处理 1020 张图片（ {} 张已选择）'.format(
-                    ptv), align='center')
+                console.rule(title=f'demo限制单次最多处理 1020 张图片（ {ptv} 张已选择）', align='center')
                 exit()
 
             # 开始处理
@@ -493,9 +492,9 @@ def domain(img) -> int:
                                         maincss.writelines('\n')
                                         for c in range(1, 6):
                                             mainjs.writelines(
-                                                r'<div id = "t{}c{}"></div>'.format(i, c))
+                                                rf'<div id = "t{i}c{c}"></div>')
                                             maincss.writelines(
-                                                '#t{}c{} {{\nmax-width: 20%; min-width: 20%; width: 20%; height: 40px; background-color: #{}; display: inline-block; z-index: 99;\n}}\n'.format(i, c, colors[c+1]))
+                                                f'#t{i}c{c} {{\nmax-width: 20%; min-width: 20%; width: 20%; height: 40px; background-color: #{colors[c+1]}; display: inline-block; z-index: 99;\n}}\n')
                                     mainjs.writelines('</div>\n')
                                     mainjs.writelines(
                                         r'<img className="img wow fadeIn" data-wow-delay="0.2s" data-wow-duration="0.5s" data-wow-offset="20" src={"' + name + r'"} />' + '\n')
@@ -511,7 +510,7 @@ def domain(img) -> int:
                                             mainjs.writelines(
                                                 r'<div id = "t{}c{}"></div>'.format(i, c))
                                             maincss.writelines(
-                                                '#t{}c{} {{\nmax-width: 20%; min-width: 20%; width: 20%; height: 40px; background-color: #{}; display: inline-block; z-index: 99;\n}}\n'.format(i, c, colors[c+1]))
+                                                f'#t{i}c{c} {{\nmax-width: 20%; min-width: 20%; width: 20%; height: 40px; background-color: #{colors[c+1]}; display: inline-block; z-index: 99;\n}}\n')
                                     mainjs.writelines('</div>\n')
                                 if img2_w == True:
                                     mainjs.writelines(

@@ -140,7 +140,7 @@ def list_conda_env(py=['3.9'],conda_exec=''):
                 logger.warning("如果你已经安装了 Conda ，请确保正确配置环境变量并完成 Conda init 初始化终端")
                 return None
             for e in _env_list:
-                with os.popen("{}\\python.exe --version".format(e)) as repo:
+                with os.popen(f"{e}\\python.exe --version") as repo:
                     _env_path = e.strip()
                     _env = '{}'.format(e).split('\\')[-1]
                     if '{}'.format(e).split('\\')[-2] == 'envs':
@@ -265,7 +265,7 @@ class Pgd:
             pick_env = ' -n ' + conda_env
         else:
             pick_env = ''
-        logger.warning("You are using Python {}".format(PY3_VNO))
+        logger.warning(f"You are using Python {PY3_VNO}")
         if py_version(PY3_VNO,cv) == -1:
             logger.critical(f"Required version : Python >= {cv}")
             with os.popen("conda --version") as conda_v:

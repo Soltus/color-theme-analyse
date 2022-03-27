@@ -411,7 +411,7 @@ setuptools.setup(
     description="Covers most scenarios as much as possible, demonstrates how to build a Python pypi project, and is also useful for analyzing image color themes",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://gitee.com/hi-windom/color-theme-analyse",
+    url="https://soltus.github.io/color-theme-analyse/",
     project_urls={
         "Bug Tracker": "https://gitee.com/hi-windom/color-theme-analyse/issues",
     },

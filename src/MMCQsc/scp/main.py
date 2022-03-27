@@ -190,5 +190,5 @@ if __name__ == '__main__':
         result = mainFunc()
     except BaseException as e:
         if isinstance(e, KeyboardInterrupt):
-            logger.warning("{}\n\t\t用户强制退出".format(__file__))
+            logger.warning(f"{__file__}\n\t\t用户强制退出")
             exit(103)
