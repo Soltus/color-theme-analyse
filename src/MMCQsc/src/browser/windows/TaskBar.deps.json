@@ -1,0 +1,96 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v5.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v5.0": {
+      "TaskBar/1.0.0": {
+        "dependencies": {
+          "HttpServer": "1.0.0",
+          "HttpServerLib": "1.0.0",
+          "Microsoft.Web.WebView2": "1.0.1150.38"
+        },
+        "runtime": {
+          "TaskBar.dll": {}
+        },
+        "resources": {
+          "zh/TaskBar.resources.dll": {
+            "locale": "zh"
+          }
+        }
+      },
+      "Microsoft.Web.WebView2/1.0.1150.38": {
+        "runtime": {
+          "lib/netcoreapp3.0/Microsoft.Web.WebView2.Core.dll": {
+            "assemblyVersion": "1.0.1150.38",
+            "fileVersion": "1.0.1150.38"
+          },
+          "lib/netcoreapp3.0/Microsoft.Web.WebView2.WinForms.dll": {
+            "assemblyVersion": "1.0.1150.38",
+            "fileVersion": "1.0.1150.38"
+          },
+          "lib/netcoreapp3.0/Microsoft.Web.WebView2.Wpf.dll": {
+            "assemblyVersion": "1.0.1150.38",
+            "fileVersion": "1.0.1150.38"
+          }
+        },
+        "runtimeTargets": {
+          "runtimes/win-arm64/native/WebView2Loader.dll": {
+            "rid": "win-arm64",
+            "assetType": "native",
+            "fileVersion": "1.0.1150.38"
+          },
+          "runtimes/win-x64/native/WebView2Loader.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "1.0.1150.38"
+          },
+          "runtimes/win-x86/native/WebView2Loader.dll": {
+            "rid": "win-x86",
+            "assetType": "native",
+            "fileVersion": "1.0.1150.38"
+          }
+        }
+      },
+      "HttpServer/1.0.0": {
+        "dependencies": {
+          "HttpServerLib": "1.0.0"
+        },
+        "runtime": {
+          "HttpServer.exe": {}
+        }
+      },
+      "HttpServerLib/1.0.0": {
+        "runtime": {
+          "HttpServerLib.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "TaskBar/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Microsoft.Web.WebView2/1.0.1150.38": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-r8oq0AeUU08q0MjyBkBPoiFWNvLHENzFq8DYRjAwC3xfEw2GxNDQtF/NbvFxiDEgm9bF3KMNJTZF4vokkzNPMA==",
+      "path": "microsoft.web.webview2/1.0.1150.38",
+      "hashPath": "microsoft.web.webview2.1.0.1150.38.nupkg.sha512"
+    },
+    "HttpServer/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "HttpServerLib/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

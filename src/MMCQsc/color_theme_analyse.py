@@ -17,10 +17,11 @@ def Menu(choice:int=0):
 欢迎使用 MMCQsc
 ---------------
 (1) 运行主程序
-(2) 清理依赖包
+(2) 运行主程序（内置edge浏览器封装）
 (3) 重装依赖包（差异模式）
 (4) 重装依赖包（强力模式）
-(5) 修复 MMCQsc_dpkg
+(5) 修复 MMCQsc_dpkg（暂不可用）
+(6) 清理依赖包
 Any other key to exit.
 ---------------
 请输入对应数字：'''
@@ -30,7 +31,7 @@ Any other key to exit.
         repo = str(choice)
     if repo == '1':
         MainFunc()
-    elif repo == '2':
+    elif repo == '6':
         from MMCQsc.scp.scripts import pipw
         pipw.uninstallMerge()
     elif repo == '3':
@@ -57,11 +58,13 @@ Any other key to exit.
         pipw.reinstallMerge(_path,full=True)
     elif repo == '5':
          pass
+    elif repo == '2':
+        MainFunc(mode=True)
     else:
         raise ValueError('无效参数')
         exit(111)
 
-def MainFunc():
+def MainFunc(mode=False):
     try:
         from MMCQsc.scp import executable_check
     except Exception as e:
@@ -69,7 +72,7 @@ def MainFunc():
     else:
         from MMCQsc.scp import main
         try:
-            result = main.mainFunc()
+            result = main.mainFunc(mode)
         except Exception as e:
             print(e)
 
