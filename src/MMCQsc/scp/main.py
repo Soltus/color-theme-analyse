@@ -149,8 +149,8 @@ def mainFunc(mode=False):
                         # response = os.system(f'{_browser} \"{SRC_DIR}\"')
                         _index = SRC_DIR.replace('\\','/')
                         args = ['TaskBar',f'{_index}']
-                        print(args)
-                        input()
+                        # print(args)
+                        # input()
                         Popen(args, bufsize=0, close_fds=False, shell=True, cwd=_browser, startupinfo=None, creationflags=0)
                         time.sleep(2)
                         exit(9)
