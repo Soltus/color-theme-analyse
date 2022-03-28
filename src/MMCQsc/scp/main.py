@@ -163,14 +163,14 @@ def mainFunc(mode=False):
                                 prolist.submit(openhtml,myip,PORT)
                         else:
                             _browser = os.path.abspath(os.path.join(SRC_DIR, 'browser','windows'))
-                        # response = os.system(f'{_browser} \"{SRC_DIR}\"')
-                        _index = SRC_DIR.replace('\\','/')
-                        args = ['TaskBar',f'{_index}']
-                        # print(args)
-                        # input()
-                        Popen(args, bufsize=0, close_fds=False, shell=True, cwd=_browser, startupinfo=None, creationflags=0)
-                        time.sleep(2)
-                        exit(9)
+                            # response = os.system(f'{_browser} \"{SRC_DIR}\"')
+                            _index = SRC_DIR.replace('\\','/')
+                            args = ['TaskBar',f'{_index}']
+                            # print(args)
+                            # input()
+                            Popen(args, bufsize=0, close_fds=False, shell=True, cwd=_browser, startupinfo=None, creationflags=0)
+                            time.sleep(2)
+                            exit(9)
                     else:
                         with futures.ProcessPoolExecutor(max_workers=None) as prolist:
                             PORT = randint(5800,5858)
