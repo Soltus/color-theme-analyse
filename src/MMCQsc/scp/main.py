@@ -65,12 +65,22 @@ def get_host_ip():
         ss = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         ss.connect(('8.8.8.8', 80))
         ip = ss.getsockname()[0]
+    except socket.error:
+        ip = "127.0.0.1"
     finally:
         ss.close()
 
     return ip
 
-
+def createServerL(myip,PORT):
+    netlocal = '（支持局域网访问）'
+    logger.info(SRC_DIR)
+    args = shlex.split(f"pyhton3 -m http.server {PORT}")
+    result =  Popen(args, bufsize=0, close_fds=False, shell=False, cwd=SRC_DIR, startupinfo=None, creationflags=0)
+    logger.debug(f"http.server进程 PID: {result.pid}")
+    logger.info(f'\n\n\n\t\t本地服务器创建成功：\n\n\t\t http://{myip}:{PORT}\n\n\t\t{netlocal}\n\n')
+    logger.warning("\n\n\t\t[ tip ] : 快捷键 CTRL + C 强制结束当前任务，CTRL + PAUSE_BREAK 强制结束所有任务并退出 Python\n\n")
+    result.wait()
 def createServer(myip,PORT):
     if os.name != 'posix':
         netlocal = '（支持局域网访问）'
@@ -143,14 +153,19 @@ def mainFunc(mode=False):
                 if buf[2] == 1 and result == 6:
                     if mode:
                         if os.name == 'posix':
-                            _browser = os.path.abspath(os.path.join(SRC_DIR, 'browser','linux'))
-                            DIR_SPLIT = '/'
+                            # _browser = os.path.abspath(os.path.join(SRC_DIR, 'browser','linux'))
+                            logger.info("Linux 下使用替代方案")
+                            with futures.ProcessPoolExecutor(max_workers=None) as prolist:
+                                PORT = randint(5800,5858)
+                                myip = get_host_ip()
+                                prolist.submit(createServerL,myip,PORT)
+                                time.sleep(2)
+                                prolist.submit(openhtml,myip,PORT)
                         else:
                             _browser = os.path.abspath(os.path.join(SRC_DIR, 'browser','windows'))
-                            DIR_SPLIT = '\\'
                         # response = os.system(f'{_browser} \"{SRC_DIR}\"')
                         _index = SRC_DIR.replace('\\','/')
-                        args = [f'.{DIR_SPLIT}TaskBar',f'{_index}']
+                        args = ['TaskBar',f'{_index}']
                         # print(args)
                         # input()
                         Popen(args, bufsize=0, close_fds=False, shell=True, cwd=_browser, startupinfo=None, creationflags=0)
