@@ -144,11 +144,13 @@ def mainFunc(mode=False):
                     if mode:
                         if os.name == 'posix':
                             _browser = os.path.abspath(os.path.join(SRC_DIR, 'browser','linux'))
+                            DIR_SPLIT = '/'
                         else:
                             _browser = os.path.abspath(os.path.join(SRC_DIR, 'browser','windows'))
+                            DIR_SPLIT = '\\'
                         # response = os.system(f'{_browser} \"{SRC_DIR}\"')
                         _index = SRC_DIR.replace('\\','/')
-                        args = ['TaskBar',f'{_index}']
+                        args = [f'.{DIR_SPLIT}TaskBar',f'{_index}']
                         # print(args)
                         # input()
                         Popen(args, bufsize=0, close_fds=False, shell=True, cwd=_browser, startupinfo=None, creationflags=0)

@@ -62,7 +62,7 @@ MMCQscR2
 
 ### 项目地址
 
-[Gitee](https://gitee.com/hi-windom/color-theme-analyse "主要同步仓库") （从GitCode同步）
+[Gitee](https://gitee.com/hi-windom/color-theme-analyse "主要同步仓库") 
 
 [Github](https://github.com/Soltus/color-theme-analyse)（偶尔同步）
 
