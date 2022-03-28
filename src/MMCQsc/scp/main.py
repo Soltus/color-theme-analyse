@@ -76,7 +76,7 @@ def createServerL(myip,PORT):
     netlocal = '（支持局域网访问）'
     logger.info(SRC_DIR)
     args = shlex.split(f"pyhton3 -m http.server {PORT}")
-    result =  Popen(args, bufsize=0, close_fds=False, shell=False, cwd=SRC_DIR, startupinfo=None, creationflags=0)
+    result =  Popen(args, bufsize=0, executable=sys.executable, close_fds=False, shell=False, cwd=SRC_DIR, startupinfo=None, creationflags=0)
     logger.debug(f"http.server进程 PID: {result.pid}")
     logger.info(f'\n\n\n\t\t本地服务器创建成功：\n\n\t\t http://{myip}:{PORT}\n\n\t\t{netlocal}\n\n')
     logger.warning("\n\n\t\t[ tip ] : 快捷键 CTRL + C 强制结束当前任务，CTRL + PAUSE_BREAK 强制结束所有任务并退出 Python\n\n")
