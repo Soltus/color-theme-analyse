@@ -291,11 +291,12 @@ class GVC(distutils.cmd.Command):
 
         return [self.version,self.version2]
 
-
+import setuptools.command.install_lib # 未引用
 import setuptools.command.build_py
 import setuptools.command.bdist_egg
 import setuptools.command.sdist
 from wheel.bdist_wheel import bdist_wheel as _bdist_wheel
+
 
 class BuildPyCommand(setuptools.command.build_py.build_py):
     """接管 python setup.py build_py"""
@@ -391,6 +392,8 @@ class SBdist(setuptools.command.sdist.sdist, _bdist_wheel):
     def initialize_options(self):
         _bdist_wheel.initialize_options(self)
         setuptools.command.sdist.sdist.initialize_options(self)
+
+
 
 # 读取许可证
 with open("README.md", "r", encoding="utf-8") as fh:
