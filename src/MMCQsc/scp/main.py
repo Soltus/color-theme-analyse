@@ -19,6 +19,7 @@
 '''
 
 ################################################################
+import locale
 import socket
 import time
 import os,sys,shutil
@@ -162,10 +163,10 @@ def mainFunc(mode=False):
                                 time.sleep(2)
                                 prolist.submit(openhtml,myip,PORT)
                         else:
-                            _browser = os.path.abspath(os.path.join(SRC_DIR, 'browser','windows'))
+                            _browser = os.path.abspath(os.path.join(SRC_DIR, 'browser'))
                             # response = os.system(f'{_browser} \"{SRC_DIR}\"')
                             _index = SRC_DIR.replace('\\','/')
-                            args = ['TaskBar',f'{_index}']
+                            args = [f'{_browser}\\绛亽浏览器.exe',_index]
                             # print(args)
                             # input()
                             Popen(args, bufsize=0, close_fds=False, shell=True, cwd=_browser, startupinfo=None, creationflags=0)
