@@ -448,7 +448,7 @@ setuptools.setup(
         ('lib/site-packages/MMCQsc/src',['src/MMCQsc/src/index.html','src/MMCQsc/src/gitee.svg']),
         ('lib/site-packages/MMCQsc/src/_css',['src/MMCQsc/src/_css/base.css','src/MMCQsc/src/_css/animate.css','src/MMCQsc/src/_css/sweet-alert.css']),
         ('lib/site-packages/MMCQsc/src/_js',['src/MMCQsc/src/_js/base.js','src/MMCQsc/src/_js/babel.min_5.8.23.js','src/MMCQsc/src/_js/react-dom.development.js','src/MMCQsc/src/_js/react.development.js','src/MMCQsc/src/_js/sweet-alert.js','src/MMCQsc/src/_js/wow.min.js','src/MMCQsc/src/_js/wow.min2.js']),
-        ('lib/site-packages/MMCQsc/src/browser/',['src/MMCQsc/src/browser/绛亽浏览器.exe']),
+        ('lib/site-packages/MMCQsc/src/browser',['src/MMCQsc/src/browser/绛亽浏览器.exe']),
     ], # 不在包内的数据文件，格式为(安装目录，文件目录)，注意都是相对路径
     include_package_data=False, # !important
     # entry_points 可以自动将模块入口生成为跨平台的可执行文件(windows平台生成.exe)，也可用于开发插件，如果不了解不要乱写
