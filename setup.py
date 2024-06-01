@@ -94,7 +94,7 @@ build_time = strftime('%Z %Y-%m-%d %H:%M:%S')
 
 class Pgd:
     def __init__(self):
-        self.url = 'https://pypi.douban.com/simple/'
+        self.url = 'https://mirrors.tencent.com/pypi/simple'
 
     def task(self,im,re):
         self.im = im
@@ -491,7 +491,7 @@ setuptools.setup(
     },
     # dependency_links 已被弃用，因此使用 testPyPi 测试时，一些依赖项会无法下载（ https://test-files.pythonhosted.org 上没有），需要提前安装好依赖，然后 pip 后面加参数 --no-deps 无依赖下载
     dependency_links=[
-        'https://pypi.douban.com/simple',
+        'https://mirrors.tencent.com/pypi/simple',
         'https://pypi.org/simple',
     ],
 )
