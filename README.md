@@ -62,13 +62,15 @@ MMCQscR2
 
 ### 项目地址
 
-[Gitee](https://gitee.com/hi-windom/color-theme-analyse "主要同步仓库") 
+[Github](https://github.com/Soltus/color-theme-analyse)（主仓库）
 
-[Github](https://github.com/Soltus/color-theme-analyse)（偶尔同步）
+[Gitee](https://gitee.com/hi-windom/color-theme-analyse "主要同步仓库")（停止维护）
 
-[GitLab](https://gitlab.com/liaoshanyi/ColorThemeAnalyse)（偶尔同步）
+[Bitbucket](https://bitbucket.org/hi-windom/colorthemeanalyse/)（停止维护，原主仓库）
 
-[GitCode](https://gitcode.net/Soltus/color-theme-analyse)
+[GitLab](https://gitlab.com/liaoshanyi/ColorThemeAnalyse)（停止维护）
+
+[GitCode](https://gitcode.net/Soltus/color-theme-analyse)（停止维护）
 
 [Pypi](https://pypi.org/project/color-theme-analyse/ "https://pypi.org/project/color-theme-analyse/")（官方仓库）
 
@@ -104,7 +106,7 @@ Bug 反馈和 Issues 提交在Gitee或Github，**在 Gitee 会得到最快反馈
 
 ### Requires
 
-**要求的版本 3.10.0 > Python >= 3.9.0**
+**要求的版本 3.13.0 > Python >= 3.9.0**
 
 建议的版本 Python == 3.9.5
 
@@ -112,7 +114,7 @@ Bug 反馈和 Issues 提交在Gitee或Github，**在 Gitee 会得到最快反馈
 
 要求的操作系统 Windows >= 1909  ( Win 10 / 11 )
 
-建议的操作系统 Windows>=22000.100（ Win 11 Dev ）
+建议的操作系统 Windows>=22000.100（ Win 11 ）
 
 必要的 Python 第三方库依赖：numpy, opencv-python, pillow, ~~easygui~~, rich
 

@@ -471,7 +471,7 @@ setuptools.setup(
     scripts=['src/MMCQsc.cmd'],
     license="MIT",
     platforms=['Windows'],
-    python_requires=">=3.9.0,<=3.10.0",
+    python_requires=">=3.9.0,<=3.13.0",
     # 关于 install_requires， 有以下五种常用的表示方法：(指定包名是必须的，而版本控制与可选依赖，则是高级形式。 这不仅仅是install_requires的形式，而是对setup.py的所有require都适用)
     # 'argparse'，只包含包名。 这种形式只检查包的存在性，不检查版本。 方便，但不利于控制风险，更新时还会遇到依赖冲突问题。
     # 'setuptools==38.2.4' 指定版本。确保了开发、测试与部署的版本一致，不会出现意外。 缺点是不利于更新，每次更新都需要改动代码。
